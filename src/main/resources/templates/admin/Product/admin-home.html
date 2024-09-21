@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <title>Tạp Hóa IT</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="keywords"/>
+    <meta content="" name="description"/>
+
+    <!-- Google Web Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
+            rel="stylesheet"
+    />
+
+    <!-- Icon Font Stylesheet -->
+    <link
+            href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <!-- Libraries Stylesheet -->
+    <link
+            rel="stylesheet"
+            th:href="@{/assets/lib/lightbox/css/lightbox.min.css}"
+    />
+    <link
+            rel="stylesheet"
+            th:href="@{/assets/lib/owlcarousel/assets/owl.carousel.min.css}"
+    />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}"/>
+
+    <!-- Template Stylesheet -->
+    <link rel="stylesheet" th:href="@{/asset-admin/css/table.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}"/>
+
+</head>
+
+<body>
+<!-- Spinner Start -->
+<div
+        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center"
+        id="spinner"
+>
+    <div class="spinner-grow text-primary" role="status"></div>
+</div>
+<!-- Spinner End -->
+
+<!-- Navbar start -->
+<div th:replace="~{fragment/navbar_admin.html}"></div>
+<!-- Navbar End -->
+<!-- Fruits Shop Start-->
+<div class="container-fluid fruite py-5">
+    <div class="container py-5">
+        <div class="tab-class text-center">
+            <div class="row g-4">
+                <div class="col-lg-4 text-start">
+                    <h1>Sản phẩm</h1>
+                </div>
+
+            </div>
+
+            <table id="example" class="table table-striped " style="width:100%">
+                <thead>
+                <tr>
+                    <th>Hình sản phẩm</th>
+                    <th>Mã sản phẩm</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Mã thương hiệu</th>
+                    <th>Mã danh mục</th>
+                    <th>Mã khuyến mãi</th>
+                    <th>Giá bán</th>
+                    <th>Số lượng</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${listProduct}">
+                    <td>
+                        <img th:src="@{'/ImageProduct/' + ${product.Image?.ImageCode}}"
+                             th:alt="${product.Image?.ImageCode}"/>
+                    </td>
+                    <td th:text="${product.ProductID}"></td>
+                    <td th:text="${product.ProductName}"></td>
+                    <td th:text="${product.Brand?.BrandID}"></td>
+                    <td th:text="${product.Category?.CategoryID}"></td>
+                    <td th:if="${product.Discount != null}" th:text="${product.Discount?.DiscountID}"></td>
+                    <td th:unless="${product.Discount != null}"></td>
+                    <td th:text="${product.UnitPrice}"></td>
+                    <td th:text="${product.Quantity}"></td>
+                    <td>
+                        <a th:href="@{/admin/Product(action='edit', id=${product.ProductID})}" class="btn btn-info">Update</a>
+                    </td>
+                    <td>
+                        <a th:attr="onclick=|deletePro('${product.ProductID}')|" class="btn btn-danger"
+                           onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Fruits Shop End-->
+<!-- Modal Search Start -->
+<div
+        aria-hidden="true"
+        aria-labelledby="exampleModalLabel"
+        class="modal fade"
+        id="searchModal"
+        tabindex="-1"
+>
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content rounded-0">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Search by keyword
+                </h5>
+                <button
+                        aria-label="Close"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        type="button"
+                ></button>
+            </div>
+            <div class="modal-body d-flex align-items-center">
+                <div class="input-group w-75 mx-auto d-flex">
+                    <input
+                            aria-describedby="search-icon-1"
+                            class="form-control p-3"
+                            placeholder="keywords"
+                            type="search"
+                    />
+                    <span class="input-group-text p-3" id="search-icon-1"
+                    ><i class="fa fa-search"></i
+                    ></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Search End -->
+
+
+<!-- Footer Start -->
+<div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5">
+    <div class="container py-5">
+        <div
+                class="pb-4 mb-4"
+                style="border-bottom: 1px solid rgba(226, 175, 24, 0.5)"
+        >
+            <div class="row g-4">
+                <div class="col-lg-3">
+                    <a href="#">
+                        <h1 class="text-primary mb-0">Fruitables</h1>
+                        <p class="text-secondary mb-0">Fresh products</p>
+                    </a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="position-relative mx-auto">
+                        <input
+                                class="form-control border-0 w-100 py-3 px-4 rounded-pill"
+                                placeholder="Your Email"
+                                type="number"
+                        />
+                        <button
+                                class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white"
+                                style="top: 0; right: 0"
+                                type="submit"
+                        >
+                            Subscribe Now
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="d-flex justify-content-end pt-3">
+                        <a
+                                class="btn btn-outline-secondary me-2 btn-md-square rounded-circle"
+                                href=""
+                        ><i class="fab fa-twitter"></i
+                        ></a>
+                        <a
+                                class="btn btn-outline-secondary me-2 btn-md-square rounded-circle"
+                                href=""
+                        ><i class="fab fa-facebook-f"></i
+                        ></a>
+                        <a
+                                class="btn btn-outline-secondary me-2 btn-md-square rounded-circle"
+                                href=""
+                        ><i class="fab fa-youtube"></i
+                        ></a>
+                        <a
+                                class="btn btn-outline-secondary btn-md-square rounded-circle"
+                                href=""
+                        ><i class="fab fa-linkedin-in"></i
+                        ></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-5">
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-item">
+                    <h4 class="text-light mb-3">Why People Like us!</h4>
+                    <p class="mb-4">
+                        typesetting, remaining essentially unchanged. It was popularised
+                        in the 1960s with the like Aldus PageMaker including of Lorem
+                        Ipsum.
+                    </p>
+                    <a
+                            class="btn border-secondary py-2 px-4 rounded-pill text-primary"
+                            href=""
+                    >Read More</a
+                    >
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="d-flex flex-column text-start footer-item">
+                    <h4 class="text-light mb-3">Shop Info</h4>
+                    <a class="btn-link" href="">About Us</a>
+                    <a class="btn-link" href="">Contact Us</a>
+                    <a class="btn-link" href="">Privacy Policy</a>
+                    <a class="btn-link" href="">Terms & Condition</a>
+                    <a class="btn-link" href="">Return Policy</a>
+                    <a class="btn-link" href="">FAQs & Help</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="d-flex flex-column text-start footer-item">
+                    <h4 class="text-light mb-3">Account</h4>
+                    <a class="btn-link" href="">My Account</a>
+                    <a class="btn-link" href="">Shop details</a>
+                    <a class="btn-link" href="">Shopping Cart</a>
+                    <a class="btn-link" href="">Wishlist</a>
+                    <a class="btn-link" href="">Order History</a>
+                    <a class="btn-link" href="">International Orders</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-item">
+                    <h4 class="text-light mb-3">Contact</h4>
+                    <p>Address: 1429 Netus Rd, NY 48247</p>
+                    <p>Email: Example@gmail.com</p>
+                    <p>Phone: +0123 4567 8910</p>
+                    <p>Payment Accepted</p>
+                    <img
+                            alt=""
+                            class="img-fluid"
+                            th:src="@{/assets/img/payment.png}"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Footer End -->
+
+<!-- Copyright Start -->
+<div class="container-fluid copyright bg-dark py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+            <span class="text-light"
+            ><a href="#"
+            ><i class="fas fa-copyright text-light me-2"></i>Your Site
+                Name</a
+            >, All right reserved.</span
+            >
+            </div>
+            <div class="col-md-6 my-auto text-center text-md-end text-white">
+                <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
+                <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
+                <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
+                Designed By
+                <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                Distributed By
+                <a class="border-bottom" href="https://themewagon.com"
+                >ThemeWagon</a
+                >
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Copyright End -->
+
+<!-- Back to Top -->
+<a
+        class="btn btn-primary border-3 border-primary rounded-circle back-to-top"
+        href="#"
+><i class="fa fa-arrow-up"></i
+></a>
+
+<script>
+    var newLink = document.createElement('a');
+    newLink.href = '/admin/Product?action=new';
+    newLink.className = 'btn btn-success d-flex m-2 py-2';
+    newLink.textContent = 'Thêm';
+</script>
+<!-- JavaScript Libraries -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+
+
+<script th:src="@{/assets/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
+<script th:src="@{/assets/lib/lightbox/js/lightbox.min.js}"></script>
+<script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Template Javascript -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/asset-admin/js/table.js}"></script>
+<script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
+</body>
+</html>

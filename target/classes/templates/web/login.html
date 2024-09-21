@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link th:href="@{/assets/css/login.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+    />
+  </head>
+  <body>
+    <div class="container "  id="container">
+      <div class="form-container sign-up-container">
+        <form>
+          <h1>Create Account</h1>
+          <span>or use your email for registration</span>
+          <input type="text" placeholder="Username" name="UserName" required />
+          <input type="text" placeholder="Phone" name="Phone" required />
+          <input type="email" placeholder="Email" name="Email" required />
+          <input
+            type="password"
+            placeholder="Password"
+            name="Password"
+            required
+          />
+          <button type="button" onclick="signUp()">Sign Up</button>
+        </form>
+      </div>
+      <div class="form-container sign-in-container">
+        <form th:action="@{/login}" method="post">
+          <h1>Sign in</h1>
+          <div class="social-container">
+            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+          <span>or use your account</span>
+          <input type="email" name="username" placeholder="Email" required />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <a href="#">Forgot your password?</a>
+          <button>Sign In</button>
+        </form>
+      </div>
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Welcome Back!</h1>
+            <p>
+              To keep connected with us please login with your personal info
+            </p>
+            <button class="ghost" id="signIn">Sign In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Hello, Friend!</h1>
+            <p>Enter your personal details and start journey with us</p>
+            <button class="ghost" id="signUp" >Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script th:src="@{/assets/js/login.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      let errorMsg = [${errorMsg}];
+      if (errorMsg) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: errorMsg
+        });
+      }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Check if the URL contains "/register"
+        if (window.location.pathname === '/register') {
+        // Find the "Sign Up" button by its ID and trigger the click event
+        document.getElementById('signUp').click();
+      }
+      });
+    </script>
+    <script th:src="@{/assets/callAPI/UserAPI.js}"></script>
+
+  </body>
+</html>

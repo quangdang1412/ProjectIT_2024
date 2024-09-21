@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-WebbanhangApplication<webbanhang>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.webbanhang.webbanhang.WebbanhangApplication",
+      "projectName": "webbanhang",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
