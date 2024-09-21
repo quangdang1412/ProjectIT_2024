@@ -35,9 +35,9 @@ public class WebSecurityConfig {
         );
         http.csrf(AbstractHttpConfigurer::disable);
 
-//       http.exceptionHandling(exceptionHandling -> exceptionHandling
-//               .accessDeniedPage("/404")
-//       );
+      http.exceptionHandling(exceptionHandling -> exceptionHandling
+              .accessDeniedPage("/404")
+      );
 
         return http.build();
     }
