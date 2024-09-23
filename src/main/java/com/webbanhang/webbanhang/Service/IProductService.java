@@ -1,5 +1,6 @@
 package com.webbanhang.webbanhang.Service;
 
+import com.webbanhang.webbanhang.DTO.response.PageResponse;
 import com.webbanhang.webbanhang.Model.ProductModel;
 import org.springframework.data.domain.Page;
 
@@ -14,4 +15,5 @@ public interface IProductService {
     List<ProductModel> findCategory(String id);
     Page<ProductModel> findCategoryForPage(String id,Integer a);
     Page<ProductModel> getProductForPage(Integer a);
+    PageResponse<?> getAllProductWithSortBy(int pageNo, int pageSize, String sortBy);
 }

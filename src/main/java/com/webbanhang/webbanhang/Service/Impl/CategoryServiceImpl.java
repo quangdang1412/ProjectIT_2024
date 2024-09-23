@@ -32,8 +32,8 @@ public class CategoryServiceImpl implements ICategoryService {
     public String save(CategoryRequestDTO a) {
         try{
             CategoryModel categoryModel = CategoryModel.builder()
-                    .CategoryID(a.getCategoryID())
-                    .CategoryName(a.getCategoryName())
+                    .categoryID(a.getCategoryID())
+                    .categoryName(a.getCategoryName())
                     .build();
             categoryRepository.save(categoryModel);
             return categoryModel.getCategoryID();

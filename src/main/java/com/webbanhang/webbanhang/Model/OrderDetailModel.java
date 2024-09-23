@@ -10,17 +10,17 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "orderdetail")
+@Table(name = "order_detail_tb")
 public class OrderDetailModel {
     @Id
     @ManyToOne()
     @JsonBackReference
-    @JoinColumn(name = "OrderID")
-    private OrderModel Order;
+    @JoinColumn(name = "orderID")
+    private OrderModel order;
     @Id
     @ManyToOne()
-    @JoinColumn(name = "ProductID")
-    private ProductModel ProductOrder;
+    @JoinColumn(name = "productID")
+    private ProductModel productOrder;
     @Column
-    private Integer Quantity;
+    private Integer quantity;
 }

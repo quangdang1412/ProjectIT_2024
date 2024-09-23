@@ -30,11 +30,11 @@ public class SupplierServiceImpl implements ISuppilerService {
     public String saveSupplier(SupplierRequestDTO a) {
         try{
             SupplierModel supplierModel = SupplierModel.builder()
-                    .SupplierID(a.getSupplierID())
-                    .SupplierName(a.getSupplierName())
-                    .Address(a.getAddress())
-                    .Email(a.getEmail())
-                    .Phone(a.getPhone())
+                    .supplierID(a.getSupplierID())
+                    .supplierName(a.getSupplierName())
+                    .address(a.getAddress())
+                    .email(a.getEmail())
+                    .phone(a.getPhone())
                     .build();
             supplierRepository.save(supplierModel);
             return supplierModel.getSupplierID();

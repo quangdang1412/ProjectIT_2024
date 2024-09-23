@@ -49,7 +49,7 @@
             <div
                     class="dropdown-menu dropdown-menu-end dropdown-menu-center m-0 bg-first rounded-2"
             >
-              <div th:if="${session.isLogIn}">
+              <div th:if="${session.isLogIn == true}">
                 <a href="/inforuser" class="dropdown-item">
                   <span>Thông tin cá nhân</span>
                 </a>
@@ -63,7 +63,7 @@
                 <a href="/logout" class="dropdown-item">Đăng xuất</a>
               </div>
 
-              <div th:if="${!session.isLogIn}">
+              <div th:if="${session.isLogIn == false}">
                 <a href="/login" class="dropdown-item">Đăng nhập</a>
                 <a href="/register" class="dropdown-item">Đăng ký</a>
               </div>

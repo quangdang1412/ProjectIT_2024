@@ -14,49 +14,46 @@ import java.util.Locale;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name ="product")
+@Table(name ="product_tb")
 public class ProductModel {
     @Id
     @Column
-    private String ProductID;
+    private String productID;
     @Column
-    private String ProductName;
+    private String productName;
     @ManyToOne()
-    @JoinColumn(name = "BrandID")
-    private BrandModel Brand;
+    @JoinColumn(name = "brandID")
+    private BrandModel brand;
     @ManyToOne()
-    @JoinColumn(name = "CategoryID")
-    private CategoryModel Category;
+    @JoinColumn(name = "categoryID")
+    private CategoryModel category;
     @ManyToOne()
-    @JoinColumn(name = "DiscountID")
-    private DiscountModel Discount;
+    @JoinColumn(name = "discountID")
+    private DiscountModel discount;
     @ManyToOne()
-    @JoinColumn(name = "ImageID")
-    private ImageModel Image;
+    @JoinColumn(name = "imageID")
+    private ImageModel image;
     @Column
-    private String Description;
+    private String description;
     @Column
-    private Double UnitPrice;
+    private Double unitPrice;
     @Column
-    private Integer Quantity;
+    private Integer quantity;
     @Column
-    private Integer DeleteProduct;
+    private Integer deleteProduct;
     @Column
-    private Double UnitCost;
+    private Double unitCost;
 
 
     @ManyToOne()
-    @JsonBackReference
-    @JoinColumn(name = "SupplierID")
-    private SupplierModel Supplier;
+    @JoinColumn(name = "supplierID")
+    private SupplierModel supplier;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ProductCart", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productCart", cascade = CascadeType.ALL)
     private List<CartModel> productCart;
 
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ProductOrder", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productOrder", cascade = CascadeType.ALL)
     private List<OrderDetailModel> productOrderDetail;
 }

@@ -30,7 +30,7 @@ public class CartDAOImpl implements ICartDAO {
     @Override
     public List<ProductModel> getProductInCart(String id) {
         Session currentSession=entityManager.unwrap(Session.class);
-        Query<ProductModel> query=currentSession.createQuery("select c.ProductCart from CartModel c where c.UserCart.UserID = :id ", ProductModel.class);
+        Query<ProductModel> query=currentSession.createQuery("select c.productCart from CartModel c where c.userCart.userID = :id ", ProductModel.class);
         query.setParameter("id",id);
         return query.getResultList();
     }
@@ -38,7 +38,7 @@ public class CartDAOImpl implements ICartDAO {
     @Override
     public CartModel findCart(String Uid, String Pid) {
         Session currentSession=entityManager.unwrap(Session.class);
-        Query<CartModel> query=currentSession.createQuery("from CartModel c where c.UserCart.UserID = :Uid and c.ProductCart.ProductID = :Pid", CartModel.class);
+        Query<CartModel> query=currentSession.createQuery("from CartModel c where c.userCart.userID = :Uid and c.productCart.productID = :Pid", CartModel.class);
         query.setParameter("Uid",Uid);
         query.setParameter("Pid",Pid);
         return query.uniqueResult();
@@ -86,7 +86,7 @@ public class CartDAOImpl implements ICartDAO {
         try {
             Session currentSession = entityManager.unwrap(Session.class);
             transaction = currentSession.beginTransaction();
-            MutationQuery query=currentSession.createMutationQuery("delete from CartModel c where c.UserCart.UserID = :Uid and c.ProductCart.ProductID = :Pid");
+            MutationQuery query=currentSession.createMutationQuery("delete from CartModel c where c.userCart.userID = :Uid and c.productCart.productID = :Pid");
             query.setParameter("Uid",a.getUserCart().getUserID());
             query.setParameter("Pid",a.getProductCart().getProductID());
             int s =query.executeUpdate();
@@ -104,7 +104,7 @@ public class CartDAOImpl implements ICartDAO {
     public CartModel findCartItemByUserAndProduct(String userId, ProductModel product) {
         Session currentSession = entityManager.unwrap(Session.class);
         Query<CartModel> query = currentSession.createQuery(
-            "FROM CartModel c WHERE c.UserCart.UserID = :userId AND c.ProductCart = :product",
+            "FROM CartModel c WHERE c.userCart.userID = :userId AND c.productCart = :product",
             CartModel.class
         );
         query.setParameter("userId", userId);
