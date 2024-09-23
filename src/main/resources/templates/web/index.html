@@ -269,21 +269,21 @@
                     <div
                       class="col-md-6 col-lg-4 col-xl-3 list-item"
                       th:each="product, iterStat : ${products}"
-                      th:data-category-id="${product.Category?.categoryID}"
+                      th:data-category-id="${product.category?.categoryID}"
                       th:if="${iterStat.index < 12}"
                     >
                       <div class="rounded position-relative fruite-item">
                         <div class="fruite-img">
                           <a th:href="@{/detail/{id}(id=${product.productID})}">
                             <img
-                              th:src="@{'/ImageProduct/' + ${product.Image?.ImageCode}}"
-                              th:alt="${product.Image?.ImageCode}"
+                              th:src="@{'/ImageProduct/' + ${product.image?.imageCode}}"
+                              th:alt="${product.image?.imageCode}"
                               class="img-fluid w-100 rounded-top"
                               style="height: 240px"
                             />
                           </a>
                           <div
-                            th:text="${product.Category?.categoryName}"
+                            th:text="${product.category?.categoryName}"
                             class="text-white bg-secondary px-3 py-1 rounded position-absolute"
                             style="top: 10px; left: 10px"
                           ></div>
@@ -301,7 +301,7 @@
                                   -webkit-box-orient: vertical;
                                   overflow: hidden;
                                 "
-                                th:text="${product.ProductName}"
+                                th:text="${product.productName}"
                               >
                                 Grapes
                               </h4>
@@ -311,7 +311,7 @@
                             >
                               <p
                                 class="text-dark fs-5 fw-bold mb-0"
-                                th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + 'đ'"
+                                th:text="${#numbers.formatDecimal(product.unitPrice,1,'COMMA',0,'POINT')} + 'đ'"
                               ></p>
                               <a
                                 href="#"
@@ -370,8 +370,8 @@
                       th:href="@{/detail/{id}(id=${bestSellingProduct.productID})}"
                     >
                       <img
-                        th:src="@{'/ImageProduct/' + ${bestSellingProduct.Image?.ImageCode}}"
-                        th:alt="${bestSellingProduct.Image?.ImageCode}"
+                        th:src="@{'/ImageProduct/' + ${bestSellingProduct.image?.imageCode}}"
+                        th:alt="${bestSellingProduct.image?.imageCode}"
                         class="img-fluid rounded-circle w-100"
                         style="height: 150px"
                       />
@@ -380,14 +380,14 @@
                   <div class="col-6">
                     <a
                       class="h5"
-                      th:text="${#numbers.formatDecimal(bestSellingProduct.UnitPrice,1,'COMMA',0,'POINT')} + 'đ'"
+                      th:text="${#numbers.formatDecimal(bestSellingProduct.unitPrice,1,'COMMA',0,'POINT')} + 'đ'"
                     ></a>
                     <a
                       th:href="@{/detail/{id}(id=${bestSellingProduct.productID})}"
                     >
                       <h4
                         class="mb-3"
-                        th:text="${bestSellingProduct.ProductName}"
+                        th:text="${bestSellingProduct.productName}"
                         style="
                               display: -webkit-box;
                               -webkit-line-clamp: 4;

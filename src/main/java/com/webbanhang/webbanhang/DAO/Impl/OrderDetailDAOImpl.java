@@ -26,10 +26,10 @@ public class OrderDetailDAOImpl implements IOrderDetailDAO {
     public List<Object[]> getBestSellingProducts() {
         Session currentSession = entityManager.unwrap(Session.class);
         Query<Object[]> query = currentSession.createQuery(
-                "SELECT od.ProductOrder.id, SUM(od.Quantity) " +
+                "SELECT od.productOrder.id, SUM(od.quantity) " +
                         "FROM OrderDetailModel od " +
-                        "GROUP BY od.ProductOrder.id " +
-                        "ORDER BY SUM(od.Quantity) DESC", Object[].class);
+                        "GROUP BY od.productOrder.id " +
+                        "ORDER BY SUM(od.quantity) DESC", Object[].class);
         return query.getResultList();
     }
     

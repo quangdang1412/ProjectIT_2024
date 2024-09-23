@@ -151,17 +151,17 @@
                         <tbody>
                         <tr th:each="orderdetail : ${listOrderDetail}">
                             <td>
-                                <img th:src="@{'/ImageProduct/' + ${orderdetail.ProductOrder.Image?.ImageCode}}"
-                                     th:alt="${orderdetail.ProductOrder.Image?.ImageCode}"/>
+                                <img th:src="@{'/ImageProduct/' + ${orderdetail.productOrder.image?.imageCode}}"
+                                     th:alt="${orderdetail.productOrder.image?.imageCode}"/>
                             </td>
-                            <td th:text="${orderdetail.ProductOrder.ProductName}"></td>
-                            <td th:text="${orderdetail.ProductOrder.Discount} != null
-                                             ? ${#numbers.formatDecimal(orderdetail.ProductOrder.UnitPrice * (100 - orderdetail.ProductOrder.Discount.Percentage) / 100, 1, 'COMMA', 0, 'POINT')} + 'đ'
-                                             : ${#numbers.formatDecimal(orderdetail.ProductOrder.UnitPrice, 1, 'COMMA', 0, 'POINT')} + 'đ'"></td>
-                            <td th:text="${orderdetail.Quantity}"></td>
-                            <td th:text="${orderdetail.ProductOrder.Discount} != null
-                                             ? ${#numbers.formatDecimal(orderdetail.ProductOrder.UnitPrice * (100 - orderdetail.ProductOrder.Discount.Percentage) / 100*orderdetail.Quantity, 1, 'COMMA', 0, 'POINT')} + 'đ'
-                                             : ${#numbers.formatDecimal(orderdetail.ProductOrder.UnitPrice*orderdetail.Quantity, 1, 'COMMA', 0, 'POINT')} + 'đ'"></td>
+                            <td th:text="${orderdetail.productOrder.productName}"></td>
+                            <td th:text="${orderdetail.productOrder.discount} != null
+                                             ? ${#numbers.formatDecimal(orderdetail.productOrder.unitPrice * (100 - orderdetail.productOrder.discount.percentage) / 100, 1, 'COMMA', 0, 'POINT')} + 'đ'
+                                             : ${#numbers.formatDecimal(orderdetail.productOrder.unitPrice, 1, 'COMMA', 0, 'POINT')} + 'đ'"></td>
+                            <td th:text="${orderdetail.quantity}"></td>
+                            <td th:text="${orderdetail.productOrder.discount} != null
+                                             ? ${#numbers.formatDecimal(orderdetail.productOrder.unitPrice * (100 - orderdetail.productOrder.discount.percentage) / 100*orderdetail.quantity, 1, 'COMMA', 0, 'POINT')} + 'đ'
+                                             : ${#numbers.formatDecimal(orderdetail.productOrder.UnitPrice*orderdetail.quantity, 1, 'COMMA', 0, 'POINT')} + 'đ'"></td>
                         </tr>
                         </tbody>
                     </table>

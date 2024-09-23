@@ -24,7 +24,7 @@ public class ImageDAOImpl implements IImageDAO {
     @Override
     public ImageModel findOneImage(String id) {
         Session currentSession=entityManager.unwrap(Session.class);
-        Query<ImageModel> query=currentSession.createQuery("from ImageModel where ImageCode= :id", ImageModel.class);
+        Query<ImageModel> query=currentSession.createQuery("from ImageModel where imageCode= :id", ImageModel.class);
         query.setParameter("id",id);
         return query.uniqueResult();
     }

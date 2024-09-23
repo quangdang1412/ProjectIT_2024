@@ -1,5 +1,8 @@
 package com.webbanhang.webbanhang.Controller.api;
 
+import com.webbanhang.webbanhang.DTO.response.ResponseData;
+import com.webbanhang.webbanhang.DTO.response.ResponseError;
+import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.CartModel;
 import com.webbanhang.webbanhang.Model.ProductModel;
 import com.webbanhang.webbanhang.Model.UserModel;
@@ -10,17 +13,19 @@ import com.webbanhang.webbanhang.Service.IUserService;
 import com.webbanhang.webbanhang.Util.CheckLogin;
 import com.webbanhang.webbanhang.Util.LoadData;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ProductAPI {
 
     private final ICategoryService categoryService;
@@ -71,5 +76,20 @@ public class ProductAPI {
         }
         String responseMessage = successMessage != null ? successMessage : errorMessage;
         return ResponseEntity.ok(responseMessage);
+    }
+    @GetMapping("/api/product/getAllProduct")
+    public ResponseData<?> getAllProduct(@RequestParam(defaultValue = "1", required = false) @Min(value = 1, message = "pageNo must be greater than 1")  int pageNo,
+                                   @Valid @Min(value = 10,  message = "pageNo must be greater than 10") @RequestParam(defaultValue = "1", required = false) int pageSize,
+                                   @RequestParam(required = false) String sortBy)
+    {
+
+        try {
+            return new ResponseData<>(HttpStatus.OK.value(),"Get user successfully",productService.getAllProductWithSortBy(pageNo,pageSize,sortBy));
+        }
+        catch (ResourceNotFoundException e){
+            log.info("errorMessage={}",e.getMessage(),e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(),e.getMessage());
+        }
+
     }
 }

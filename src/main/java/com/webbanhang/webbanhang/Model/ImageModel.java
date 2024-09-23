@@ -13,16 +13,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "image")
+@Table(name = "image_tb")
 public class ImageModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private String ImageID;
+    private String imageID;
     @Column
-    private String ImageCode;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "Image", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    private String imageCode;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "image", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<ProductModel> products;
 
 }

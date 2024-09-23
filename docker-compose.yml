@@ -1,0 +1,13 @@
+
+
+services:
+  api-service:
+    container_name: TapHoaIT
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - '8080:80'
+networks:
+  backend:
+    driver: bridge

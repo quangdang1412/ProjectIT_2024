@@ -1,4 +1,4 @@
-package com.webbanhang.webbanhang.Util;
+package com.webbanhang.webbanhang.Util.Validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

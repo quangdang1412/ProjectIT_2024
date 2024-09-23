@@ -1,5 +1,6 @@
 package com.webbanhang.webbanhang.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,15 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "brand")
+@Table(name = "brand_tb")
 public class BrandModel {
     @Id
     @Column
-    private String BrandID;
+    private String brandID;
 
     @Column
-    private String BrandName;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "Brand", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    private String brandName;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "brand", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<ProductModel> products;
 }

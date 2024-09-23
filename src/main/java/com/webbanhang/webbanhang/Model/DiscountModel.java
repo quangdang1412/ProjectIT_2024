@@ -15,19 +15,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "discount")
+@Table(name = "discount_tb")
 public class DiscountModel {
     @Id
     @Column
-    private String DiscountID;
+    private String discountID;
     @Column
-    private Integer Percentage;
+    private Integer percentage;
     @Column
-    private Date StartDate;
+    private Date startDate;
     @Column
-    private Date EndDate;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "Discount", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    private Date endDate;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "discount", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<ProductModel> products;
 
 }

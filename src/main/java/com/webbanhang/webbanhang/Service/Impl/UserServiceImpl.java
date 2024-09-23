@@ -95,14 +95,14 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
         RoleModel role = roleRepository.findById(request.getType()).orElseThrow(() -> new ResourceNotFoundException("Role not found"));
         try{
             UserModel userModel= UserModel.builder()
-                    .UserID(request.getUserID())
-                    .UserName(request.getUserName())
-                    .Role(role)
-                    .Email(request.getEmail())
-                    .Phone(request.getPhone())
-                    .Address(request.getAddress())
-                    .Gender(String.valueOf(request.getGender()))
-                    .Password(passwordEncoder.encode(request.getPassword()))
+                    .userID(request.getUserID())
+                    .userName(request.getUserName())
+                    .role(role)
+                    .email(request.getEmail())
+                    .phone(request.getPhone())
+                    .address(request.getAddress())
+                    .gender(String.valueOf(request.getGender()))
+                    .password(passwordEncoder.encode(request.getPassword()))
                     .build();
             userRepository.save(userModel);
             return userModel.getUserID();

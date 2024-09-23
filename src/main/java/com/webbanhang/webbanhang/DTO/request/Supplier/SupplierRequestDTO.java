@@ -1,6 +1,6 @@
 package com.webbanhang.webbanhang.DTO.request.Supplier;
 
-import com.webbanhang.webbanhang.Util.PhoneNumber;
+import com.webbanhang.webbanhang.Util.Validation.PhoneNumber;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -13,22 +13,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "SupplierModel")
-@Table(name = "supplier")
+@Table(name = "supplier_tb")
 public class SupplierModel {
     @Id
     @Column
-    private String SupplierID;
+    private String supplierID;
     @Column
-    private String SupplierName;
+    private String supplierName;
     @Column
-    private String Address;
+    private String address;
     @Column
-    private String Phone;
+    private String phone;
     @Column
-    private String Email;
+    private String email;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "Supplier", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "supplier", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<ProductModel> products;
 
 

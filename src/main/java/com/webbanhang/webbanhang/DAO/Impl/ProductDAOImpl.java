@@ -23,14 +23,14 @@ public class ProductDAOImpl implements IProductDAO {
     @Override
     public List<ProductModel> getAllProduct() {
         Session currentSession = entityManager.unwrap(Session.class);
-        Query<ProductModel> query = currentSession.createQuery("from ProductModel where DeleteProduct = 1", ProductModel.class);
+        Query<ProductModel> query = currentSession.createQuery("from ProductModel where deleteProduct = 1", ProductModel.class);
         return query.getResultList();
     }
 
     @Override
     public ProductModel findOneProduct(String id) {
         Session currentSession = entityManager.unwrap(Session.class);
-        Query<ProductModel> query = currentSession.createQuery("from ProductModel where ProductID = :id", ProductModel.class);
+        Query<ProductModel> query = currentSession.createQuery("from ProductModel where productID = :id", ProductModel.class);
         query.setParameter("id", id);
         return query.uniqueResult();
     }
@@ -92,20 +92,20 @@ public class ProductDAOImpl implements IProductDAO {
     @Override
     public List<ProductModel> findCategory(String id) {
         Session currentSession = entityManager.unwrap(Session.class);
-        Query<ProductModel> query = currentSession.createQuery("from ProductModel where Category.CategoryID = :categoryId", ProductModel.class);
+        Query<ProductModel> query = currentSession.createQuery("from ProductModel where category.categoryID = :categoryId", ProductModel.class);
         query.setParameter("categoryId", id);
         return query.getResultList();
     }
     @Override
     public Page<ProductModel> findCategoryForPage(String id,Integer a) {
         Session currentSession = entityManager.unwrap(Session.class);
-        Query<ProductModel> query = currentSession.createQuery("from ProductModel where Category.CategoryID = :categoryId", ProductModel.class);
+        Query<ProductModel> query = currentSession.createQuery("from ProductModel where category.categoryID = :categoryId", ProductModel.class);
         Pageable pageable = PageRequest.of(a-1,9);
         query.setParameter("categoryId", id);
         query.setFirstResult((a - 1) * 9);
         query.setMaxResults(9);
         List<ProductModel> products = query.getResultList();
-        Query<Long> countQuery = currentSession.createQuery("SELECT COUNT(p) from ProductModel p where p.Category.CategoryID = :categoryId", Long.class);
+        Query<Long> countQuery = currentSession.createQuery("SELECT COUNT(p) from ProductModel p where p.category.categoryID = :categoryId", Long.class);
         countQuery.setParameter("categoryId", id);
         Long total = countQuery.getSingleResult();
         return new PageImpl<>(products,pageable,total);
