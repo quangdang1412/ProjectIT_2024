@@ -13,6 +13,8 @@ public interface IUserService {
     String changePassword(String id, String pass);
     String deleteUser(String id);
     String saveUser(UserRequestDTO request);
+    UserModel updateUser(String id, UserModel user);
+    UserModel createUser(UserModel user);
 
 
 }

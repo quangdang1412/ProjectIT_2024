@@ -8,7 +8,7 @@ import lombok.*;
 
 import java.io.Serializable;
 
-
+@Data
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +23,7 @@ public class UserRequestDTO implements Serializable {
     @NotNull
     private String userName;
 
-    @NotBlank(message = "UserName must be not blank")
+    @NotBlank(message = "Password must be not blank")
     @NotNull
     private String password;
 
