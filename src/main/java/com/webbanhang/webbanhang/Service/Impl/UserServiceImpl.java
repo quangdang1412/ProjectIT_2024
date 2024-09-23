@@ -113,4 +113,23 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
             throw new DuplicateException(property+ " has been used");
         }
     }
+    @Override
+    public UserModel updateUser(String userId, UserModel user) {
+        UserModel existingUser = userRepository.findById(userId).orElse(null);
+        if (existingUser != null) {
+            existingUser.setEmail(user.getEmail());
+            existingUser.setUserName(user.getUserName());
+            existingUser.setPhone(user.getPhone());
+            existingUser.setAddress(user.getAddress());
+            existingUser.setGender(user.getGender());
+            return userRepository.save(existingUser);
+        }
+        return null;
+    }
+    @Override
+    public UserModel createUser(UserModel user) {
+        return userRepository.save(user);
+    }
+
+
 }

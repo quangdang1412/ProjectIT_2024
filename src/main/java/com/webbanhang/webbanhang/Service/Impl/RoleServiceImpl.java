@@ -19,7 +19,7 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public RoleModel findRoleByID(String id) {
+    public RoleModel findRoleByID(Integer id) {
         return roleRepository.findById(Integer.valueOf(id)).orElseThrow(()-> new ResourceNotFoundException("Role not found"));
     }
 }
