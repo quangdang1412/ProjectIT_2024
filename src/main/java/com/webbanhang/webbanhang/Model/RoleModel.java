@@ -12,17 +12,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "roleuser")
+@Table(name = "role_user_tb")
 public class RoleModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer Type;
+    private Integer type;
 
     @Column
-    private String RoleName;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "Role", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    private String roleName;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "role", cascade = CascadeType.ALL)
+    @JsonBackReference
     List<UserModel> users;
 
 }

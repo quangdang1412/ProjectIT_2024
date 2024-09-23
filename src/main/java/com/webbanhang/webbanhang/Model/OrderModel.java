@@ -14,43 +14,43 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "OrderModel")
-@Table(name ="shop_order")
+@Table(name ="shop_order_tb")
 public class OrderModel {
     @Id
     @Column
-    private String OrderID;
+    private String orderID;
     @ManyToOne()
     @JsonBackReference
-    @JoinColumn(name = "UserID")
-    private UserModel UserOrder;
+    @JoinColumn(name = "userID")
+    private UserModel userOrder;
     @ManyToOne()
-    @JoinColumn(name = "SellerID")
-    private UserModel SellerOrder;
+    @JoinColumn(name = "sellerID")
+    private UserModel sellerOrder;
     @ManyToOne()
-    @JoinColumn(name = "ShipperID")
-    private UserModel ShipperOrder;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "Order", cascade = CascadeType.ALL)
+    @JoinColumn(name = "shipperID")
+    private UserModel shipperOrder;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderDetailModel> orderDetails;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "OrderPayment", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "orderPayment", cascade = CascadeType.ALL)
     @JsonManagedReference
     private PaymentModel PaymentModel;
 
     @Column
-    private Date OrderDate;
+    private Date orderDate;
     @Column
-    private Double TotalPrice;
+    private Double totalPrice;
     @Column
-    private Double TransportFee;
+    private Double transportFee;
     @Column
-    private Date DeliveryTime;
+    private Date deliveryTime;
     @Column
-    private String Status;
+    private String status;
     @Column
-    private String Phone;
+    private String phone;
     @Column
-    private String Name;
+    private String name;
     @Column
-    private String Address;
+    private String address;
 }

@@ -10,16 +10,16 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "payment")
+@Table(name = "payment_tb")
 public class PaymentModel {
     @Id
     @OneToOne()
-    @JoinColumn(name = "OrderID")
+    @JoinColumn(name = "orderID")
     @JsonBackReference
-    private OrderModel OrderPayment;
+    private OrderModel orderPayment;
     @Column
-    private String Method;
+    private String method;
     @Column
-    private String Status;
+    private String status;
 
 }

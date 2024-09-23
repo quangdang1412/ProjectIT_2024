@@ -32,10 +32,10 @@ public class DiscountServiceImpl implements IDiscountService {
     public String save(DiscountRequestDTO a) {
         try{
             DiscountModel discountModel = DiscountModel.builder()
-                    .DiscountID(a.getDiscountID())
-                    .Percentage(a.getPercentage())
-                    .StartDate(Date.valueOf(a.getStartDate()))
-                    .EndDate(Date.valueOf(a.getEndDate()))
+                    .discountID(a.getDiscountID())
+                    .percentage(a.getPercentage())
+                    .startDate(Date.valueOf(a.getStartDate()))
+                    .endDate(Date.valueOf(a.getEndDate()))
                     .build();
             discountRepository.save(discountModel);
             return a.getDiscountID();

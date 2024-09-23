@@ -14,41 +14,41 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
+@Table(name = "user_tb")
 public class UserModel {
     @Id
     @Column
-    private String UserID;
+    private String userID;
 
     @Column
-    private String UserName;
+    private String userName;
     @Column
-    private String Address;
+    private String address;
     @Column
-    private String Phone;
+    private String phone;
     @Column
-    private String Gender;
+    private String gender;
     @Column
-    private String Email;
+    private String email;
     @Column
-    private String Password;
+    private String password;
 
     @ManyToOne()
-    @JsonBackReference
-    @JoinColumn(name = "Type")
-    private RoleModel Role;
+    @JsonManagedReference
+    @JoinColumn(name = "type")
+    private RoleModel role;
 
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "UserCart", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "userCart", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CartModel> userCart;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "UserOrder", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userOrder", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderModel> userOrder;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "SellerOrder", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sellerOrder", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderModel> sellerOrder;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ShipperOrder", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "shipperOrder", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderModel> shipperOrder;
 }

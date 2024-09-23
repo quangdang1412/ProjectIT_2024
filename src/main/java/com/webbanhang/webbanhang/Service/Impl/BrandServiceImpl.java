@@ -30,8 +30,8 @@ public class BrandServiceImpl implements IBrandService {
     public String save(BrandRequestDTO a) {
         try{
             BrandModel brandModel = BrandModel.builder()
-                    .BrandID(a.getBrandID())
-                    .BrandName(a.getBrandName())
+                    .brandID(a.getBrandID())
+                    .brandName(a.getBrandName())
                     .build();
             brandRepository.save(brandModel);
             return brandModel.getBrandID();

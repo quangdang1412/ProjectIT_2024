@@ -36,12 +36,12 @@ public class OrderServiceImpl implements IOrderService {
             UserModel userModel = userService.findUserByID(id);
             double totalPrice = 0;
             OrderModel order = OrderModel.builder()
-                    .OrderID(a.getOrderID())
-                    .UserOrder(userModel)
-                    .Name(a.getName())
-                    .Address(a.getAddress())
-                    .Phone(a.getPhone())
-                    .Status("Chờ xác nhận")
+                    .orderID(a.getOrderID())
+                    .userOrder(userModel)
+                    .name(a.getName())
+                    .address(a.getAddress())
+                    .phone(a.getPhone())
+                    .status("Chờ xác nhận")
                     .build();
             PaymentModel payment = new PaymentModel();
             LocalDate today = LocalDate.now();
