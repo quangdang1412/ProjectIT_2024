@@ -51,28 +51,14 @@ function deleteProinCart(productId) {
 
     });
 }
-function deletePro(productId) {
-    $.ajax({
-        url: '/admin/deleteProduct/' + productId,
-        type: 'Put',
-        success: function(response) {
-            console.log("Server response:", response); // Debugging log
-            if (response.includes("Đã xóa sản phẩm")) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Thông báo.',
-                    text: response
-                });
-                // Remove the table row
-                $(`tr:has(a[onclick*='${productId}'])`).remove();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Thông báo.',
-                    text: response
-                });
-            }
-        }
 
-    });
+function sendProductData(check) {
+    var form = document.getElementById('formID')
+    var data = new FormData(form);
+    const method = check === 'insert' ? 'POST' : 'PUT';
+    const endpoint2 = check === 'insert' ? 'add' : 'update';
+    sendRequest(method,'product',endpoint2, data, '/admin/Product');
+}
+function deleteProduct(id) {
+    sendRequest('DELETE','product',`delete/${id}`, id, 'delete');
 }

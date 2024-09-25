@@ -1,7 +1,7 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
 import com.webbanhang.webbanhang.DTO.request.Supplier.SupplierRequestDTO;
-import com.webbanhang.webbanhang.Exception.DuplicateException;
+import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.SupplierModel;
 import com.webbanhang.webbanhang.Repository.ISupplierRepository;
@@ -42,7 +42,7 @@ public class SupplierServiceImpl implements ISuppilerService {
             String error = e.getMessage();
             String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
             log.info(error);
-            throw new DuplicateException(property+ " has been used");
+            throw new CustomException(property+ " has been used");
         }
     }
 
@@ -57,7 +57,7 @@ public class SupplierServiceImpl implements ISuppilerService {
             String error = e.getMessage();
             String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
             log.info(error);
-            throw new DuplicateException(property+ " has been used");
+            throw new CustomException(property+ " has been used");
         }
     }
 }

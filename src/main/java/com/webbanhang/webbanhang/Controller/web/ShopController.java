@@ -79,7 +79,7 @@ public class ShopController {
     public String addToCart(@PathVariable("productId") String productId, Model model, HttpSession session,RedirectAttributes redirectAttributes) {
         checkLogin.checkLogin(session,model,userService);
         UserModel user = (UserModel) session.getAttribute("UserLogin");
-        ProductModel product = productService.findOneProduct(productId);
+        ProductModel product = productService.getProductByID(productId);
         CartModel cartItem = cartService.findCartItemByUserAndProduct(user.getUserID(), product);
 
         if (cartItem != null) {

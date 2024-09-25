@@ -10,6 +10,29 @@ function getUserData() {
         type: getValue('Type', 'select')
     };
 }
+function getProductData() {
+
+    return  {
+        productID: getValue('ProductID'),
+        productName: getValue('ProductName'),
+        brand: getValue('BrandID', 'select'),
+        category: getValue('CategoryID', 'select'),
+        discount: getValue('DiscountID', 'select'),
+        supplierID: getValue('SupplierID', 'select'),
+        unitCost: getValue('UnitCost'),
+        unitPrice: getValue('UnitPrice'),
+        quantity: getValue('Quantity'),
+        fileImage: getFile(),
+        description: getValue('Description', 'textarea')
+    };
+}
+function getFile() {
+    const fileInput = document.querySelector('input[name="ImageCode"]');
+    if (fileInput.files.length > 0) {
+        return fileInput.files[0]
+    }
+    return null
+}
 function getOrderData() {
     return {
         orderID: getValue('OrderID'),
@@ -58,7 +81,10 @@ function getDropdownValue(dropdownID) {
     const dropdown = document.getElementById(dropdownID);
     return dropdown.options[dropdown.selectedIndex].value;
 }
-
+function getFileValue(name) {
+    const fileInput = document.querySelector(`input[name="${name}"]`);
+    return fileInput && fileInput.files.length > 0 ? fileInput.files[0] : null;
+}
 function getRadioValue(radioName) {
     const selected = document.querySelector(`input[name="${radioName}"]:checked`);
     return selected ? selected.value : null;
@@ -99,11 +125,14 @@ function notify(xhr,url,data) {
 function sendRequest(method,endpoint1,endpoint2,data,url){
     let xhr = new XMLHttpRequest();
     xhr.open(method, `http://localhost:8080/api/${endpoint1}/${endpoint2}`, true);
-
-    xhr.setRequestHeader("Content-Type", "application/json");
+    if(endpoint1 !=="product" && endpoint2 !=="add")
+        xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function () {
         notify(xhr,url,data)
     };
-    xhr.send(JSON.stringify(data));
+    if(endpoint1 !=="product" && endpoint2 !=="add")
+        xhr.send(JSON.stringify(data));
+    else
+        xhr.send(data);
 }

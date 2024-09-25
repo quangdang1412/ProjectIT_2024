@@ -1,16 +1,13 @@
 package com.webbanhang.webbanhang.Controller.api;
 
 import com.webbanhang.webbanhang.DTO.request.Order.OrderRequestDTO;
-import com.webbanhang.webbanhang.DTO.request.Supplier.SupplierRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.ResponseData;
 import com.webbanhang.webbanhang.DTO.response.ResponseError;
-import com.webbanhang.webbanhang.Exception.DuplicateException;
+import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Model.CartModel;
-import com.webbanhang.webbanhang.Model.OrderModel;
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.ICartService;
 import com.webbanhang.webbanhang.Service.IOrderService;
-import com.webbanhang.webbanhang.Service.IUserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +39,7 @@ public class OrderAPI {
         }
         catch (Exception e){
             log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof DuplicateException)
+            if(e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
@@ -58,7 +55,7 @@ public class OrderAPI {
         }
         catch (Exception e){
             log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof DuplicateException)
+            if(e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update failed");
         }
