@@ -33,7 +33,7 @@ public class TestController {
     public ProductModel oneProduct(HttpServletRequest request,Model model)
     {
         String id=(String)request.getParameter("id");
-        return productService.findOneProduct(id);
+        return productService.getProductByID(id);
     }
     @GetMapping("/brand")
     public BrandModel getBrand(HttpServletRequest request,Model model ){

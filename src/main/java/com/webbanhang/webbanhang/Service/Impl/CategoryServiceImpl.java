@@ -1,10 +1,9 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
 import com.webbanhang.webbanhang.DTO.request.Other.CategoryRequestDTO;
-import com.webbanhang.webbanhang.Exception.DuplicateException;
+import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.CategoryModel;
-import com.webbanhang.webbanhang.Model.OrderModel;
 import com.webbanhang.webbanhang.Repository.ICategoryRepository;
 import com.webbanhang.webbanhang.Service.ICategoryService;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +40,7 @@ public class CategoryServiceImpl implements ICategoryService {
             String error = e.getMessage();
             String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
             log.info(e.getMessage());
-            throw new DuplicateException(property+ " has been used");
+            throw new CustomException(property+ " has been used");
         }
     }
 

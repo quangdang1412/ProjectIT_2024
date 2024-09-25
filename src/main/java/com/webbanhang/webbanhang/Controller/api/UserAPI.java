@@ -5,7 +5,7 @@ import com.webbanhang.webbanhang.DTO.request.User.UpdateUserRequestDTO;
 import com.webbanhang.webbanhang.DTO.request.User.UserRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.ResponseData;
 import com.webbanhang.webbanhang.DTO.response.ResponseError;
-import com.webbanhang.webbanhang.Exception.DuplicateException;
+import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.IUserService;
 import jakarta.servlet.http.HttpSession;
@@ -40,7 +40,7 @@ public class UserAPI {
         }
         catch (Exception e){
             log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof DuplicateException)
+            if(e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
@@ -64,7 +64,7 @@ public class UserAPI {
         }
         catch (Exception e){
             log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof DuplicateException)
+            if(e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Sign up failed");
         }
@@ -79,7 +79,7 @@ public class UserAPI {
         }
         catch (Exception e){
             log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof DuplicateException)
+            if(e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update failed");
         }
@@ -105,7 +105,7 @@ public class UserAPI {
         }
         catch (Exception e){
             log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof DuplicateException)
+            if(e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update failed");
         }

@@ -93,7 +93,7 @@
                 <tbody>
                 <tr th:each="product : ${listProduct}">
                     <td>
-                        <img th:src="@{'/ImageProduct/' + ${product.Image?.ImageCode}}"
+                        <img th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
                              th:alt="${product.Image?.ImageCode}"/>
                     </td>
                     <td th:text="${product.ProductID}"></td>
@@ -108,7 +108,7 @@
                         <a th:href="@{/admin/Product(action='edit', id=${product.ProductID})}" class="btn btn-info">Update</a>
                     </td>
                     <td>
-                        <a th:attr="onclick=|deletePro('${product.ProductID}')|" class="btn btn-danger"
+                        <a th:attr="onclick=|deleteProduct('${product.ProductID}')|" class="btn btn-danger"
                            onclick="return confirm('Are you sure?')">Delete</a>
                     </td>
                 </tr>
@@ -327,6 +327,7 @@
 <!-- Template Javascript -->
 <script th:src="@{/assets/js/main.js}"></script>
 <script th:src="@{/asset-admin/js/table.js}"></script>
+<script th:src="@{/assets/callAPI/SendAPI.js}"></script>
 <script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
 </body>
 </html>

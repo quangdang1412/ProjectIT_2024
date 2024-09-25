@@ -55,7 +55,7 @@ public class LoadData {
         List<ProductModel> products = new ArrayList<>();
 
         for (String productId : productIds) {
-            ProductModel product = productService.findOneProduct(productId);
+            ProductModel product = productService.getProductByID(productId);
             if (product != null) {
                 products.add(product);
             }
