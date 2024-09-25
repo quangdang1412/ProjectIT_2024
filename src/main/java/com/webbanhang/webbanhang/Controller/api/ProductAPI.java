@@ -123,7 +123,10 @@ public class ProductAPI {
         }
         catch (Exception e ){
             log.info("errorMessage={}",e.getMessage(),e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(),e.getMessage());
+            String error = e.getMessage();
+            if(error.contains("bounds for length"))
+                error = "Failed";
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(),error);
         }
     }
     @DeleteMapping(value ="/api/product/delete/{proID}")
