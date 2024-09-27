@@ -26,7 +26,7 @@ public class UserLogin implements UserDetails {
     {
         this.email = userInfo.getEmail();
         this.password = userInfo.getPassword();
-        this.fullName = userInfo.getUserName();
+        this.fullName = userInfo.getUsername();
         this.authorities = Arrays.stream(userInfo.getRole().getRoleName().split(","))
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.trim())) // Ensure roles are prefixed with "ROLE_"
                 .collect(Collectors.toList());
