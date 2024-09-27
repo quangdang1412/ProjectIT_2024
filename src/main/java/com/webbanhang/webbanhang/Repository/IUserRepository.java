@@ -17,4 +17,7 @@ public interface IUserRepository extends JpaRepository<UserModel,String> {
 
     @Query(value = "from UserModel u where u.role.type = ?1")
     List<UserModel> getAllUserByType(Integer id);
+
+    UserModel findByUserID(String userId);
+
 }

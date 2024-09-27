@@ -37,7 +37,7 @@ public class JwtServiceImpl implements IJwtService {
     public String generateToken(UserModel user) {
         return Jwts
                 .builder()
-                .setSubject(user.getUserName())
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

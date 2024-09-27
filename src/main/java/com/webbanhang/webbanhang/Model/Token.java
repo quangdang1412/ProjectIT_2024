@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tokens")
+@Table(name = "tokens_tb")
 public class Token {
     
     @Id
