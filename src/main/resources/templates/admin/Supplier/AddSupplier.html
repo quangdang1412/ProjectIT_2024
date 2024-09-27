@@ -173,24 +173,5 @@
 <script th:src="@{/asset-admin/js/table.js}"></script>
 <script th:src="@{/assets/callAPI/SendAPI.js}"></script>
 <script th:src="@{/assets/callAPI/SupplierAPI.js}"></script>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var success = [[${successMessage}]];
-    if (success) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Thông báo.',
-            text: success
-        });
-    }
-    var error = [[${errorMessage}]];
-    if (error) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Thông báo.',
-            text: success
-        });
-    }
-</script>
 </body>
 </html>

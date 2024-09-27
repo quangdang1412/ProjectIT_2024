@@ -1,10 +1,9 @@
 package com.webbanhang.webbanhang.Controller.api;
 
 import com.webbanhang.webbanhang.DTO.request.Supplier.SupplierRequestDTO;
-import com.webbanhang.webbanhang.DTO.request.User.UserRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.ResponseData;
 import com.webbanhang.webbanhang.DTO.response.ResponseError;
-import com.webbanhang.webbanhang.Exception.DuplicateException;
+import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Service.ISuppilerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ public class SupplierAPI {
         }
         catch (Exception e){
             log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof DuplicateException)
+            if(e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
@@ -45,7 +44,7 @@ public class SupplierAPI {
         }
         catch (Exception e){
             log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof DuplicateException)
+            if(e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update failed");
         }

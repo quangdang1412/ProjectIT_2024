@@ -1,18 +1,23 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
 import com.webbanhang.webbanhang.DAO.IProductDAO;
+import com.webbanhang.webbanhang.DTO.request.Product.ProductRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.PageResponse;
+import com.webbanhang.webbanhang.Exception.CustomException;
+import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
+import com.webbanhang.webbanhang.Model.ImageModel;
 import com.webbanhang.webbanhang.Model.ProductModel;
 import com.webbanhang.webbanhang.Repository.IProductRepository;
-import com.webbanhang.webbanhang.Service.IProductService;
+import com.webbanhang.webbanhang.Service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +26,15 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductServiceImpl implements IProductService {
     private final IProductDAO productDAO;
     private final IProductRepository productRepository;
+    private final IBrandService brandService;
+    private final ICategoryService categoryService;
+    private final IDiscountService discountService;
+    private final ISuppilerService supplierService;
+    private final IImageService imageService;
 
     @Override
     public List<ProductModel> getAllProduct() {
@@ -31,23 +42,59 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductModel findOneProduct(String id) {
-        return productDAO.findOneProduct(id);
+    public ProductModel getProductByID(String id) {
+        return productRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Product not found"));
     }
 
     @Override
-    public boolean addProduct(ProductModel a) {
-        return productDAO.addProduct(a);
-    }
+    public String saveProduct(ProductRequestDTO productRequestDTO, MultipartFile file) {
+        try{
 
-    @Override
-    public boolean updateProduct(ProductModel a) {
-        return productDAO.updateProduct(a);
+            ProductModel productModel= ProductModel.builder()
+                    .productID(productRequestDTO.getProductID())
+                    .productName(productRequestDTO.getProductName())
+                    .brand(brandService.findBrandByID(productRequestDTO.getBrand()))
+                    .category(categoryService.findCategoryByID(productRequestDTO.getCategory()))
+                    .description(productRequestDTO.getDescription())
+                    .discount(productRequestDTO.getDiscount().equals("empty") ? null : discountService.findDiscountByID(productRequestDTO.getDiscount()))
+                    .quantity(productRequestDTO.getQuantity())
+                    .unitCost(productRequestDTO.getUnitCost())
+                    .unitPrice(productRequestDTO.getUnitPrice())
+                    .supplier(supplierService.findSupplierByID(productRequestDTO.getSupplierID()))
+                    .deleteProduct(1)
+                    .build();
+            ImageModel imageProduct = null;
+            String fileName = imageService.upload(file);
+            if(fileName.contains("Something went wrong"))
+                throw new CustomException("Failed");
+            if(imageService.findOneImage(fileName)==null)
+            {
+                imageService.addImage(fileName);
+            }
+            imageProduct = imageService.findOneImage(fileName);
+            productModel.setImage(imageProduct);
+            productRepository.save(productModel);
+            return productModel.getProductID();
+        }catch (Exception e){
+            String error = e.getMessage();
+            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            log.info(error);
+            throw new CustomException(property+ " has been used");
+        }
     }
-
     @Override
-    public boolean deleteProduct(ProductModel a) {
-        return productDAO.deleteProduct(a);
+    public String deleteProduct(String id) {
+        try{
+            ProductModel productModel = getProductByID(id);
+            productModel.setDeleteProduct(0);
+            productRepository.save(productModel);
+            return productModel.getProductID();
+        }catch (Exception e){
+            String error = e.getMessage();
+            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            log.info(error);
+            throw new CustomException(property+ " has been used");
+        }
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
 import com.webbanhang.webbanhang.DTO.request.User.UserRequestDTO;
-import com.webbanhang.webbanhang.Exception.DuplicateException;
+import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.RoleModel;
 import com.webbanhang.webbanhang.Model.UserModel;
@@ -73,7 +73,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
             String error = e.getMessage();
             String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
             log.info(error);
-            throw new DuplicateException(property+ " has been used");
+            throw new CustomException(property+ " has been used");
         }
     }
 
@@ -87,7 +87,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
             String error = e.getMessage();
             String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
             log.info(error);
-            throw new DuplicateException(property+ " has been used");
+            throw new CustomException(property+ " has been used");
         }
     }
     @Override
@@ -110,7 +110,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
             String error = e.getMessage();
             String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
             log.info(error);
-            throw new DuplicateException(property+ " has been used");
+            throw new CustomException(property+ " has been used");
         }
     }
     @Override

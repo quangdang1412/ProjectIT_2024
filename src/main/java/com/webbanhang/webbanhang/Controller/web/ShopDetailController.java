@@ -47,7 +47,7 @@ public class ShopDetailController {
         loadData.loadProduct(model);
         loadData.loadOrderDetail(model);
         loadData.loadCategory(model);
-        ProductModel product = productService.findOneProduct(productId);
+        ProductModel product = productService.getProductByID(productId);
         List<ProductModel> productDiscount = new ArrayList<>();
         for(ProductModel x : productService.getAllProduct())
         {
