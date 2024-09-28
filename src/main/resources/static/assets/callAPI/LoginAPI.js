@@ -5,7 +5,6 @@ $(document).ready(function () {
     const email = $('[name="username"]').val();
     const password = $('[name="password"]').val();
 
-    // Gọi AJAX để đăng nhập
     $.ajax({
       url: "/api/auth/login",
       method: "POST",
@@ -17,6 +16,7 @@ $(document).ready(function () {
           text: "Chào mừng bạn trở lại!",
           icon: "success",
         }).then(() => {
+          localStorage.setItem("token", response.token);
           window.location.href = "/";
         });
       },
