@@ -1,12 +1,23 @@
 $(document).ready(function () {
+  // Xử lý form login để lưu token vào localStorage
   $("#loginForm").on("submit", function (e) {
-    e.preventDefault(); // Ngăn sự kiện gửi form
+    e.preventDefault(); // Ngăn sự kiện gửi form mặc định
 
     const email = $('[name="username"]').val();
     const password = $('[name="password"]').val();
 
+    // Kiểm tra xem email và password có trống không
+    if (!email || !password) {
+      Swal.fire({
+        title: "Lỗi!",
+        text: "Vui lòng nhập email và mật khẩu.",
+        icon: "error",
+      });
+      return;
+    }
+
     $.ajax({
-      url: "/api/auth/login",
+      url: "/api/auth/login", // API login
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify({ email: email, password: password }),
@@ -16,17 +27,32 @@ $(document).ready(function () {
           text: "Chào mừng bạn trở lại!",
           icon: "success",
         }).then(() => {
+          // Lưu JWT vào localStorage
           localStorage.setItem("token", response.token);
+          // Điều hướng về trang chủ
           window.location.href = "/";
         });
       },
       error: function (xhr) {
         // Xử lý khi có lỗi
-        let errorMessage = "";
+        let errorMessage = "Đã xảy ra lỗi. Vui lòng thử lại!";
 
-        // Lấy thông điệp từ phản hồi JSON nếu có
+        // Lấy thông điệp lỗi từ phản hồi JSON (nếu có)
         if (xhr.responseJSON && xhr.responseJSON.message) {
           errorMessage = xhr.responseJSON.message;
+        } else if (xhr.status === 403) {
+          errorMessage = "Tài khoản hoặc mật khẩu không chính xác!";
+        } else if (xhr.status === 401) {
+          // Token hết hạn hoặc không hợp lệ
+          localStorage.removeItem("token"); // Xóa token
+          Swal.fire({
+            title: "Token hết hạn!",
+            text: "Vui lòng đăng nhập lại.",
+            icon: "warning",
+          }).then(() => {
+            window.location.href = "/login"; // Chuyển hướng đến trang đăng nhập
+          });
+          return; // Ngừng xử lý tiếp
         }
 
         Swal.fire({
@@ -37,4 +63,18 @@ $(document).ready(function () {
       },
     });
   });
+
+  // Hàm đăng xuất
+  function logout() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      Swal.fire({
+        title: "Lỗi!",
+        text: "Bạn chưa đăng nhập.",
+        icon: "error",
+      });
+      return;
+    }
+  }
 });

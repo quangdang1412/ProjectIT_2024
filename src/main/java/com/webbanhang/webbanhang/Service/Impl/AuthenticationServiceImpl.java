@@ -3,6 +3,7 @@ package com.webbanhang.webbanhang.Service.Impl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import com.webbanhang.webbanhang.DTO.request.User.AuthenticationRequest;
 import com.webbanhang.webbanhang.DTO.request.User.RefreshRequest;
 import com.webbanhang.webbanhang.DTO.request.User.UserRequestDTO;
 import com.webbanhang.webbanhang.Exception.InvalidPasswordException;
+import com.webbanhang.webbanhang.Exception.TokenException;
 import com.webbanhang.webbanhang.Mapper.UserMapper;
 import com.webbanhang.webbanhang.Model.AuthenticationResponse;
 import com.webbanhang.webbanhang.Model.RegisterRequest;
@@ -67,13 +69,13 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         var refreshToken = refreshTokenRequest.getToken();
         Token token = tokenRepository.findByToken(refreshToken);
         if (token == null) {
-            throw new RuntimeException("Invalid refresh Token");
+            throw new TokenException("Invalid refresh Token");
         }
         if (token.isRevoked()) {
-            throw new RuntimeException("Token is revoked");
+            throw new TokenException("Token is revoked");
         }
         if (token.isExpired()) {
-            throw new RuntimeException("Token is expired");
+            throw new TokenException("Token is expired");
         }
         String userId = token.getUserId();
         UserModel user = userRepository.findByUserID(userId);
@@ -96,6 +98,10 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         } catch (BadCredentialsException e) {
             throw new InvalidPasswordException("Tài khoản hoặc mật khẩu không đúng!");
         }
+        SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        ));
+
         UserModel user = userRepository.getUserByEmail(request.getEmail());
         var jwtToken = jwtService.generateToken(user);
         Token token = Token.builder()
@@ -110,6 +116,15 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .userDto(userDto)
                 .token(jwtToken)
                 .build();
+    }
+    public boolean logout(String token) {
+        Token tokenEntity = tokenRepository.findByToken(token);
+        if (tokenEntity == null) {
+            return false;
+        }
+        tokenEntity.setRevoked(true);
+        tokenRepository.save(tokenEntity);
+        return true;
     }
 }
 

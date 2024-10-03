@@ -50,7 +50,12 @@ public class GlobalExceptionHandler {
 
         return errorResponse;
     }
-    
+    @ExceptionHandler(TokenException.class)
+    public ResponseEntity<String> handleTokenException(TokenException ex, WebRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ex.getMessage()); // Trả về thông điệp lỗi với mã trạng thái 401
+    }
     
     
 
