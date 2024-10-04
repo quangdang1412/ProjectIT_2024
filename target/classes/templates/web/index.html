@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
   <head>
     <meta charset="utf-8" />
     <title>Tạp Hoá IT</title>
@@ -17,6 +20,10 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
       rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
     />
 
     <!-- Icon Font Stylesheet -->
@@ -389,12 +396,12 @@
                         class="mb-3"
                         th:text="${bestSellingProduct.productName}"
                         style="
-                              display: -webkit-box;
-                              -webkit-line-clamp: 4;
-                              -webkit-box-orient: vertical;
-                              overflow: hidden;
-                              min-height: 115px;
-                            "
+                          display: -webkit-box;
+                          -webkit-line-clamp: 4;
+                          -webkit-box-orient: vertical;
+                          overflow: hidden;
+                          min-height: 115px;
+                        "
                       ></h4>
                     </a>
                     <a
@@ -416,7 +423,6 @@
       <div th:replace="~{fragment/footer.html}"></div>
       <!-- Footer End -->
 
-
       <!-- Back to Top -->
       <a
         href="#"
@@ -431,58 +437,14 @@
       <script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
       <script th:src="@{/assets/lib/lightbox/js/lightbox.min.js}"></script>
       <script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
-      <script>
-        // Lấy tất cả các liên kết danh mục
-        const categoryLinks = document.querySelectorAll(".category-link");
-
-        // Lắng nghe sự kiện click trên các liên kết danh mục
-        categoryLinks.forEach((link) => {
-          link.addEventListener("click", (event) => {
-            event.preventDefault();
-
-            // Lấy ID của danh mục được chọn
-            const categoryId = event.currentTarget.dataset.categoryId;
-            if (categoryId) {
-              console.log(categoryId);
-              // Hiển thị các sản phẩm tương ứng với danh mục
-              displayProductsByCategory(categoryId);
-            } else {
-              console.log("categoryId not found");
-              displayProductsByCategory(null);
-            }
-          });
-        });
-
-        function displayProductsByCategory(categoryId) {
-          // Ẩn tất cả các sản phẩm
-          const listItems = document.querySelectorAll(".list-item");
-          listItems.forEach((item) => {
-            item.style.display = "none";
-          });
-
-          // Hiển thị các sản phẩm thuộc danh mục được chọn
-          if (categoryId === "all") {
-            listItems.forEach((item) => {
-              item.style.display = "block";
-            });
-          } else if (categoryId) {
-            const productsByCategory = document.querySelectorAll(
-              `.list-item[data-category-id="${categoryId}"]`
-            );
-            productsByCategory.forEach((product) => {
-              product.style.display = "block";
-            });
-          } else {
-            // Nếu categoryId là null, hiển thị toàn bộ danh sách
-            listItems.forEach((item) => {
-              item.style.display = "block";
-            });
-          }
-        }
-      </script>
 
       <!-- Template Javascript -->
       <script th:src="@{/assets/js/main.js}"></script>
+      <script type="module" th:src="@{/assets/callAPI/home.js}"></script>
+      <script th:src="@{/assets/callAPI/logout.js}"></script>
+      <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
+
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </div>
   </body>
 </html>

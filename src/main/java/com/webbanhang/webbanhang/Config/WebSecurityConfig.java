@@ -2,7 +2,6 @@ package com.webbanhang.webbanhang.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -21,59 +20,48 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-
 public class WebSecurityConfig {
-    
+
     private final AuthenticationFilter authenticationFilter;
     private final AuthenticationProvider authenticationProvider;
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers(
-                    "/", 
-                    "/static/**", 
-                    "/template/**", 
-                    "/error", 
-                    "/api/**", 
-                    "/assets/**", 
-                    "/signup", 
-                    "/register", 
-                    "/shop", 
-                    "/ImageProduct/**", 
-                    "/detail/**", 
-                    "/locations"
+                        "/",
+                        "/static/**",
+                        "/template/**",
+                        "/error",
+                        "/api/**",
+                        "/assets/**",
+                        "/signup",
+                        "/register",
+                        "/shop",
+                        "/ImageProduct/**",
+                        "/detail/**",
+                        "/locations",
+                        "/login",
+                        "/test"
                 ).permitAll()
                 .requestMatchers("/admin/Order").hasAnyRole("SELLER", "SHIPPER", "ADMIN")
-                .requestMatchers("/admin/Order?type=1").hasRole("SELLER")
-                .requestMatchers("/admin/Order?type=2", "/admin/Order?type=3").hasRole("SHIPPER")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/")
-            )
+            .formLogin(Customizer.withDefaults()) // Sử dụng trang login mặc định của Spring Security
+            .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class) // Thêm JWT filter
+            .authenticationProvider(authenticationProvider) // Cấu hình provider
             .exceptionHandling(exception -> exception
-                .authenticationEntryPoint((request, response, authException) -> 
-                    response.sendError(403, "Access Denied")  // Trả về lỗi 403 khi chưa đăng nhập
+                .authenticationEntryPoint((request, response, authException) ->
+                    response.sendError(403, "Access Denied")
                 )
-            )
-            .httpBasic(Customizer.withDefaults());
+            );
 
-            
         http.csrf(AbstractHttpConfigurer::disable);
-        
+
         return http.build();
     }
     @Bean

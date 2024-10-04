@@ -8,7 +8,6 @@ import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Repository.IRoleRepository;
 import com.webbanhang.webbanhang.Repository.IUserRepository;
 import com.webbanhang.webbanhang.Service.IUserService;
-import com.webbanhang.webbanhang.security.UserLogin;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,11 +40,12 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        UserModel user = userRepository.getUserByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException(email);
-        }
-        return new UserLogin(user);
+        // UserModel user = userRepository.getUserByEmail(email);
+        // if (user == null) {
+        //     throw new UsernameNotFoundException(email);
+        // }
+        // return new UserLogin(user);
+        return null;
     }
 
     @Override

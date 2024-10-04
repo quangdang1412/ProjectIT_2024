@@ -60,13 +60,7 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String login(Model model, HttpSession session,
-                        @RequestParam(value = "error", required = false) String error,
-                        @RequestParam(value = "logout", required = false) String logout) {
-        checkLogin.checkLogin(session, model, userService);
-        if (Objects.equals(error, "")) {
-            model.addAttribute("errorMsg", "Tài khoản hoặc mật khẩu sai.");
-        }
+    public String login() {
         return "/web/login";
     }
 
@@ -88,5 +82,9 @@ public class HomeController {
     public ResponseEntity<List<UserModel>> getUsers() {
         List<UserModel> users = userService.getAllUser();
         return ResponseEntity.ok(users);
+    }
+    @GetMapping("/test")
+    public String test(){
+        return "/web/test";
     }
 }   

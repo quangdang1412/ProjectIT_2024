@@ -47,6 +47,7 @@
             </a>
             <div
               class="dropdown-menu dropdown-menu-end dropdown-menu-center m-0 bg-first rounded-2"
+              id="dropdownContainer"
             >
               <div sec:authorize="isAuthenticated()">
                 <a href="/inforuser" class="dropdown-item">
@@ -58,8 +59,19 @@
                 <a href="/yourOrder" class="dropdown-item">
                   <span>Đơn hàng</span>
                 </a>
-                <a href="/admin/Order" class="dropdown-item" >Quản lí </a>
-                <a href="/logout" class="dropdown-item">Đăng xuất</a>
+                <a
+                  href="/admin/Order"
+                  class="dropdown-item"
+                  sec:authorize="hasAuthority('ADMIN')"
+                  >Quản lí
+                </a>
+                <a
+                  id="logoutLink"
+                  class="dropdown-item"
+                  href="#"
+                  onclick="logout()"
+                  >Đăng xuất</a
+                >
               </div>
 
               <div sec:authorize="!isAuthenticated()">
