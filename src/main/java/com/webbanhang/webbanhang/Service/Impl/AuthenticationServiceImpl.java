@@ -66,7 +66,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Override
     public AuthenticationResponse refreshToken(RefreshRequest refreshTokenRequest) {
-        String refreshToken = refreshTokenRequest.getToken();
+        String refreshToken = refreshTokenRequest.getRefreshToken();
         Token token = tokenRepository.findByToken(refreshToken);
         
         if (token == null || token.isRevoked() || token.isExpired()) {

@@ -15,5 +15,6 @@ $.ajax({
   },
   error: function (xhr, status, error) {
     console.log("Error: " + error);
+    localStorage.removeItem("token");
   },
 });

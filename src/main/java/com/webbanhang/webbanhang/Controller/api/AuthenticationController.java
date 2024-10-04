@@ -35,10 +35,15 @@ public class AuthenticationController {
     }
     
     @PostMapping("/refresh")
-    public ResponseEntity<AuthenticationResponse> refresh(@RequestBody RefreshRequest refreshTokenRequest) {
-        AuthenticationResponse response = authenticationService.refreshToken(refreshTokenRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<AuthenticationResponse> refresh(@RequestHeader("Authorization") String bearerToken) {
+    String token = bearerToken.replace("Bearer ", "");
+
+    RefreshRequest refreshTokenRequest = new RefreshRequest(token);
+    AuthenticationResponse response = authenticationService.refreshToken(refreshTokenRequest);
+    
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
             AuthenticationResponse response = authenticationService.login(request);
