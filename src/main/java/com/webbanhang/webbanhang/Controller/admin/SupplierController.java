@@ -1,9 +1,7 @@
 package com.webbanhang.webbanhang.Controller.admin;
 
 import com.webbanhang.webbanhang.Model.SupplierModel;
-import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.ISuppilerService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
