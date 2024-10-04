@@ -1,7 +1,7 @@
 // Đặt khoảng thời gian gia hạn token - 15 phút
 setInterval(() => {
   extendToken();
-}, 90000); // 15 phút 900000
+}, 600000); // 15 phút 900000
 
 function extendToken() {
   const currentToken = localStorage.getItem("token");
