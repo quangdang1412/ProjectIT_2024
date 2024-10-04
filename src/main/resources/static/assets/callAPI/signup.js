@@ -32,6 +32,11 @@ $(document).ready(function () {
       },
       error: function (xhr) {
         let errorMessage = "Đã xảy ra lỗi. Vui lòng thử lại!";
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          errorMessage = xhr.responseJSON.message;
+        } else if (xhr.status === 409) {
+          errorMessage = "Email đã tồn tại!";
+        }
 
         Swal.fire({
           title: "Đăng kí thất bại!",
