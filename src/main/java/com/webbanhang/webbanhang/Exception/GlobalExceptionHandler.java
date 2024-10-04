@@ -56,7 +56,10 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(ex.getMessage()); // Trả về thông điệp lỗi với mã trạng thái 401
     }
-    
+    @ExceptionHandler(ExpiredTokenException.class)
+    public ResponseEntity<String> handleExpiredTokenException(ExpiredTokenException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token đã hết hạn, vui lòng đăng nhập lại.");
+    }
     
 
 }
