@@ -85,7 +85,7 @@ public class YourOrderController {
         model.addAttribute("paymentMethod",a.getPaymentModel().getMethod());
         model.addAttribute("DeliveryTime",a.getDeliveryTime());
         model.addAttribute("Status",a.getStatus());
-        model.addAttribute("shipperName",a.getShipperOrder() != null ? a.getShipperOrder().getUserName() : null);
+        model.addAttribute("shipperName",a.getShipperOrder() != null ? a.getShipperOrder().getUsername() : null);
         model.addAttribute("Order",a);
         return "/web/your-orderdetail";
     }

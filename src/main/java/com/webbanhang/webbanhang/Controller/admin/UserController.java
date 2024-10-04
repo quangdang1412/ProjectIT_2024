@@ -61,7 +61,7 @@ public class UserController  {
         model.addAttribute("listRole",roleService.getAllRole());
         model.addAttribute("checkUser","update");
         model.addAttribute("UserID",a.getUserID());
-        model.addAttribute("UserName",a.getUserName());
+        model.addAttribute("UserName",a.getUsername());
         model.addAttribute("Phone",a.getPhone());
         model.addAttribute("Email",a.getEmail());
         model.addAttribute("Password",passwordEncoder.encode(a.getPassword()));

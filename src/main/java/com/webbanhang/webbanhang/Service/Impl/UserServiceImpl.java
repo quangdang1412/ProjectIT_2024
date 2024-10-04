@@ -118,7 +118,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
         UserModel existingUser = userRepository.findById(userId).orElse(null);
         if (existingUser != null) {
             existingUser.setEmail(user.getEmail());
-            existingUser.setUserName(user.getUserName());
+            existingUser.setUserName(user.getUsername());
             existingUser.setPhone(user.getPhone());
             existingUser.setAddress(user.getAddress());
             existingUser.setGender(user.getGender());
