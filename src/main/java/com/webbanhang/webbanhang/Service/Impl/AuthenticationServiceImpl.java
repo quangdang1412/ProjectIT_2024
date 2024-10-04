@@ -43,9 +43,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         newUser.setUserName(request.getName());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setEmail(request.getEmail());
+        newUser.setPhone(request.getPhone());
         newUser.setUserID(userId);
         RoleModel role = roleService.findRoleByID(2);
         newUser.setRole(role);
+        
 
         UserModel createdUser = userRepository.save(newUser);
         String jwtToken = jwtService.generateToken(createdUser);

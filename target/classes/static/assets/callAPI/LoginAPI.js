@@ -6,16 +6,6 @@ $(document).ready(function () {
     const email = $('[name="username"]').val();
     const password = $('[name="password"]').val();
 
-    // Kiểm tra xem email và password có trống không
-    if (!email || !password) {
-      Swal.fire({
-        title: "Lỗi!",
-        text: "Vui lòng nhập email và mật khẩu.",
-        icon: "error",
-      });
-      return;
-    }
-
     $.ajax({
       url: "/api/auth/login", // API login
       method: "POST",
@@ -63,18 +53,4 @@ $(document).ready(function () {
       },
     });
   });
-
-  // Hàm đăng xuất
-  function logout() {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      Swal.fire({
-        title: "Lỗi!",
-        text: "Bạn chưa đăng nhập.",
-        icon: "error",
-      });
-      return;
-    }
-  }
 });
