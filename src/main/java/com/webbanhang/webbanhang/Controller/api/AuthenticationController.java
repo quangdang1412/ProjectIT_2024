@@ -18,6 +18,9 @@ import com.webbanhang.webbanhang.Model.AuthenticationResponse;
 import com.webbanhang.webbanhang.Model.RegisterRequest;
 import com.webbanhang.webbanhang.Service.Impl.AuthenticationServiceImpl;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 
 
 
@@ -45,9 +48,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request,HttpServletRequest httpServletRequest) {
             AuthenticationResponse response = authenticationService.login(request);
             
+        HttpSession session = httpServletRequest.getSession();
+        session.setAttribute("token", response.getToken());
+        session.setAttribute("userdata", response.getUserDto());
+
             return ResponseEntity.ok()
             .header("Authorization", "Bearer " + response.getToken()) // Thêm token vào header
             .body(response);

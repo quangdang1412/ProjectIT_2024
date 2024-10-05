@@ -61,9 +61,7 @@
     <!-- Spinner End -->
 
     <!-- Navbar start -->
-    <div th:replace="~{fragment/navbar.html :: navbar}">
-
-    </div>
+    <div th:replace="~{fragment/navbar.html :: navbar}"></div>
     <!-- Navbar End -->
     <!-- Fruits Shop Start-->
     <div class="container-fluid fruite py-5 mb-5 hero-header">
@@ -281,11 +279,18 @@
                         >‹</a
                       >
                     </li>
-                    <li class="dt-paging-button page-item"
-                        th:each="i : ${#numbers.sequence(1, totalPages)}"
-                        th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1}"
-                        th:classappend="${currentPage == i} ? 'active' : ''">
-                      <a class="page-link" th:href="@{'?pageNo=' + ${i}}" aria-controls="example" th:text="${i}"></a>
+                    <li
+                      class="dt-paging-button page-item"
+                      th:each="i : ${#numbers.sequence(1, totalPages)}"
+                      th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1}"
+                      th:classappend="${currentPage == i} ? 'active' : ''"
+                    >
+                      <a
+                        class="page-link"
+                        th:href="@{'?pageNo=' + ${i}}"
+                        aria-controls="example"
+                        th:text="${i}"
+                      ></a>
                     </li>
                     <li class="dt-paging-button page-item disabled">
                       <a
@@ -343,5 +348,7 @@
     <!-- Template Javascript -->
     <script th:src="@{/assets/js/main.js}"></script>
     <script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
+    <script type="module" th:src="@{/assets/callAPI/home.js}"></script>
+    <script th:src="@{/assets/callAPI/sendAPI.js}"></script>
   </body>
 </html>
