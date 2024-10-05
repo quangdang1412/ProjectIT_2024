@@ -1,5 +1,6 @@
 package com.webbanhang.webbanhang.Repository;
 
+import com.google.cloud.storage.Option;
 import com.webbanhang.webbanhang.Model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,5 @@ public interface IUserRepository extends JpaRepository<UserModel,String> {
 
     UserModel findByUserID(String userId);
 
+    UserModel findByEmail(String email);
 }

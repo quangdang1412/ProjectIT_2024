@@ -8,8 +8,7 @@ public class UserMapper {
     public static UserRequestDTO mapToUserDto(UserModel user) {
         UserRequestDTO userDto = new UserRequestDTO();
         userDto.setUserID(user.getUserID());
-        userDto.setPassword(user.getPassword());
-       
+        userDto.setPhone(user.getPhone());       
         userDto.setUserName(user.getUsername());
         userDto.setEmail(user.getEmail());
         userDto.setType(user.getRole().getType());

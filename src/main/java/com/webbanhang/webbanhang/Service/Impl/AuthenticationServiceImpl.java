@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.webbanhang.webbanhang.DTO.request.User.AuthenticationRequest;
 import com.webbanhang.webbanhang.DTO.request.User.RefreshRequest;
 import com.webbanhang.webbanhang.DTO.request.User.UserRequestDTO;
+import com.webbanhang.webbanhang.Exception.EmailAlreadyExistsException;
 import com.webbanhang.webbanhang.Exception.InvalidPasswordException;
 import com.webbanhang.webbanhang.Exception.TokenException;
 import com.webbanhang.webbanhang.Mapper.UserMapper;
@@ -38,14 +39,19 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
+        if (userService.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException("Email đã đăng kí tài khoản: " + request.getEmail());
+        }
         UserModel newUser = new UserModel();
         String userId = "U" + (userService.getAllUser().size() + 1);
         newUser.setUserName(request.getName());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setEmail(request.getEmail());
+        newUser.setPhone(request.getPhone());
         newUser.setUserID(userId);
         RoleModel role = roleService.findRoleByID(2);
         newUser.setRole(role);
+        
 
         UserModel createdUser = userRepository.save(newUser);
         String jwtToken = jwtService.generateToken(createdUser);

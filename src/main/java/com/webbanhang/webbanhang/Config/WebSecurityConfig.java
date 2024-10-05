@@ -24,6 +24,7 @@ public class WebSecurityConfig {
 
     private final AuthenticationFilter authenticationFilter;
     private final AuthenticationProvider authenticationProvider;
+    private String []role_more = {"SELLER", "SHIPPER", "ADMIN"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,8 +46,8 @@ public class WebSecurityConfig {
                         "/login",
                         "/test"
                 ).permitAll()
-                .requestMatchers("/admin/Order").hasAnyRole("SELLER", "SHIPPER", "ADMIN")
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/admin/Order").hasAnyAuthority(role_more)
+                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
@@ -59,6 +60,10 @@ public class WebSecurityConfig {
                     response.sendError(403, "Access Denied")
                 )
             );
+            http.exceptionHandling(exceptionHandling -> exceptionHandling
+                          .accessDeniedPage("/404")
+            );
+            
 
         http.csrf(AbstractHttpConfigurer::disable);
 

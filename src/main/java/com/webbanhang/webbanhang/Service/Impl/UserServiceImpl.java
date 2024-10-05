@@ -130,6 +130,8 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
     public UserModel createUser(UserModel user) {
         return userRepository.save(user);
     }
-
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
 
 }

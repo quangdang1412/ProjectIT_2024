@@ -18,6 +18,11 @@ import java.util.Map;
 public class OrderController {
     private final IOrderService orderService;
     private final IUserService userService;
+    // @GetMapping("/Order")
+    // public String tesString(Model model)
+    // {
+    //     return "/web/test";
+    // }
     @GetMapping("/Order")
     public String checkActionGet(Model model,@RequestParam Map<String,String> allParams, RedirectAttributes redirectAttributes)
     {

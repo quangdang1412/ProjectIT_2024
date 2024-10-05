@@ -15,6 +15,7 @@ public interface IUserService {
     String saveUser(UserRequestDTO request);
     UserModel updateUser(String id, UserModel user);
     UserModel createUser(UserModel user);
+    boolean existsByEmail(String email);
 
 
 }
