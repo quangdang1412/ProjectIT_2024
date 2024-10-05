@@ -25,15 +25,11 @@ import java.util.List;
 public class HomeController {
     @Autowired
     private IUserService userService;
-    
+
     @Autowired
     private  LoadData loadData;
-    private final CheckLogin checkLogin = new CheckLogin();
-
-    
     @RequestMapping(value = {"/", "/index","/static"})
     public String home(Model model,HttpSession session) {
-        checkLogin.checkLogin(session,model,userService);
         loadData.loadProduct(model);
         loadData.loadOrderDetail(model);
         loadData.loadCategory(model);
@@ -41,7 +37,6 @@ public class HomeController {
     }
     @GetMapping("/contact")
     public String contact(Model model,HttpSession session) {
-        checkLogin.checkLogin(session,model,userService);
         return "/web/contact";
     }
 
@@ -49,10 +44,9 @@ public class HomeController {
     public String testimonial() {
         return "/web/testimonial";
     }
-    
+
     @GetMapping("/shop-detail")
     public String shopDetail(Model model,HttpSession session){
-        checkLogin.checkLogin(session,model,userService);
         return "/web/shop-detail";
     }
 
@@ -60,7 +54,7 @@ public class HomeController {
     public String login() {
         return "/web/login";
     }
-   
+
 
     @GetMapping("/register")
     public String register(Model model){
@@ -70,13 +64,12 @@ public class HomeController {
 
     @GetMapping("/inforuser")
     public String inforuser(Model model, HttpSession session){
-        checkLogin.checkLogin(session,model,userService);
         UserModel a = (UserModel) session.getAttribute("UserLogin");
         UserModel b = userService.findUserByID(a.getUserID());
         model.addAttribute("User",b);
         return "/web/inforUser";
     }
-   @GetMapping("/list")
+    @GetMapping("/list")
     public ResponseEntity<List<UserModel>> getUsers() {
         List<UserModel> users = userService.getAllUser();
         return ResponseEntity.ok(users);
@@ -85,4 +78,4 @@ public class HomeController {
     public String test(){
         return "/web/test";
     }
-}   
+}

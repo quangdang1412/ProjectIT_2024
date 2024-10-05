@@ -28,10 +28,10 @@ public class YourOrderController {
     private IOrderService orderService;
     @Autowired
     private IUserService userService;
-    private final CheckLogin checkLogin = new CheckLogin();
+
     @GetMapping("/yourOrder")
     public String yourOrder(Model model, @ModelAttribute("productId") String productId, HttpSession session) {
-        checkLogin.checkLogin(session,model,userService);
+       // checkLogin.checkLogin(session,model,userService);
         UserModel a = (UserModel)session.getAttribute("UserLogin");
         List<OrderModel> listOrder =  a.getUserOrder();
         model.addAttribute("listOrder",listOrder);
@@ -40,7 +40,7 @@ public class YourOrderController {
     @GetMapping("/yourOrder/updateorder")
     public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session)
     {
-        checkLogin.checkLogin(session,model,userService);
+        //checkLogin.checkLogin(session,model,userService);
         String action = allParams.get("action");
         String id =allParams.get("id");
         if (action == null) {
@@ -57,7 +57,7 @@ public class YourOrderController {
     @PostMapping("/yourOrder/updateorder")
     public String checkActionPost(Model model, RedirectAttributes redirectAttributes, @RequestParam Map<String,String> allParams, @ModelAttribute("Order") OrderModel order,HttpSession session)
     {
-        checkLogin.checkLogin(session,model,userService);
+        //checkLogin.checkLogin(session,model,userService);
         String action = allParams.get("action");
         if (action == null) {
             action = "list";

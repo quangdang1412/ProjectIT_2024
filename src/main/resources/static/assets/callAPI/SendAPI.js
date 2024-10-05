@@ -127,6 +127,8 @@ function sendRequest(method,endpoint1,endpoint2,data,url){
     xhr.open(method, `http://localhost:8080/api/${endpoint1}/${endpoint2}`, true);
     if(endpoint1 !=="product" && endpoint2 !=="add")
         xhr.setRequestHeader("Content-Type", "application/json");
+        const token = localStorage.getItem("token");
+        xhr.setRequestHeader("Authorization", `Bearer ${token}`);
 
     xhr.onreadystatechange = function () {
         notify(xhr,url,data)
@@ -135,4 +137,23 @@ function sendRequest(method,endpoint1,endpoint2,data,url){
         xhr.send(JSON.stringify(data));
     else
         xhr.send(data);
+}
+function getAccess(url) {
+    fetch("/{url}", {
+        method: "GET",
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+    }).then(response => {
+        if (response.redirected) {
+            window.location.href = url; // Chuyển hướng người dùng nếu server yêu cầu
+        }
+        return response.text(); // Nếu response trả về HTML
+    })
+        .then(html => {
+            document.open();
+            document.write(html);
+            document.close(); // Hiển thị trang HTML mới
+        })
+        .catch(error => console.error('Error:', error));
 }

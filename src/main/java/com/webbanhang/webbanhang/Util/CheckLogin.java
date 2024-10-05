@@ -1,37 +1,31 @@
 package com.webbanhang.webbanhang.Util;
 
+import com.webbanhang.webbanhang.Model.AuthenticationResponse;
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.IUserService;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
 @Component
+@RequiredArgsConstructor
 public class CheckLogin {
-    public void checkLogin(HttpSession session, Model model,IUserService userService)
+    private final IUserService userService;
+    public void checkLogin(HttpSession session, AuthenticationResponse response )
     {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth != null && auth.isAuthenticated() && !(auth.getPrincipal() instanceof String)) {
-            UserModel user = (UserModel) auth.getPrincipal();
-            UserModel userModel = userService.findByEmail(user.getEmail());
+        if (response != null) {
+            UserModel userModel = userService.findByEmail(response.getUserDto().getEmail());
             session.setAttribute("UserLogin", userModel);
-            session.setAttribute("UserLoginRole",userModel.getRole().getRoleName());
-            session.setAttribute("isLogIn",true);
-            session.setAttribute("fullName",user.getUsername());
-            if (userModel.getUserCart() != null)
-                session.setAttribute("countProductInCart",userModel.getUserCart().size());
-            else
-                session.setAttribute("countProductInCart",0);
-            model.addAttribute("fullName", user.getUsername());
-            model.addAttribute("authorities", user.getAuthorities());
-            model.addAttribute("isLoggedIn", true);
-
+            session.setAttribute("UserLoginRole", userModel.getRole().getRoleName());
+            session.setAttribute("isLoggedIn", 1);
+            session.setAttribute("fullName", userModel.getUsername());
+            session.setAttribute("authorities", userModel.getAuthorities());
+            session.setAttribute("countProductInCart", userModel.getUserCart() != null ? userModel.getUserCart().size() : 0);
         } else {
-            session.setAttribute("isLogIn",false);
-            model.addAttribute("isLoggedIn", false);
+            session.setAttribute("isLoggedIn", 0);
         }
     }
 }

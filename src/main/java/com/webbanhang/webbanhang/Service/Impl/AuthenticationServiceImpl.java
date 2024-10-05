@@ -1,5 +1,6 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
+import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -78,36 +79,21 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         if (token == null || token.isRevoked() || token.isExpired()) {
             throw new TokenException("Invalid or expired refresh token");
         }
-
         UserModel user = userRepository.findByUserID(token.getUserId());
         String newAccessToken = jwtService.generateToken(user);
-
         token.setToken(newAccessToken);
         token.setExpired(false);
         token.setRevoked(false);
         tokenRepository.save(token);
-
         return AuthenticationResponse.builder()
                 .userDto(UserMapper.mapToUserDto(user))
                 .token(newAccessToken)
                 .build();
     }
-
     @Override
     public AuthenticationResponse login(AuthenticationRequest request) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmail(), request.getPassword()
-                    )
-            );
-        } catch (BadCredentialsException e) {
-            throw new InvalidPasswordException("Tài khoản hoặc mật khẩu không đúng!");
-        }
-
-        UserModel user = userRepository.getUserByEmail(request.getEmail());
+        UserModel user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new ResourceNotFoundException("Tài khoản hoặc mật khẩu không chính xác"));
         String jwtToken = jwtService.generateToken(user);
-
         Token token = Token.builder()
                 .userId(user.getUserID())
                 .token(jwtToken)
@@ -115,9 +101,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .revoked(false)
                 .build();
         tokenRepository.save(token);
-
         UserRequestDTO userDto = UserMapper.mapToUserDto(user);
-
         return AuthenticationResponse.builder()
                 .userDto(userDto)
                 .token(jwtToken)
@@ -127,14 +111,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     @Override
     public boolean logout(String token) {
         Token tokenEntity = tokenRepository.findByToken(token);
-        
         if (tokenEntity == null) {
             return false;
         }
-
         tokenEntity.setRevoked(true);
         tokenRepository.save(tokenEntity);
-
         return true;
     }
 }

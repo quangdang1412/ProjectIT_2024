@@ -37,13 +37,11 @@ public class ShopDetailController {
     private  LoadData loadData;
 
 
-    private CheckLogin checkLogin = new CheckLogin();
 
 
 
     @GetMapping("/detail/{productId}")
     public String detail(Model model, @ModelAttribute("productId") String productId,HttpSession session) {
-        checkLogin.checkLogin(session,model,userService);
         loadData.loadProduct(model);
         loadData.loadOrderDetail(model);
         loadData.loadCategory(model);

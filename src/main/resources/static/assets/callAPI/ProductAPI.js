@@ -31,6 +31,10 @@ function deleteProinCart(productId) {
   $.ajax({
     url: "/api/deleteproduct/" + productId,
     type: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"), // Include JWT token if necessary
+    },
     success: function (response) {
       console.log("Server response:", response); // Debugging log
       // Assume the response is a string that indicates success or error

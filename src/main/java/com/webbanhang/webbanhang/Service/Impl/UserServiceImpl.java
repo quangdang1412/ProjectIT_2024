@@ -131,7 +131,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
         return userRepository.save(user);
     }
     public boolean existsByEmail(String email) {
-        return userRepository.findByEmail(email) != null;
+        return userRepository.findByEmail(email).isPresent();
     }
 
 }

@@ -33,7 +33,7 @@ public class CheckOutController {
     private IOrderService orderService;
     @Autowired
     private ICartService cartService;
-    private final CheckLogin checkLogin = new CheckLogin();
+
     public void loadProduct(Model model,HttpSession session) {
         UserModel a = (UserModel) session.getAttribute("UserLogin");
         List<CartModel> carts = new ArrayList<>();
@@ -66,8 +66,11 @@ public class CheckOutController {
     }
     @GetMapping("/checkout")
     public String checkout(Model model, HttpSession session) {
-        checkLogin.checkLogin(session,model,userService);
-        loadProduct(model,session);
-        return "/web/checkout";
+        //checkLogin.checkLogin(session,model,userService);
+        if((UserModel)session.getAttribute("UserLogin") != null) {
+            loadProduct(model,session);
+            return "/web/checkout";
+        }
+        return "redirect:/login";
     }
 }

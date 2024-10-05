@@ -24,28 +24,32 @@ public class WebSecurityConfig {
 
     private final AuthenticationFilter authenticationFilter;
     private final AuthenticationProvider authenticationProvider;
+    private  String[] WHITE_LITS ={ "/",
+            "/static/**",
+            "/template/**",
+            "/error",
+            "/api/**",
+            "/assets/**",
+            "/signup",
+            "/register",
+            "/shop",
+            "/ImageProduct/**",
+            "/detail/**",
+            "/locations",
+            "/login",
+            "/inforuser",
+            "/changePassword",
+            "/yourOrder",
+            "/cart",
+            "/checkout",
+            "/test"};
     private String []role_more = {"SELLER", "SHIPPER", "ADMIN"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(requests -> requests
-                .requestMatchers(
-                        "/",
-                        "/static/**",
-                        "/template/**",
-                        "/error",
-                        "/api/**",
-                        "/assets/**",
-                        "/signup",
-                        "/register",
-                        "/shop",
-                        "/ImageProduct/**",
-                        "/detail/**",
-                        "/locations",
-                        "/login",
-                        "/test"
-                ).permitAll()
+                .requestMatchers( WHITE_LITS).permitAll()
                 .requestMatchers("/admin/Order").hasAnyAuthority(role_more)
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
@@ -63,10 +67,7 @@ public class WebSecurityConfig {
             http.exceptionHandling(exceptionHandling -> exceptionHandling
                           .accessDeniedPage("/404")
             );
-            
-
         http.csrf(AbstractHttpConfigurer::disable);
-
         return http.build();
     }
     @Bean
