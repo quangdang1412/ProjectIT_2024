@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fruitables - Vegetable Website Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="keywords" />
+    <meta content="" name="description" />
+    <style>
+      #BankInfor {
+        display: none; /* Initially hidden */
+      }
+    </style>
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icon Font Stylesheet -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Libraries Stylesheet -->
+    <link
+      th:href="@{/assets/lib/lightbox/css/lightbox.min.css}"
+      rel="stylesheet"
+    />
+    <link
+      th:href="@{/assets/lib/owlcarousel/assets/owl.carousel.min.css}"
+      rel="stylesheet"
+    />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Template Stylesheet -->
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet" />
+    <!-- Select2 CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Select2 JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        // Load provinces dropdown on page load
+        $.ajax({
+          url: "http://localhost:8080/locations",
+          type: "GET",
+          success: function (data) {
+            var provinces = [];
+            var districts = {};
+            var communes = {};
+
+            // Process data to populate arrays
+            data.forEach(function (location) {
+              if (!provinces.includes(location.provinceName)) {
+                provinces.push(location.provinceName);
+              }
+
+              // Initialize district array if not exists
+              if (!districts[location.provinceName]) {
+                districts[location.provinceName] = [];
+              }
+              if (
+                !districts[location.provinceName].includes(
+                  location.districtName
+                )
+              ) {
+                districts[location.provinceName].push(location.districtName);
+              }
+
+              // Initialize commune array if not exists
+              if (!communes[location.districtName]) {
+                communes[location.districtName] = [];
+              }
+              if (
+                !communes[location.districtName].includes(location.communeName)
+              ) {
+                communes[location.districtName].push(location.communeName);
+              }
+            });
+
+            // Populate provinces dropdown
+            var provinceDropdown = $("#provinceDropdown");
+            provinceDropdown.empty();
+            provinceDropdown.append(
+              '<option selected="true" disabled>Chọn tỉnh thành</option>'
+            );
+            provinces.forEach(function (province) {
+              provinceDropdown.append(
+                $("<option></option>").attr("value", province).text(province)
+              );
+            });
+
+            // Initialize Select2 for provinces dropdown
+            provinceDropdown.select2();
+
+            // Handle province change event to load districts
+            provinceDropdown.change(function () {
+              var selectedProvince = $(this).val();
+              var districtDropdown = $("#districtDropdown");
+              districtDropdown.empty();
+              districtDropdown.append(
+                '<option selected="true" disabled>Choose thành phố/huyện </option>'
+              );
+              districts[selectedProvince].forEach(function (district) {
+                districtDropdown.append(
+                  $("<option></option>").attr("value", district).text(district)
+                );
+              });
+
+              // Refresh Select2 after updating options
+              districtDropdown.select2("destroy").select2();
+            });
+
+            // Initialize Select2 for districts dropdown
+            $("#districtDropdown").select2();
+
+            // Handle district change event to load communes
+            $("#districtDropdown").change(function () {
+              var selectedDistrict = $(this).val();
+              var communeDropdown = $("#communeDropdown");
+              communeDropdown.empty();
+              communeDropdown.append(
+                '<option selected="true" disabled>Chọn phường/xã</option>'
+              );
+              communes[selectedDistrict].forEach(function (commune) {
+                communeDropdown.append(
+                  $("<option></option>").attr("value", commune).text(commune)
+                );
+              });
+
+              // Refresh Select2 after updating options
+              communeDropdown.select2("destroy").select2();
+            });
+
+            // Initialize Select2 for communes dropdown
+            $("#communeDropdown").select2();
+          },
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <!-- Spinner Start -->
+    <div
+      id="spinner"
+      class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center"
+    >
+      <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Navbar start -->
+    <div th:replace="~{fragment/navbar.html :: navbar}">
+
+    </div>
+    <!-- Navbar End -->
+
+    <!-- Checkout Page Start -->
+    <div class="container-fluid py-5 mb-5 hero-header">
+      <div class="container py-5">
+        <h1 class="mb-4">Đơn hàng</h1>
+        <form >
+          <div class="row g-5">
+            <div class="col-md-12 col-lg-6 col-xl-5">
+              <h5>Thông tin khách hàng</h5>
+              <div class="form-item">
+                <label class="form-label my-3">Mã hoá đơn<sup>*</sup></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="OrderID"
+                  th:value="${OrderID}"
+                  required
+                  readonly
+                />
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3"
+                  >Họ tên người nhận<sup>*</sup></label
+                >
+                <input type="text" class="form-control" name="Name" required />
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3">Số điện thoại<sup>*</sup></label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="Phone"
+                  required
+                />
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3"
+                  >Địa chỉ giao hàng<sup>*</sup></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  name="Address"
+                  required
+                />
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3">Tỉnh<sup>*</sup></label>
+                <select id="provinceDropdown" class="form-control">
+                  <option selected="true" disabled>Chọn tỉnh</option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3"
+                  >Thành phố/Huyện<sup>*</sup></label
+                >
+                <select id="districtDropdown" class="form-control">
+                  <option selected="true" disabled>Chọn thành phố</option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3">Phường/Xã<sup>*</sup></label>
+                <select id="communeDropdown" class="form-control">
+                  <option selected="true" disabled>Chọn phường xã</option>
+                </select>
+              </div>
+
+              <hr />
+              <h5>Phương thức vận chuyển</h5>
+              <div class="form-check text-start">
+                <input
+                  type="radio"
+                  class="form-check-input bg-primary border-0"
+                  id="Shipping-1"
+                  name="shippingOption"
+                  value="100000"
+                  onchange="updateShippingCost()"
+                  th:checked="${shippingOption eq 'fastShipping'}"
+                />
+                <label class="form-check-label" for="Shipping-1">
+                  Giao hàng nhanh
+                </label>
+                <span class="text-muted fw-normal text-wrap mb-1 d-block"
+                  >Dự kiến giao hàng vào: <span th:text="${fastDate}"></span
+                ></span>
+                <span class="text-muted fw-normal d-block"
+                  >Phí vận chuyển: 100,000 đ</span
+                >
+              </div>
+
+              <div class="form-check text-start">
+                <input
+                  type="radio"
+                  class="form-check-input bg-primary border-0"
+                  id="Shipping-2"
+                  name="shippingOption"
+                  value="50000"
+                  onchange="updateShippingCost()"
+                  th:checked="${shippingOption eq 'economyShipping'  or shippingOption == null}"
+                />
+                <label class="form-check-label" for="Shipping-2"
+                  >Giao hàng tiết kiệm</label
+                >
+                <span class="text-muted fw-normal text-wrap mb-1 d-block"
+                  >Dự kiến giao hàng vào: <span th:text="${normalDate}"></span
+                ></span>
+                <span class="text-muted fw-normal d-block"
+                  >Phí vận chuyển: 50,000 đ</span
+                >
+              </div>
+              <hr />
+              <h5>Phương thức thành toán</h5>
+              <div
+                class="row g-4 text-center align-items-center justify-content-center border-bottom py-3"
+              >
+                <div class="col-12">
+                  <div class="form-check text-start my-3">
+                    <input
+                      type="radio"
+                      class="form-check-input bg-primary border-0"
+                      id="Transfer-1"
+                      name="paymentMethod"
+                      value="Transfer"
+                      th:checked="${paymentMethod eq 'Transfer'}"
+                    />
+                    <label class="form-check-label" for="Transfer-1"
+                      >Online Banking</label
+                    >
+                  </div>
+                  <div id="BankInfor">
+                    <p class="text-start text-dark">Ngân hàng: MBBank</p>
+                    <p class="text-start text-dark">Số tài khoản: tphong934</p>
+                    <p class="text-start text-dark">
+                      Vui lòng nhập đầy đủ thông tin như mã hóa đơn, số điện
+                      thoại vào nội dung chuyển khoản để đảm bảo bạn có thể
+                      thanh toán đúng đơn hàng mình muốn. Đơn hàng của bạn sẽ
+                      không được vận chuyển cho tới khi bạn thanh toán
+                    </p>
+                    <p class="text-start text-dark">
+                      Ví dụ nội dung chuyển khoản: O001 081*********
+                    </p>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-check text-start my-3">
+                    <input
+                      type="radio"
+                      class="form-check-input bg-primary border-0"
+                      id="Payments-1"
+                      name="paymentMethod"
+                      value="InPlace"
+                      th:checked="${paymentMethod eq 'InPlace' or paymentMethod == null}"
+                    />
+                    <label class="form-check-label" for="Payments-1"
+                      >Thanh toán khi nhận hàng</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-6 col-xl-7">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Sản phẩm</th>
+                      <th scope="col">Tên</th>
+                      <th scope="col">Giá</th>
+                      <th scope="col">Số lượng</th>
+                      <th scope="col" style="min-width: 100px">Tổng</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="cart: ${carts}">
+                      <th scope="row">
+                        <div class="d-flex align-items-center">
+                          <img
+                            th:src="@{'/ImageProduct/' + ${cart.ProductCart.Image?.ImageCode}}"
+                            th:alt="${cart.ProductCart.Image?.ImageCode}"
+                            class="img-fluid me-5 rounded-circle"
+                            style="width: 80px; height: 80px"
+                          />
+                        </div>
+                      </th>
+                      <td>
+                        <p
+                          class="mb-0 mt-4"
+                          th:text="${cart.ProductCart.ProductName}"
+                          style="max-width: 400px; word-wrap: break-word"
+                        ></p>
+                      </td>
+                      <td>
+                        <p
+                          class="mb-0 mt-4"
+                          th:text="${cart.ProductCart.Discount} != null
+                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100, 1, 'COMMA', 0, 'POINT')} + 'đ'
+                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice, 1, 'COMMA', 0, 'POINT')} + 'đ'"
+                        >
+                          ">
+                        </p>
+                      </td>
+                      <td>
+                        <p class="mb-0 mt-4" th:text="${cart.Quantity}"></p>
+                      </td>
+                      <td>
+                        <p
+                          class="mb-0 mt-4"
+                          th:text="${cart.ProductCart.Discount} != null
+                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + 'đ'
+                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + 'đ'"
+                        >
+                          ">
+                        </p>
+                      </td>
+                      <td>
+                        <a
+                          th:attr="onclick=|deleteProinCart('${cart.ProductCart.ProductID}')|"
+                          class="btn btn-md rounded-circle bg-light border mt-4"
+                        >
+                          <i class="fa fa-times text-danger"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"></th>
+                      <td class="py-5"></td>
+                      <td class="py-5"></td>
+                      <td class="py-5">
+                        <h5 class="mb-0 text-dark py-3">Tổng tiền:</h5>
+                      </td>
+                      <td class="py-5">
+                        <div class="py-3 border-bottom border-top">
+                          <p
+                            class="mb-0 text-dark"
+                            id="totalAmount"
+                            th:value="${totalAmount}"
+                            th:text="${#numbers.formatDecimal(totalAmount, 1, 'COMMA', 0, 'POINT')} + 'đ'"
+                          ></p>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"></th>
+                      <td class="py-5"></td>
+                      <td class="py-5"></td>
+                      <td class="py-5">
+                        <h5 class="mb-0 text-dark py-3">Phí vận chuyển:</h5>
+                      </td>
+                      <td class="py-5">
+                        <div class="py-3 border-bottom border-top">
+                          <p class="mb-0 text-dark" id="shippingCost">
+                            50,000đ
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"></th>
+                      <td class="py-5"></td>
+                      <td class="py-5"></td>
+                      <td class="py-5">
+                        <h5 class="mb-0 text-dark py-3">Thành tiền:</h5>
+                      </td>
+                      <td class="py-5">
+                        <div class="py-3 border-bottom border-top">
+                          <p class="mb-0 text-dark" id="totalElement">0</p>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                class="row g-4 text-center align-items-center justify-content-center pt-4"
+              >
+                <button
+                  type="button"
+                  class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary"
+                  th:attr="onclick=|sendOrderData('${checkOrder == null ? 'insert' : 'update'}')|"
+                >
+                  Đặt hàng
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Checkout Page End -->
+
+    <!-- Footer Start -->
+    <div th:replace="~{fragment/footer.html}"></div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a
+      href="#"
+      class="btn btn-primary border-3 border-primary rounded-circle back-to-top"
+      ><i class="fa fa-arrow-up"></i
+    ></a>
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/assets/lib/easing/easing.min.js}"></script>
+    <script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
+    <script th:src="@{/assets/lib/lightbox/js/lightbox.min.js}"></script>
+    <script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Template Javascript -->
+    <script th:src="@{/assets/js/main.js}"></script>
+    <script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
+    <script th:src="@{/assets/callAPI/SendAPI.js}"></script>
+    <script th:src="@{/assets/callAPI/OrderAPI.js}"></script>
+    <script>
+      function formatCurrency(amount) {
+        return amount.toFixed(0).replace(/\d(?=(\d{3})+$)/g, "$&,");
+      }
+
+      function updateShippingCost() {
+        const shippingOptions = document.getElementsByName("shippingOption");
+        let selectedValue = 0;
+
+        for (let i = 0; i < shippingOptions.length; i++) {
+          if (shippingOptions[i].checked) {
+            selectedValue = parseInt(shippingOptions[i].value, 10);
+            break;
+          }
+        }
+
+        const shippingCostElement = document.getElementById("shippingCost");
+        shippingCostElement.textContent = formatCurrency(selectedValue);
+
+        updateTotal(selectedValue);
+      }
+
+      function updateTotal(shippingCost) {
+        if (shippingCost === undefined) {
+          shippingCost = 50000;
+        }
+
+        const totalAmount = parseFloat(
+          document
+            .getElementById("totalAmount")
+            .textContent.replace("đ", "")
+            .replace(",", "")
+        );
+
+        const total = shippingCost + totalAmount;
+        document.getElementById("totalElement").textContent =
+          formatCurrency(total) + "đ";
+      }
+
+      // Khởi chạy tính toán tổng
+      updateTotal();
+      //bank infor
+      function toggleBankInfo() {
+        const transferRadio = document.getElementById("Transfer-1");
+        const bankInfo = document.getElementById("BankInfor");
+
+        if (transferRadio.checked) {
+          bankInfo.style.display = "block";
+        } else {
+          bankInfo.style.display = "none";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const radios = document.getElementsByName("paymentMethod");
+        radios.forEach((radio) => {
+          radio.addEventListener("change", toggleBankInfo);
+        });
+        // Initial check on page load
+        toggleBankInfo();
+      });
+    </script>
+
+  </body>
+</html>

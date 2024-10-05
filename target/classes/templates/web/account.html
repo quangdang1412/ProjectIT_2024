@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link th:href="@{/assets/css/login.css}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+    />
+  </head>
+  <body style="background: #34a76d">
+    <div class="container" id="container" style="width: 384px">
+      <div class="form-container sign-in-container" style="width: 100%">
+        <form enctype="multipart/form-data">
+          <h1>Đổi mật khẩu</h1>
+          <input
+            type="password"
+            name="oldpassword"
+            placeholder="Mật khẩu cũ"
+            required=""
+          />
+          <input
+            type="password"
+            name="newpassword"
+            placeholder="Mật khẩu mới"
+            required=""
+          />
+          <input
+            type="password"
+            name="confirmpassword"
+            placeholder="Xác nhận mật khẩu mới"
+            required=""
+          />
+          <button  type="button" th:attr="onclick=|changeUserPassword()|">Xong</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="/assets/js/login.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/assets/callAPI/sendAPI.js}"></script>
+    <script th:src="@{/assets/callAPI/UserAPI.js}"></script>
+  </body>
+</html>

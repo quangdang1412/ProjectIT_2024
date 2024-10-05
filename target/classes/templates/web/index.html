@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tạp Hoá IT</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="keywords" />
+    <meta content="" name="description" />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      th:href="@{/assets/img/logoit3.png}"
+    />
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+    />
+
+    <!-- Icon Font Stylesheet -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Libraries Stylesheet -->
+    <link
+      th:href="@{/assets/lib/lightbox/css/lightbox.min.css}"
+      rel="stylesheet"
+    />
+    <link
+      th:href="@{/assets/lib/owlcarousel/assets/owl.carousel.min.css}"
+      rel="stylesheet"
+    />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+
+    <!-- Template Stylesheet -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}" />
+  </head>
+
+  <body>
+    <!-- Spinner Start -->
+    <div
+      id="spinner"
+      class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center"
+    >
+      <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Navbar start -->
+    <div th:replace="~{fragment/navbar.html :: navbar}"></div>
+    <!-- Navbar End -->
+
+    <!-- Hero Start -->
+    <div class="container-fluid py-5 mb-5 hero-header">
+      <div class="container py-5">
+        <div class="row g-5 align-items-center">
+          <div
+            id="carouselId"
+            class="carousel slide position-relative"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-inner" role="listbox">
+              <div class="carousel-item active rounded">
+                <img
+                  th:src="@{/assets/img/back1.jpg}"
+                  class="img-fluid w-100 h-100 bg-secondary rounded"
+                  alt="First slide"
+                />
+              </div>
+              <div class="carousel-item rounded">
+                <img
+                  th:src="@{/assets/img/back2.jpg}"
+                  class="img-fluid w-100 h-100 rounded"
+                  alt="Second slide"
+                />
+              </div>
+              <div class="carousel-item rounded">
+                <img
+                  th:src="@{/assets/img/back3.jpg}"
+                  class="img-fluid w-100 h-100 rounded"
+                  alt="Third slide"
+                />
+              </div>
+            </div>
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselId"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselId"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Hero End -->
+
+    <!-- Featurs Section Start -->
+    <div class="container-fluid featurs py-5">
+      <div class="container py-5">
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-3">
+            <div class="featurs-item text-center rounded bg-light p-4">
+              <div
+                class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto"
+              >
+                <i class="fas fa-car-side fa-3x text-white"></i>
+              </div>
+              <div class="featurs-content text-center">
+                <h5>Giao hàng tận nơi</h5>
+                <p class="mb-0">Giao hàng toàn quốc</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="featurs-item text-center rounded bg-light p-4">
+              <div
+                class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto"
+              >
+                <i class="fas fa-user-shield fa-3x text-white"></i>
+              </div>
+              <div class="featurs-content text-center">
+                <h5>Sản phẩm tốt</h5>
+                <p class="mb-0">100% sản phẩm chính hãng</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="featurs-item text-center rounded bg-light p-4">
+              <div
+                class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto"
+              >
+                <i class="fas fa-exchange-alt fa-3x text-white"></i>
+              </div>
+              <div class="featurs-content text-center">
+                <h5>30 ngày đổi trả</h5>
+                <p class="mb-0">Bảo hành 1 đổi 1 trong 30 ngày</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="featurs-item text-center rounded bg-light p-4">
+              <div
+                class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto"
+              >
+                <i class="fa fa-phone-alt fa-3x text-white"></i>
+              </div>
+              <div class="featurs-content text-center">
+                <h5>Hỗ trợ 24/7</h5>
+                <p class="mb-0">Hỗ trợ tận tâm, nhiệt tình</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Featurs Section End -->
+
+    <!-- Fruits Shop Start-->
+    <div class="container-fluid fruite py-5">
+      <div class="container py-5">
+        <div class="tab-class text-center">
+          <div class="row g-4">
+            <div class="col-lg-4 text-start">
+              <h1>Một số sản phẩm</h1>
+            </div>
+            <div class="col-lg-8 text-end">
+              <ul class="nav nav-pills d-inline-flex text-center mb-5">
+                <li class="nav-item">
+                  <a
+                    class="d-flex m-2 py-2 bg-light rounded-pill active category-link"
+                    data-bs-toggle="pill"
+                    href="#tab-1"
+                    data-category-id="all"
+                  >
+                    <span class="text-dark" style="width: 130px">Tất cả</span>
+                  </a>
+                </li>
+
+                <li
+                  class="nav-item"
+                  th:each="category, iterStat : ${categories}"
+                  th:if="${iterStat.index < 3}"
+                >
+                  <a
+                    class="d-flex m-2 py-2 bg-light rounded-pill category-link"
+                    data-bs-toggle="pill"
+                    href="#tab-3"
+                    th:data-category-id="${category.categoryID}"
+                  >
+                    <span
+                      class="text-dark"
+                      style="width: 130px"
+                      th:text="${category.categoryName}"
+                    ></span>
+                  </a>
+                </li>
+
+                <li class="nav-item dropdown" th:if="${categories.size() > 3}">
+                  <a
+                    class="d-flex m-2 py-2 bg-light rounded-pill category-link dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    style="
+                      position: relative;
+                      display: flex;
+                      align-items: center;
+                    "
+                  >
+                    <div style="width: 130px">
+                      <span class="text-dark">More</span>
+                      <i class="fas fa-caret-down ml-1"></i>
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li
+                      th:each="category, iterStat : ${categories}"
+                      th:if="${iterStat.index >= 3}"
+                    >
+                      <a
+                        class="dropdown-item category-link"
+                        data-bs-toggle="pill"
+                        href="#tab-3"
+                        th:data-category-id="${category.categoryID}"
+                      >
+                        <span
+                          class="text-dark"
+                          th:text="${category.categoryName}"
+                        ></span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+              <div class="row g-4">
+                <div class="col-lg-12">
+                  <div class="row g-4">
+                    <div
+                      class="col-md-6 col-lg-4 col-xl-3 list-item"
+                      th:each="product, iterStat : ${products}"
+                      th:data-category-id="${product.category?.categoryID}"
+                      th:if="${iterStat.index < 12}"
+                    >
+                      <div class="rounded position-relative fruite-item">
+                        <div class="fruite-img">
+                          <a th:href="@{/detail/{id}(id=${product.productID})}">
+                            <img
+                              th:src="@{'/ImageProduct/' + ${product.image?.imageCode}}"
+                              th:alt="${product.image?.imageCode}"
+                              class="img-fluid w-100 rounded-top"
+                              style="height: 240px"
+                            />
+                          </a>
+                          <div
+                            th:text="${product.category?.categoryName}"
+                            class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                            style="top: 10px; left: 10px"
+                          ></div>
+                          <div
+                            class="p-4 border border-secondary border-top-0 rounded-bottom"
+                          >
+                            <a
+                              th:href="@{/detail/{id}(id=${product.productID})}"
+                            >
+                              <h4
+                                style="
+                                  min-height: 115px;
+                                  display: -webkit-box;
+                                  -webkit-line-clamp: 4;
+                                  -webkit-box-orient: vertical;
+                                  overflow: hidden;
+                                "
+                                th:text="${product.productName}"
+                              >
+                                Grapes
+                              </h4>
+                            </a>
+                            <div
+                              class="d-flex justify-content-between flex-lg-wrap"
+                            >
+                              <p
+                                class="text-dark fs-5 fw-bold mb-0"
+                                th:text="${#numbers.formatDecimal(product.unitPrice,1,'COMMA',0,'POINT')} + 'đ'"
+                              ></p>
+                              <a
+                                href="#"
+                                class="btn border border-secondary rounded-pill px-3 text-primary"
+                                ><i
+                                  class="fa fa-shopping-bag me-2 text-primary"
+                                ></i>
+                                Giỏ hàng</a
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Fruits Shop End-->
+
+      <!-- Banner Section Start-->
+      <div
+        class="container-fluid banner bg-secondary my-5"
+        style="
+          background-color: transparent !important;
+          height: 800px;
+          width: 1400px;
+        "
+      >
+        <img
+          th:src="@{/assets/img/slider1_1.jpg}"
+          class="img-fluid w-100 h-100 bg-secondary rounded"
+          alt="First slide"
+        />
+      </div>
+      <!-- Banner Section End -->
+
+      <!-- Bestsaler Product Start -->
+      <div class="container-fluid py-5">
+        <div class="container py-5">
+          <div class="text-center mx-auto mb-5" style="max-width: 700px">
+            <h1 class="display-4">Sản phẩm bán chạy</h1>
+          </div>
+          <div class="row g-4">
+            <div
+              class="col-lg-6 col-xl-4"
+              th:each="bestSellingProduct : ${bestSellingProducts}"
+            >
+              <div class="p-4 rounded bg-light">
+                <div class="row align-items-center">
+                  <div class="col-6">
+                    <a
+                      th:href="@{/detail/{id}(id=${bestSellingProduct.productID})}"
+                    >
+                      <img
+                        th:src="@{'/ImageProduct/' + ${bestSellingProduct.image?.imageCode}}"
+                        th:alt="${bestSellingProduct.image?.imageCode}"
+                        class="img-fluid rounded-circle w-100"
+                        style="height: 150px"
+                      />
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <a
+                      class="h5"
+                      th:text="${#numbers.formatDecimal(bestSellingProduct.unitPrice,1,'COMMA',0,'POINT')} + 'đ'"
+                    ></a>
+                    <a
+                      th:href="@{/detail/{id}(id=${bestSellingProduct.productID})}"
+                    >
+                      <h4
+                        class="mb-3"
+                        th:text="${bestSellingProduct.productName}"
+                        style="
+                          display: -webkit-box;
+                          -webkit-line-clamp: 4;
+                          -webkit-box-orient: vertical;
+                          overflow: hidden;
+                          min-height: 115px;
+                        "
+                      ></h4>
+                    </a>
+                    <a
+                      href="#"
+                      class="btn border border-secondary rounded-pill px-3 text-primary"
+                      ><i class="fa fa-shopping-bag me-2 text-primary"></i> Add
+                      to cart</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Bestsaler Product End -->
+
+      <!-- Footer Start -->
+      <div th:replace="~{fragment/footer.html}"></div>
+      <!-- Footer End -->
+
+      <!-- Back to Top -->
+      <a
+        href="#"
+        class="btn btn-primary border-3 border-primary rounded-circle back-to-top"
+        ><i class="fa fa-arrow-up"></i
+      ></a>
+
+      <!-- JavaScript Libraries -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+      <script th:src="@{/assets/lib/easing/easing.min.js}"></script>
+      <script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
+      <script th:src="@{/assets/lib/lightbox/js/lightbox.min.js}"></script>
+      <script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
+
+      <!-- Template Javascript -->
+      <script th:src="@{/assets/js/main.js}"></script>
+      <script type="module" th:src="@{/assets/callAPI/home.js}"></script>
+      <script th:src="@{/assets/callAPI/logout.js}"></script>
+      <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </div>
+  </body>
+</html>
