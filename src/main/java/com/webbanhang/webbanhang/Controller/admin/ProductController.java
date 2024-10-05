@@ -4,6 +4,7 @@ package com.webbanhang.webbanhang.Controller.admin;
 import com.webbanhang.webbanhang.Model.*;
 import com.webbanhang.webbanhang.Service.*;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,8 +35,11 @@ public class ProductController {
 
 
     @GetMapping(value ={"/Product","/"})
-    public String checkActionGet(Model model,@RequestParam Map<String,String> allParams, RedirectAttributes redirectAttributes)
+    public String checkActionGet(Model model, @RequestParam Map<String,String> allParams, HttpSession session)
     {
+        if(!session.getAttribute("UserLoginRole").equals("ADMIN")) {
+            return "redirect:/404";
+        }
         String action = allParams.get("action");
         String id =allParams.get("id");
         if (action == null) {
@@ -52,7 +56,7 @@ public class ProductController {
         }
     }
     @PostMapping("/Product")
-    public String checkActionPost(Model model,RedirectAttributes redirectAttributes,@RequestParam Map<String,String> allParams,@RequestParam("ImageCode") MultipartFile file,@ModelAttribute("Product") ProductModel user)
+    public String checkActionPost(Model model,HttpSession session,@RequestParam Map<String,String> allParams,@RequestParam("ImageCode") MultipartFile file,@ModelAttribute("Product") ProductModel user)
     {
         String action = allParams.get("action");
         if (action == null) {
@@ -60,7 +64,7 @@ public class ProductController {
         }
         switch (action) {
             default:
-                return checkActionGet(model,allParams,redirectAttributes);
+                return checkActionGet(model,allParams,session);
 
         }
     }

@@ -5,6 +5,7 @@ import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Repository.IUserRepository;
 import com.webbanhang.webbanhang.Service.IRoleService;
 import com.webbanhang.webbanhang.Service.IUserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -24,8 +25,11 @@ public class UserController  {
     private final IRoleService roleService;
     private final PasswordEncoder passwordEncoder;
     @GetMapping("/User")
-    public String checkActionGet(Model model, @RequestParam Map<String,String> allParams,RedirectAttributes redirectAttributes)
+    public String checkActionGet(Model model, @RequestParam Map<String,String> allParams, HttpSession session)
     {
+        if(!session.getAttribute("UserLoginRole").equals("ADMIN")) {
+            return "redirect:/404";
+        }
         String action = allParams.get("action");
         String id =allParams.get("id");
         if (action == null) {

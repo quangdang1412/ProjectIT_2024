@@ -2,30 +2,35 @@ function addToCart(productId) {
   let quantityElement = document.getElementById("quantityInput");
   let quantity = quantityElement ? quantityElement.value : 1;
   console.log(quantity);
-  $.ajax({
-    url: "/api/addtocart/" + productId + "/" + quantity,
-    type: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"), // Include JWT token if necessary
-    },
-    success: function (response) {
-      console.log("Server response:", response); // Debugging log
-      if (response.includes("Đã cập nhật sản phẩm vào giỏ hàng")) {
-        Swal.fire({
-          icon: "success",
-          title: "Thông báo.",
-          text: response,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Thông báo.",
-          text: response,
-        });
-      }
-    },
-  });
+  const token = localStorage.getItem("token")
+  if(token === null)
+    window.location.href = "/login";
+  else{
+    $.ajax({
+      url: "/api/addtocart/" + productId + "/" + quantity,
+      type: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"), // Include JWT token if necessary
+      },
+      success: function (response) {
+        console.log("Server response:", response); // Debugging log
+        if (response.includes("Đã cập nhật sản phẩm vào giỏ hàng")) {
+          Swal.fire({
+            icon: "success",
+            title: "Thông báo.",
+            text: response,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Thông báo.",
+            text: response,
+          });
+        }
+      },
+    });
+  }
 }
 function deleteProinCart(productId) {
   $.ajax({

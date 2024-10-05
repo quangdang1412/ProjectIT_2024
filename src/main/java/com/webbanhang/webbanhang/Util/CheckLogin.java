@@ -22,7 +22,7 @@ public class CheckLogin {
             session.setAttribute("UserLoginRole", userModel.getRole().getRoleName());
             session.setAttribute("isLoggedIn", 1);
             session.setAttribute("fullName", userModel.getUsername());
-            session.setAttribute("authorities", userModel.getAuthorities());
+            session.setAttribute("authorities", userModel.getRole().getType());
             session.setAttribute("countProductInCart", userModel.getUserCart() != null ? userModel.getUserCart().size() : 0);
         } else {
             session.setAttribute("isLoggedIn", 0);

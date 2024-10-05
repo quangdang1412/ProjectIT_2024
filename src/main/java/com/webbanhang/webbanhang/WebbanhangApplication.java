@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 @SpringBootApplication
 public class WebbanhangApplication {
 	public static void main(String[] args) throws FileNotFoundException {
-
 		SpringApplication.run(WebbanhangApplication.class, args);
 	}
 

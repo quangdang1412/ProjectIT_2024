@@ -28,8 +28,9 @@ public class WebSecurityConfig {
             "/static/**",
             "/template/**",
             "/error",
-            "/api/**",
+            "/api/auth/**",
             "/assets/**",
+            "/asset-admin/**",
             "/signup",
             "/register",
             "/shop",
@@ -42,7 +43,23 @@ public class WebSecurityConfig {
             "/yourOrder",
             "/cart",
             "/checkout",
+            "/admin/**",
             "/test"};
+    private String[] EMPLOYEE_LIST={
+            "/api/order/update",
+    };
+    private String[] ADMIN_LIST={
+            "/api/order/update",
+            "/api/order/delete/**",
+            "/api/other/**",
+            "/api/product/add",
+            "/api/product/update",
+            "/api/product/delete/**",
+            "/api/supplier/**",
+            "/api/user/add",
+            "/api/user/delete/**",
+            "/api/user/update"
+    };
     private String []role_more = {"SELLER", "SHIPPER", "ADMIN"};
 
     @Bean
@@ -50,8 +67,8 @@ public class WebSecurityConfig {
         http
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers( WHITE_LITS).permitAll()
-                .requestMatchers("/admin/Order").hasAnyAuthority(role_more)
-                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                .requestMatchers(EMPLOYEE_LIST).hasAnyAuthority(role_more)
+                .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
