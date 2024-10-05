@@ -13,9 +13,12 @@ if (isTokenExpired(token)) {
       Authorization: "Bearer " + token,
     },
     success: function (response) {
-      var $responseHTML = $(response);
-      var $newDropdownMenu = $responseHTML.find(".dropdown-menu").html();
-      $("#dropdownContainer").html($newDropdownMenu);
+      // var $responseHTML = $(response);
+      // var $newDropdownMenu = $responseHTML.find(".dropdown-menu").html();
+      // $("#dropdownContainer").html($newDropdownMenu);
+      document.open();
+      document.write(response);
+      document.close();
     },
     error: function (xhr, status, error) {
       console.log("Error: " + error);

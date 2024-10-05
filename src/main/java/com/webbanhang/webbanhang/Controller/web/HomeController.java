@@ -49,10 +49,7 @@ public class HomeController {
     public String testimonial() {
         return "/web/testimonial";
     }
-    @GetMapping(value ={"/404","/error"})
-    public String er404() {
-        return "/web/404";
-    }
+    
     @GetMapping("/shop-detail")
     public String shopDetail(Model model,HttpSession session){
         checkLogin.checkLogin(session,model,userService);
@@ -63,6 +60,7 @@ public class HomeController {
     public String login() {
         return "/web/login";
     }
+   
 
     @GetMapping("/register")
     public String register(Model model){

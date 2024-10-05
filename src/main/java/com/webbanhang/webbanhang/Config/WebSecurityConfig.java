@@ -60,6 +60,10 @@ public class WebSecurityConfig {
                     response.sendError(403, "Access Denied")
                 )
             );
+            http.exceptionHandling(exceptionHandling -> exceptionHandling
+                          .accessDeniedPage("/404")
+            );
+            
 
         http.csrf(AbstractHttpConfigurer::disable);
 

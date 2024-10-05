@@ -27,7 +27,6 @@ $(document).ready(function () {
         // Xử lý khi có lỗi
         let errorMessage = "Đã xảy ra lỗi. Vui lòng thử lại!";
 
-        // Lấy thông điệp lỗi từ phản hồi JSON (nếu có)
         if (xhr.responseJSON && xhr.responseJSON.message) {
           errorMessage = xhr.responseJSON.message;
         } else if (xhr.status === 403) {
