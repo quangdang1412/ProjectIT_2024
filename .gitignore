@@ -1,2 +1,5 @@
 .vscode
-*/target/**
+*.env
+/target/
+/.idea/
+/.vscode/

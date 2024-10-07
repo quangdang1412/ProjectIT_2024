@@ -40,7 +40,7 @@ public class WebSecurityConfig {
             "/login",
             "/inforuser",
             "/changePassword",
-            "/yourOrder",
+            "/yourOrder/**",
             "/cart",
             "/checkout",
             "/admin/**",

@@ -41,8 +41,13 @@ public class YourOrderController {
     public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session)
     {
         //checkLogin.checkLogin(session,model,userService);
+        UserModel a = (UserModel)session.getAttribute("UserLogin");
+
         String action = allParams.get("action");
         String id =allParams.get("id");
+        OrderModel orderModel = orderService.getOrderByID(id);
+        if(a == null || !orderModel.getUserOrder().getUserID().equals(a.getUserID()))
+            return "redirect:/login";
         if (action == null) {
             action = "list";
         }

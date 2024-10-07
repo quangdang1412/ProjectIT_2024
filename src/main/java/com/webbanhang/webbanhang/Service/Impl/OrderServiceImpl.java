@@ -24,6 +24,7 @@ public class OrderServiceImpl implements IOrderService {
 
     private final IUserService userService;
     private final IOrderRepository orderRepository;
+    private final MailService mailService;
 
     @Override
     public List<OrderModel> getAllOrder() {
@@ -99,13 +100,19 @@ public class OrderServiceImpl implements IOrderService {
     public String updateOrder(Map<String,String> allParams) {
         try{
             OrderModel order = getOrderByID(allParams.get("orderID"));
+            int checkChangeStatus = 0;
             if(!order.getStatus().equals(allParams.get("status"))){
                 order.setSellerOrder(userService.findUserByID(allParams.get("sellerID")));
                 order.setShipperOrder(userService.findUserByID(allParams.get("shipperID")));
                 order.setStatus((allParams.get("status")));
+                checkChangeStatus = 1;
             }
             order.setAddress(allParams.get("address"));
             orderRepository.save(order);
+            if(checkChangeStatus == 1)
+                mailService.sendUpdateOrderMail(order,checkChangeStatus);
+            else
+                mailService.sendUpdateOrderMail(order,checkChangeStatus);
             return order.getOrderID();
         }catch (Exception e){
             String error = e.getMessage();

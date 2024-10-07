@@ -85,7 +85,7 @@
                 <th scope="row">
                   <div class="d-flex align-items-center">
                     <img
-                      th:src="@{'/ImageProduct/' + ${cart.ProductCart.Image?.ImageCode}}"
+                      th:src="${#strings.contains(cart.ProductCart.Image?.ImageCode, 'https') ? cart.ProductCart.Image.ImageCode : '/ImageProduct/' + cart.ProductCart.Image.ImageCode}"
                       th:alt="${cart.ProductCart.Image?.ImageCode}"
                       class="img-fluid me-5 rounded-circle"
                       style="width: 80px; height: 80px"
@@ -103,8 +103,8 @@
                   <p
                     class="mb-0 mt-4"
                     th:text="${cart.ProductCart.Discount} != null
-                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100, 1, 'COMMA', 0, 'POINT')} + 'đ'
-                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice, 1, 'COMMA', 0, 'POINT')} + 'đ'"
+                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100, 1, 'COMMA', 0, 'POINT')} + ' VND'
+                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND'"
                   >
                     ">
                   </p>
@@ -119,8 +119,8 @@
                   <p
                     class="mb-0 mt-4"
                     th:text="${cart.ProductCart.Discount} != null
-                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + 'đ'
-                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + 'đ'"
+                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
+                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'"
                   ></p>
                 </td>
                 <td>
