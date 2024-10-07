@@ -283,7 +283,7 @@
                         <div class="fruite-img">
                           <a th:href="@{/detail/{id}(id=${product.productID})}">
                             <img
-                              th:src="@{'/ImageProduct/' + ${product.image?.imageCode}}"
+                              th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
                               th:alt="${product.image?.imageCode}"
                               class="img-fluid w-100 rounded-top"
                               style="height: 240px"
@@ -377,7 +377,7 @@
                       th:href="@{/detail/{id}(id=${bestSellingProduct.productID})}"
                     >
                       <img
-                        th:src="@{'/ImageProduct/' + ${bestSellingProduct.image?.imageCode}}"
+                        th:src="${#strings.contains(bestSellingProduct.Image?.ImageCode, 'https') ? bestSellingProduct.Image.ImageCode : '/ImageProduct/' + bestSellingProduct.Image.ImageCode}"
                         th:alt="${bestSellingProduct.image?.imageCode}"
                         class="img-fluid rounded-circle w-100"
                         style="height: 150px"
