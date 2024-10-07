@@ -27,7 +27,7 @@ public class CartController {
     private IProductService productService;
     @Autowired
     private ICartService cartService;
-    private final CheckLogin checkLogin = new CheckLogin();
+
     public void loadProduct(Model model,HttpSession session) {
         UserModel d=(UserModel) session.getAttribute("UserLogin");
         UserModel a = userService.findUserByID(d.getUserID());
@@ -54,9 +54,12 @@ public class CartController {
 
     @GetMapping("/cart")
     public String shop(Model model, HttpSession session){
-        checkLogin.checkLogin(session,model,userService);
-        loadProduct(model,session);
-        return "/web/cart";
+        //checkLogin.checkLogin(session,model,userService);
+        if((UserModel)session.getAttribute("UserLogin") != null) {
+            loadProduct(model,session);
+            return "/web/cart";
+        }
+        return "redirect:/login";
     }
     
 }

@@ -38,10 +38,9 @@ public class ProductAPI {
     private final IUserService userService;
     private final ICartService cartService;
     private final LoadData loadData;
-    private final CheckLogin checkLogin = new CheckLogin();
     @PostMapping("/api/addtocart/{productId}/{quantity}")
     public ResponseEntity<?> addToCart(@PathVariable("productId") String productId,@PathVariable("quantity") int quantity, Model model, HttpSession session) {
-        checkLogin.checkLogin(session,model,userService);
+        //checkLogin.checkLogin(session,model,userService);
         UserModel user = (UserModel) session.getAttribute("UserLogin");
         ProductModel product = productService.getProductByID(productId);
         CartModel cartItem = cartService.findCartItemByUserAndProduct(user.getUserID(), product);

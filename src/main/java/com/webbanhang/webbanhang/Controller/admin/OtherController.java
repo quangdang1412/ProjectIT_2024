@@ -6,6 +6,7 @@ import com.webbanhang.webbanhang.Model.DiscountModel;
 import com.webbanhang.webbanhang.Service.IBrandService;
 import com.webbanhang.webbanhang.Service.ICategoryService;
 import com.webbanhang.webbanhang.Service.IDiscountService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +25,11 @@ public class OtherController {
     @Autowired
     private IBrandService brandService;
     @GetMapping("/Other")
-    public String checkActionGet(@RequestParam Map<String,String> allParams, Model model)
+    public String checkActionGet(@RequestParam Map<String,String> allParams, Model model,HttpSession session)
     {
+        if(!session.getAttribute("UserLoginRole").equals("ADMIN")) {
+            return "redirect:/404";
+        }
         String type = allParams.get("type");
         String action = allParams.get("action");
         if (action == null) {
@@ -72,9 +76,11 @@ public class OtherController {
         }
     }
     @PostMapping("/Other")
-    public String checkActionPost(@RequestParam Map<String,String> allParams, Model model, RedirectAttributes redirectAttributes
-                                 ,@ModelAttribute("Brand") BrandModel brand,@ModelAttribute("Category") CategoryModel category,@ModelAttribute("Discount") DiscountModel discount)
-    {
+    public String checkActionPost(@RequestParam Map<String,String> allParams, Model model, HttpSession session
+                                 , @ModelAttribute("Brand") BrandModel brand, @ModelAttribute("Category") CategoryModel category, @ModelAttribute("Discount") DiscountModel discount)
+        {    if(session.getAttribute("UserLoginRole").equals("CUSTOMER")) {
+            return "redirect:/404";
+        }
         String type = allParams.get("type");
         String action = allParams.get("action");
         if (action == null) {

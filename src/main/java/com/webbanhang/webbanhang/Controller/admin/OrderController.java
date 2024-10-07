@@ -3,6 +3,7 @@ package com.webbanhang.webbanhang.Controller.admin;
 import com.webbanhang.webbanhang.Model.*;
 import com.webbanhang.webbanhang.Service.IOrderService;
 import com.webbanhang.webbanhang.Service.IUserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,14 +19,12 @@ import java.util.Map;
 public class OrderController {
     private final IOrderService orderService;
     private final IUserService userService;
-    // @GetMapping("/Order")
-    // public String tesString(Model model)
-    // {
-    //     return "/web/test";
-    // }
     @GetMapping("/Order")
-    public String checkActionGet(Model model,@RequestParam Map<String,String> allParams, RedirectAttributes redirectAttributes)
+    public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session)
     {
+        if(session.getAttribute("UserLoginRole").equals("CUSTOMER")) {
+            return "redirect:/404";
+        }
         String type = allParams.get("type");
         String action = allParams.get("action");
         String id =allParams.get("id");
@@ -41,7 +40,7 @@ public class OrderController {
         }
     }
     @PostMapping("/Order")
-    public String checkActionPost(Model model, RedirectAttributes redirectAttributes, @RequestParam Map<String,String> allParams, @ModelAttribute("Order") OrderModel order)
+    public String checkActionPost(Model model, HttpSession session, @RequestParam Map<String,String> allParams, @ModelAttribute("Order") OrderModel order)
     {
         String action = allParams.get("action");
         if (action == null) {
@@ -49,7 +48,7 @@ public class OrderController {
         }
         switch (action) {
             default:
-                return checkActionGet(model,allParams,redirectAttributes);
+                return checkActionGet(model,allParams,session);
 
         }
     }
