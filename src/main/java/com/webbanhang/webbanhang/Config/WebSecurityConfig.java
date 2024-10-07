@@ -24,30 +24,51 @@ public class WebSecurityConfig {
 
     private final AuthenticationFilter authenticationFilter;
     private final AuthenticationProvider authenticationProvider;
+    private  String[] WHITE_LITS ={ "/",
+            "/static/**",
+            "/template/**",
+            "/error",
+            "/api/auth/**",
+            "/assets/**",
+            "/asset-admin/**",
+            "/signup",
+            "/register",
+            "/shop",
+            "/ImageProduct/**",
+            "/detail/**",
+            "/locations",
+            "/login",
+            "/inforuser",
+            "/changePassword",
+            "/yourOrder/**",
+            "/cart",
+            "/checkout",
+            "/admin/**",
+            "/test"};
+    private String[] EMPLOYEE_LIST={
+            "/api/order/update",
+    };
+    private String[] ADMIN_LIST={
+            "/api/order/update",
+            "/api/order/delete/**",
+            "/api/other/**",
+            "/api/product/add",
+            "/api/product/update",
+            "/api/product/delete/**",
+            "/api/supplier/**",
+            "/api/user/add",
+            "/api/user/delete/**",
+            "/api/user/update"
+    };
     private String []role_more = {"SELLER", "SHIPPER", "ADMIN"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(requests -> requests
-                .requestMatchers(
-                        "/",
-                        "/static/**",
-                        "/template/**",
-                        "/error",
-                        "/api/**",
-                        "/assets/**",
-                        "/signup",
-                        "/register",
-                        "/shop",
-                        "/ImageProduct/**",
-                        "/detail/**",
-                        "/locations",
-                        "/login",
-                        "/test"
-                ).permitAll()
-                .requestMatchers("/admin/Order").hasAnyAuthority(role_more)
-                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                .requestMatchers( WHITE_LITS).permitAll()
+                .requestMatchers(EMPLOYEE_LIST).hasAnyAuthority(role_more)
+                .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
@@ -63,10 +84,7 @@ public class WebSecurityConfig {
             http.exceptionHandling(exceptionHandling -> exceptionHandling
                           .accessDeniedPage("/404")
             );
-            
-
         http.csrf(AbstractHttpConfigurer::disable);
-
         return http.build();
     }
     @Bean

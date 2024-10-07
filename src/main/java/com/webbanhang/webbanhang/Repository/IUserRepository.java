@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IUserRepository extends JpaRepository<UserModel,String> {
@@ -21,5 +22,6 @@ public interface IUserRepository extends JpaRepository<UserModel,String> {
 
     UserModel findByUserID(String userId);
 
-    UserModel findByEmail(String email);
+    Optional<UserModel> findByEmail(String email);
+
 }

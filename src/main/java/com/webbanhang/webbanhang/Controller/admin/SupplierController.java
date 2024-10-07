@@ -2,6 +2,7 @@ package com.webbanhang.webbanhang.Controller.admin;
 
 import com.webbanhang.webbanhang.Model.SupplierModel;
 import com.webbanhang.webbanhang.Service.ISuppilerService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +17,11 @@ public class SupplierController {
     @Autowired
     private ISuppilerService suppilerService;
     @GetMapping("/Supplier")
-    public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,RedirectAttributes redirectAttributes)
+    public String checkActionGet(Model model, @RequestParam Map<String,String> allParams, HttpSession session)
     {
+        if(!session.getAttribute("UserLoginRole").equals("ADMIN")) {
+            return "redirect:/404";
+        }
         String action = allParams.get("action");
         String id =allParams.get("id");
         if (action == null) {
@@ -33,19 +37,6 @@ public class SupplierController {
 
         }
 
-    }
-    @PostMapping("/Supplier")
-    public String checkActionPost(Model model, RedirectAttributes redirectAttributes, @RequestParam Map<String,String> allParams, @ModelAttribute("Supplier") SupplierModel user)
-    {
-        String action = allParams.get("action");
-        if (action == null) {
-            action = "list";
-        }
-        switch (action) {
-            default:
-                return checkActionGet(model,allParams,redirectAttributes);
-
-        }
     }
     public String listSupplier(Model model) {
 

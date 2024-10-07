@@ -64,7 +64,7 @@ public class ShopController {
         loadCategory(model);
         productPage(model,pageNo);
         loadData.ProductDiscount(model);
-        checkLogin.checkLogin(session,model,userService);
+        //checkLogin.checkLogin(session,model,userService);
         return "/web/shop";
     }
     @GetMapping("/shop/category/{categoryId}")
@@ -72,12 +72,12 @@ public class ShopController {
         loadCategory(model);
         Page<ProductModel> products = productService.findCategoryForPage(categoryId,pageNo);
         model.addAttribute("products", products);
-        checkLogin.checkLogin(session,model,userService);
+        //checkLogin.checkLogin(session,model,userService);
         return "/web/shop";
     }
     @GetMapping("/shop/addtocart/{productId}")
     public String addToCart(@PathVariable("productId") String productId, Model model, HttpSession session,RedirectAttributes redirectAttributes) {
-        checkLogin.checkLogin(session,model,userService);
+        //checkLogin.checkLogin(session,model,userService);
         UserModel user = (UserModel) session.getAttribute("UserLogin");
         ProductModel product = productService.getProductByID(productId);
         CartModel cartItem = cartService.findCartItemByUserAndProduct(user.getUserID(), product);

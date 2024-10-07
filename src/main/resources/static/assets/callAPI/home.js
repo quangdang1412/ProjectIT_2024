@@ -1,7 +1,5 @@
 import { isTokenExpired } from "./checkToken.js";
-
 var token = localStorage.getItem("token");
-
 if (isTokenExpired(token)) {
   localStorage.removeItem("token");
 } else {

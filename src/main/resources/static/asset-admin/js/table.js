@@ -5,10 +5,6 @@ $('#dt-search-0').attr('placeholder', '')
 
 // Remove the div with id "example_info"
 document.getElementById('example_info').remove();
-
-
-
-
 // thay doi link trong nut them
 var rowContainers = document.querySelectorAll('.row.mt-2.justify-content-between');
 
