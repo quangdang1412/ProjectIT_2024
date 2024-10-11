@@ -39,30 +39,36 @@ public class ProductAPI {
     private final ICartService cartService;
     private final LoadData loadData;
     @PostMapping("/api/addtocart/{productId}/{quantity}")
-    public ResponseEntity<?> addToCart(@PathVariable("productId") String productId,@PathVariable("quantity") int quantity, Model model, HttpSession session) {
-        //checkLogin.checkLogin(session,model,userService);
-        UserModel user = (UserModel) session.getAttribute("UserLogin");
-        ProductModel product = productService.getProductByID(productId);
-        CartModel cartItem = cartService.findCartItemByUserAndProduct(user.getUserID(), product);
+    public ResponseEntity<?> addToCart(@PathVariable("productId") String productId,@PathVariable("quantity") int quantity,HttpSession session) {
+       try{
+           //checkLogin.checkLogin(session,model,userService);
+           UserModel a = (UserModel) session.getAttribute("UserLogin");
+           UserModel user = userService.findUserByID(a.getUserID());
+           ProductModel product = productService.getProductByID(productId);
+           CartModel cartItem = cartService.findCartItemByUserAndProduct(user.getUserID(), product);
 
-        String successMessage = null;
-        String errorMessage = null;
-        if (cartItem != null) {
-            cartItem.setQuantity(cartItem.getQuantity() + quantity);
-            cartService.updateCart(cartItem);
-            successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
-        }
-        else {
-            CartModel newCartItem = new CartModel(user, product, quantity);
-            boolean success = cartService.addCart(newCartItem);
-            if (success) {
-                successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
-            } else {
-                errorMessage ="Không thêm được sản phẩm vào giỏ hàng";
-            }
-        }
-        String responseMessage = successMessage != null ? successMessage : errorMessage;
-        return ResponseEntity.ok(responseMessage);
+           String successMessage = null;
+           String errorMessage = null;
+           if (cartItem != null) {
+               cartItem.setQuantity(cartItem.getQuantity() + quantity);
+               cartService.updateCart(cartItem);
+               successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
+           }
+           else {
+               CartModel newCartItem = new CartModel(user, product, quantity);
+               boolean success = cartService.addCart(newCartItem);
+               if (success) {
+                   successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
+               } else {
+                   errorMessage ="Không thêm được sản phẩm vào giỏ hàng";
+               }
+           }
+           String responseMessage = successMessage != null ? successMessage : errorMessage;
+           return ResponseEntity.ok(responseMessage);
+       }catch (Exception e){
+           log.error(e.getMessage());
+           return ResponseEntity.ok("Không thêm được sản phẩm vào giỏ hàng");
+       }
     }
     @DeleteMapping("/api/deleteproduct/{productId}")
     public ResponseEntity<?> deleteProInCart(@PathVariable("productId") String id,HttpSession session)

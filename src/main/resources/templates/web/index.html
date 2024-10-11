@@ -439,11 +439,14 @@
       <script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
 
       <!-- Template Javascript -->
+      <script>
+        const isLoggedIn = [[${session.isLoggedIn}]]
+      </script>
       <script th:src="@{/assets/js/main.js}"></script>
       <script th:src="@{/assets/callAPI/SendAPI.js}"></script>
-<!--      <script type="module" th:src="@{/assets/callAPI/home.js}"></script>-->
+      <script th:src="@{/assets/callAPI/home.js}"></script>
       <script th:src="@{/assets/callAPI/logout.js}"></script>
-<!--      <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>-->
+      <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </div>
   </body>

@@ -13,7 +13,9 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,8 +32,8 @@ import com.webbanhang.webbanhang.Service.Impl.AuthenticationServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-
-
+import java.util.Collections;
+import java.util.Map;
 
 
 @RequestMapping("/api/auth")
@@ -95,6 +97,15 @@ public class AuthenticationController {
             return ResponseEntity.ok("Đăng xuất thành công!");
         } else {
             return ResponseEntity.status(400).body("Không tìm thấy token!");
+        }
+    }
+    @GetMapping("/get-token")
+    public ResponseEntity<?> getToken(HttpSession session) {
+        String token = (String) session.getAttribute("token");
+        if (token != null) {
+            return ResponseEntity.ok(Collections.singletonMap("token", token));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token not found");
         }
     }
     
