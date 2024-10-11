@@ -1,5 +1,7 @@
 package com.webbanhang.webbanhang.Config;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,18 +17,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class WebSecurityConfig {
 
     private final AuthenticationFilter authenticationFilter;
     private final AuthenticationProvider authenticationProvider;
-    private  String[] WHITE_LITS ={ "/",
+    private final String[] WHITE_LITS ={ "/",
             "/static/**",
             "/template/**",
+            "/signinoauth2","/loginSuccess",
             "/error",
             "/api/auth/**",
             "/assets/**",
@@ -37,7 +39,7 @@ public class WebSecurityConfig {
             "/ImageProduct/**",
             "/detail/**",
             "/locations",
-            "/login",
+            "/login/**",
             "/inforuser",
             "/changePassword",
             "/yourOrder/**",
@@ -45,10 +47,10 @@ public class WebSecurityConfig {
             "/checkout",
             "/admin/**",
             "/test"};
-    private String[] EMPLOYEE_LIST={
+    private final String[] EMPLOYEE_LIST={
             "/api/order/update",
     };
-    private String[] ADMIN_LIST={
+    private final String[] ADMIN_LIST={
             "/api/order/update",
             "/api/order/delete/**",
             "/api/other/**",
@@ -60,30 +62,30 @@ public class WebSecurityConfig {
             "/api/user/delete/**",
             "/api/user/update"
     };
-    private String []role_more = {"SELLER", "SHIPPER", "ADMIN"};
+    private final String []role_more = {"SELLER", "SHIPPER", "ADMIN"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(requests -> requests
-                .requestMatchers( WHITE_LITS).permitAll()
-                .requestMatchers(EMPLOYEE_LIST).hasAnyAuthority(role_more)
-                .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .formLogin(Customizer.withDefaults()) // Sử dụng trang login mặc định của Spring Security
-            .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class) // Thêm JWT filter
-            .authenticationProvider(authenticationProvider) // Cấu hình provider
-            .exceptionHandling(exception -> exception
-                .authenticationEntryPoint((request, response, authException) ->
-                    response.sendError(403, "Access Denied")
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers( WHITE_LITS).permitAll()
+                        .requestMatchers(EMPLOYEE_LIST).hasAnyAuthority(role_more)
+                        .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
+                        .anyRequest().authenticated()
                 )
-            );
-            http.exceptionHandling(exceptionHandling -> exceptionHandling
-                          .accessDeniedPage("/404")
-            );
+                .oauth2Login(Customizer.withDefaults())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class) // Thêm JWT filter
+                .authenticationProvider(authenticationProvider) // Cấu hình provider
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendError(403, "Access Denied")
+                        )
+                );
+        http.exceptionHandling(exceptionHandling -> exceptionHandling
+                .accessDeniedPage("/404")
+        );
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
