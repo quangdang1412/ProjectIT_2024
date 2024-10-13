@@ -102,7 +102,7 @@
                     <td th:text="${product.Category?.CategoryID}"></td>
                     <td th:if="${product.Discount != null}" th:text="${product.Discount?.DiscountID}"></td>
                     <td th:unless="${product.Discount != null}"></td>
-                    <td th:text="${product.UnitPrice}"></td>
+                    <td th:text="${#numbers.formatDecimal(product.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
                     <td th:text="${product.Quantity}"></td>
                     <td>
                         <a th:href="@{/admin/Product(action='edit', id=${product.ProductID})}" class="btn btn-info">Update</a>

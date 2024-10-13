@@ -66,7 +66,7 @@
     <!-- Navbar End -->
 
     <!-- Cart Page Start -->
-    <div class="container-fluid py-5 mb-5 hero-header">
+    <div class="container-fluid py-5 mb-5 ">
       <div class="container py-5">
         <div class="table-responsive">
           <table class="table">
@@ -74,9 +74,10 @@
               <tr>
                 <th scope="col">Sản phấm</th>
                 <th scope="col">Tên</th>
-                <th scope="col">Giá</th>
-                <th scope="col">Số lượng</th>
+                <th scope="col">Tổng tiền</th>
+                <th scope="col">Giảm</th>
                 <th scope="col">Thành tiền</th>
+<!--                <th scope="col">Mua</th>-->
                 <th scope="col">Xóa</th>
               </tr>
             </thead>
@@ -93,18 +94,15 @@
                   </div>
                 </th>
                 <td>
+                  <a th:href="@{/detail/{id}(id=${cart.ProductCart.productID})}">
+                    <h5 class="mb-0 mt-4 font-size-16 text-dark"
+                        style="max-width: 300px; word-wrap: break-word"
+                        th:text="${cart.ProductCart.ProductName}">
+                    </h5>
+                  </a>
                   <p
-                    class="mb-0 mt-4"
-                    th:text="${cart.ProductCart.ProductName}"
-                    style="max-width: 400px; word-wrap: break-word"
-                  ></p>
-                </td>
-                <td>
-                  <p
-                    class="mb-0 mt-4"
-                    th:text="${cart.ProductCart.Discount} != null
-                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100, 1, 'COMMA', 0, 'POINT')} + ' VND'
-                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+                          class="mb-0 mt-4"
+                          th:text="${#numbers.formatDecimal(cart.ProductCart.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND x ' + ${cart.Quantity}"
                   >
                     ">
                   </p>
@@ -112,7 +110,15 @@
                 <td>
                   <p
                           class="mb-0 mt-4"
-                          th:text="${cart.Quantity}"
+                          th:text="${#numbers.formatDecimal(cart.ProductCart.UnitPrice*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+                  ></p>
+                </td>
+                <td>
+                  <p
+                          class="mb-0 mt-4"
+                          th:text="${cart.ProductCart.Discount} != null
+                                             ? '-'+${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (cart.ProductCart.Discount.Percentage) / 100*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
+                                             : '0 VND'"
                   ></p>
                 </td>
                 <td>

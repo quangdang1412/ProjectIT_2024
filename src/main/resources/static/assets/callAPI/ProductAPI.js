@@ -16,11 +16,16 @@ function addToCart(productId) {
       success: function (response) {
         console.log("Server response:", response); // Debugging log
         if (response.includes("Đã cập nhật sản phẩm vào giỏ hàng")) {
+
           Swal.fire({
             icon: "success",
             title: "Thông báo.",
             text: response,
           });
+          // Cập nhật số lượng sản phẩm trong giỏ hàng trên giao diện
+          let countElement = document.getElementById("countProductInCart");
+          let currentCount = parseInt(countElement.textContent) || 0;
+          countElement.textContent = currentCount + parseInt(quantity); // Cộng thêm số sản phẩm đã thêm
         } else {
           Swal.fire({
             icon: "error",
@@ -51,6 +56,9 @@ function deleteProinCart(productId) {
         });
         // Remove the table row
         $(`tr:has(a[onclick*='${productId}'])`).remove();
+        let countElement = document.getElementById("countProductInCart");
+        let currentCount = parseInt(countElement.textContent) || 0;
+        countElement.textContent = Math.max(currentCount - 1, 0); // Trừ đi 1 sản phẩm hoặc giữ giá trị tối thiểu là 0
       } else {
         Swal.fire({
           icon: "error",

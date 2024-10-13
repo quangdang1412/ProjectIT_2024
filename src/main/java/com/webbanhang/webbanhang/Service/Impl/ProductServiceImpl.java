@@ -64,15 +64,19 @@ public class ProductServiceImpl implements IProductService {
                     .deleteProduct(1)
                     .build();
             ImageModel imageProduct = null;
-            String fileName = imageService.upload(file);
-            if(fileName.contains("Something went wrong"))
-                throw new CustomException("Failed");
-            if(imageService.findOneImage(fileName)==null)
-            {
-                imageService.addImage(fileName);
+            if(!file.isEmpty()){
+                String fileName = imageService.upload(file);
+                if(fileName.contains("Something went wrong"))
+                    throw new CustomException("Failed");
+                if(imageService.findOneImage(fileName)==null)
+                {
+                    imageService.addImage(fileName);
+                }
+                imageProduct = imageService.findOneImage(fileName);
+                productModel.setImage(imageProduct);
+            }else{
+                productModel.setImage(productRepository.findById(productRequestDTO.getProductID()).get().getImage());
             }
-            imageProduct = imageService.findOneImage(fileName);
-            productModel.setImage(imageProduct);
             productRepository.save(productModel);
             return productModel.getProductID();
         }catch (Exception e){

@@ -29,4 +29,12 @@ public class CheckLogin {
             session.setAttribute("isLoggedIn", 0);
         }
     }
+    public void refreshUser(HttpSession session) {
+        if (session.getAttribute("UserLogin") != null) {
+            UserModel userModel = (UserModel) session.getAttribute("UserLogin");
+            UserModel newUser = userService.findUserByID(userModel.getUserID());
+            session.setAttribute("UserLogin", newUser);
+            session.setAttribute("countProductInCart", newUser.getUserCart() != null ? newUser.getUserCart().size() : 0);
+        }
+    }
 }
