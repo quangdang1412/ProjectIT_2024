@@ -110,25 +110,24 @@
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Giá nhập<sup>*</sup></label>
-                        <input type="text" class="form-control" name="UnitCost" th:value="${UnitCost}" required/>
+                        <input type="number" class="form-control" name="UnitCost" th:value="${UnitCost}" required/>
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Giá bán<sup>*</sup></label>
-                        <input type="text" class="form-control" name="UnitPrice" th:value="${UnitPrice}" required/>
+                        <input type="number" class="form-control" name="UnitPrice" th:value="${UnitPrice}" required/>
                     </div>
 
                     <div class="form-item">
                         <label class="form-label my-3">Số lượng<sup>*</sup></label>
-                        <input type="text" class="form-control" name="Quantity" th:value="${Quantity}" required />
+                        <input type="number" class="form-control" name="Quantity" th:value="${Quantity}" required />
 
                     </div>
                     <div class="form-item">
                         <label for="formFile" class="form-label my-3">Hình ảnh sản phẩm<sup>*</sup></label>
                         <input name="ImageCode"  th:value="${ImageProduct}" type="file" class="form-control" id="formFile" accept="image/*" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])" style="background-color: #ffffff">
                         <br>
-                        <img id="blah"  width="200" height="250"
-                             th:src="${#strings.contains(ImageProduct, 'https') ? ImageProduct : '/ImageProduct/' + ImageProduct}"
-                        >
+                        <img id="blah" width="200" height="250"
+                             th:src="${ImageProduct != null ? (#strings.contains(ImageProduct, 'https') ? ImageProduct : '/ImageProduct/' + ImageProduct) : ''}">
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Mô tả sản phẩm<sup>*</sup></label>

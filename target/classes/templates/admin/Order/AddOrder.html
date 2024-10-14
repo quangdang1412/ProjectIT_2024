@@ -80,20 +80,20 @@
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Khách hàng<sup>*</sup></label>
-                        <input type="text" class="form-control"  name="UserID" th:value="${UserID.UserName}"  required  readonly/>
+                        <input type="text" class="form-control"  name="UserID" th:value="${UserID.Username}"  required  readonly/>
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Nhân viên bán hàng<sup>*</sup></label>
                         <select class="form-select" aria-label="Default select example"  name="SellerID" required>
                             <option></option>
-                            <option  th:each="seller : ${listSeller}" th:value="${seller.UserID}" th:text="${seller.UserName}" th:selected="${seller.UserName == sellerName} "></option>
+                            <option  th:each="seller : ${listSeller}" th:value="${seller.UserID}" th:text="${seller.Username}" th:selected="${seller.Username == sellerName} "></option>
                         </select>
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Nhân viên giao hàng<sup>*</sup></label>
                         <select class="form-select" aria-label="Default select example"  name="ShipperID" required >
                             <option></option>
-                            <option  th:each="shipper : ${listShipper}" th:value="${shipper.UserID}" th:text="${shipper.UserName}" th:selected="${shipper.UserName == shipperName}"></option>
+                            <option  th:each="shipper : ${listShipper}" th:value="${shipper.UserID}" th:text="${shipper.Username}" th:selected="${shipper.Username == shipperName}"></option>
                         </select>
                     </div>
                     <div class="form-item">
@@ -118,15 +118,15 @@
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Tổng tiền<sup>*</sup></label>
-                        <input type="text" class="form-control" name="TotalPrice" th:value="${TotalPrice}" required readonly/>
+                        <input type="text" class="form-control" name="TotalPrice" th:value="${#numbers.formatDecimal(TotalPrice,1,'COMMA',0,'POINT')}" required readonly/>
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Phí vận chuyển<sup>*</sup></label>
-                        <input type="text" class="form-control" name="TransportFee" th:value="${TransportFee}" required readonly/>
+                        <input type="text" class="form-control" name="TransportFee" th:value="${#numbers.formatDecimal(TransportFee,1,'COMMA',0,'POINT')}" required readonly/>
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Thành tiền<sup>*</sup></label>
-                        <input type="text" class="form-control"  th:value="${TransportFee+ TotalPrice}" required readonly/>
+                        <input type="text" class="form-control"  th:value="${#numbers.formatDecimal(TransportFee+ TotalPrice,1,'COMMA',0,'POINT')}" required readonly/>
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Hình thức thanh toán<sup>*</sup></label>
@@ -151,48 +151,96 @@
                         </select>
                     </div>
                     <br>
-                    <table id="example" class="table table-striped " style="width:100%">
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
                         <thead>
                         <tr>
-                            <th>Hình sản phẩm</th>
-                            <th>Mã sản phẩm</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Mã thương hiệu</th>
-                            <th>Mã danh mục</th>
-                            <th>Mã khuyến mãi</th>
-                            <th>Giá bán</th>
-                            <th>Số lượng</th>
+                            <th scope="col">Sản phấm</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Danh mục</th>
+                            <th scope="col">Thương hiệu</th>
+                            <th scope="col">Tổng tiền</th>
+                            <th scope="col">Giảm</th>
+                            <th scope="col">Thành tiền</th>
+                            <!--                <th scope="col">Mua</th>-->
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="orderdetail : ${listOrderDetail}">
+                        <tr th:each="orderdetail: ${listOrderDetail}">
+                            <th scope="row">
+                                <div class="d-flex align-items-center">
+                                    <img
+                                            th:src="${#strings.contains(orderdetail.productOrder.Image?.ImageCode, 'https') ? orderdetail.productOrder.Image.ImageCode : '/ImageProduct/' + orderdetail.productOrder.Image.ImageCode}"
+                                            th:alt="${orderdetail.productOrder.Image?.ImageCode}"
+                                            class="img-fluid me-5 rounded-circle"
+                                            style="width: 80px; height: 80px"
+                                    />
+                                </div>
+                            </th>
                             <td>
-                                <img th:src="@{'/ImageProduct/' + ${orderdetail.ProductOrder.Image?.ImageCode}}"
-                                     th:alt="${orderdetail.ProductOrder.Image?.ImageCode}"/>
+                                <a th:href="@{/detail/{id}(id=${orderdetail.productOrder.productID})}">
+                                    <h5 class="mb-0 mt-4 font-size-16 text-dark"
+                                        style="max-width: 300px; word-wrap: break-word"
+                                        th:text="${orderdetail.productOrder.ProductName}">
+                                    </h5>
+                                </a>
+                                <p
+                                        class="mb-0 mt-4"
+                                        th:text="${#numbers.formatDecimal(orderdetail.productOrder.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND x ' + ${orderdetail.Quantity}"
+                                >
+                                    ">
+                                </p>
                             </td>
-                            <td th:text="${orderdetail.ProductOrder.ProductID}"></td>
-                            <td th:text="${orderdetail.ProductOrder.ProductName}"></td>
-                            <td th:text="${orderdetail.ProductOrder.Brand?.BrandID}"></td>
-                            <td th:text="${orderdetail.ProductOrder.Category?.CategoryID}"></td>
-                            <td th:if="${orderdetail.ProductOrder.Discount != null}" th:text="${orderdetail.ProductOrder.Discount?.DiscountID}"></td>
-                            <td th:unless="${orderdetail.ProductOrder.Discount != null}"></td>
-                            <td th:text="${orderdetail.ProductOrder.UnitPrice}"></td>
-                            <td th:text="${orderdetail.Quantity}"></td>
+                            <td>
+                                <p
+                                        class="mb-0 mt-4"
+                                        th:text="${orderdetail.productOrder.category.categoryName}"
+                                ></p>
+                            </td>
+                            <td>
+                                <p
+                                        class="mb-0 mt-4"
+                                        th:text="${orderdetail.productOrder.brand.brandName}"
+                                ></p>
+                            </td>
+                            <td>
+                                <p
+                                        class="mb-0 mt-4"
+                                        th:text="${#numbers.formatDecimal(orderdetail.productOrder.UnitPrice*orderdetail.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+                                ></p>
+                            </td>
+                            <td>
+                                <p
+                                        class="mb-0 mt-4"
+                                        th:text="${orderdetail.productOrder.Discount} != null
+                                             ? '-'+${#numbers.formatDecimal(orderdetail.productOrder.UnitPrice * (orderdetail.productOrder.Discount.Percentage) / 100*orderdetail.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
+                                             : '0 VND'"
+                                ></p>
+                            </td>
+                            <td>
+                                <p
+                                        class="mb-0 mt-4"
+                                        th:text="${orderdetail.productOrder.Discount} != null
+                                             ? ${#numbers.formatDecimal(orderdetail.productOrder.UnitPrice * (100 - orderdetail.productOrder.Discount.Percentage) / 100*orderdetail.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
+                                             : ${#numbers.formatDecimal(orderdetail.productOrder.UnitPrice*orderdetail.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+                                ></p>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-
-                <div class ="d-flex col-md-12 col-lg-6 col-xl-7 justify-content-end">
+                <div class="col-md-12 col-lg-6 col-xl-7 d-flex justify-content-end" style="width: 100%">
                     <button
                             type="button"
-                            class="btn btn-success mt-2 me-2" th:if="${Status != 'Hoàn thành'}"
-                            th:attr="onclick=|sendOrderData('${checkOrder == null ? 'insert' : 'update'}')|"
-                    >Save</button>
+                            class="btn btn-success mt-2 me-2"
+                            th:if="${Status != 'Hoàn thành'}"
+                            th:attr="onclick=|sendOrderData('${checkOrder == null ? 'insert' : 'update'}')|">
+                        Save
+                    </button>
                     <a href="Order?action=list" class="btn btn-secondary mt-2">Cancel</a>
                 </div>
             </div>
-
         </form>
     </div>
 </div>
