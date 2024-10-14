@@ -108,5 +108,14 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token not found");
         }
     }
+    @PostMapping("/forgot_password")
+    public ResponseEntity<String> forgot_password(@RequestBody String email) {
+        return new ResponseEntity<>(authenticationService.forgotPassword(email),HttpStatus.OK);
+    }
+    @PostMapping("/reset_password")
+    public ResponseEntity<String> reset_password(@RequestBody String secretKey) {
+        return new ResponseEntity<>(authenticationService.resetPassword(secretKey),HttpStatus.OK);
+    }
+
     
 }

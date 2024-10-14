@@ -1,5 +1,5 @@
 .vscode
 *.env
-/target/
 /.idea/
 /.vscode/
+/target/classes/

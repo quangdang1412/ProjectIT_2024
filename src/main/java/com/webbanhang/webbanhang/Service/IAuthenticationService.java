@@ -10,5 +10,9 @@ public interface IAuthenticationService {
     AuthenticationResponse login(AuthenticationRequest request);
     AuthenticationResponse refreshToken(RefreshRequest request);
     boolean logout(String token);
+
+    String forgotPassword(String email);
+
+    String resetPassword(String key);
 }
     
