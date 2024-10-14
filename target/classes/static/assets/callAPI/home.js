@@ -1,24 +1,18 @@
-import { isTokenExpired } from "./checkToken.js";
-var token = localStorage.getItem("token");
-if (isTokenExpired(token)) {
-  localStorage.removeItem("token");
-} else {
-  // Nếu token còn hiệu lực, gửi yêu cầu AJAX
-  $.ajax({
-    url: "/", // API GET đến "/"
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-    success: function (response) {
-      var $responseHTML = $(response);
-      var $newDropdownMenu = $responseHTML.find(".dropdown-menu").html();
-      $("#dropdownContainer").html($newDropdownMenu);
-    },
-    error: function (xhr, status, error) {
-      console.log("Error: " + error);
-      localStorage.removeItem("token"); // Xóa token khi có lỗi
-      window.location.href = "/login"; // Chuyển đến trang đăng nhập
-    },
-  });
+if (isLoggedIn === 1) {
+    $.ajax({
+        url: "/api/auth/get-token",
+        method: "GET",
+        success: function(response) {
+            var token = response.token;
+            if (token) {
+                localStorage.setItem('token', token);
+                console.log("Token đã được lưu:", token);
+            } else {
+                console.error("Không tìm thấy token.");
+            }
+        },
+        error: function(error) {
+            console.error("Lỗi khi lấy token từ session:", error);
+        }
+    });
 }

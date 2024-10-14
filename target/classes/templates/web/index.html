@@ -68,7 +68,7 @@
     <!-- Navbar End -->
 
     <!-- Hero Start -->
-    <div class="container-fluid py-5 mb-5 hero-header">
+    <div class="container-fluid py-5 mb-5 ">
       <div class="container py-5">
         <div class="row g-5 align-items-center">
           <div
@@ -343,19 +343,23 @@
       <!-- Fruits Shop End-->
 
       <!-- Banner Section Start-->
-      <div
-        class="container-fluid banner bg-secondary my-5"
-        style="
-          background-color: transparent !important;
-          height: 800px;
-          width: 1400px;
-        "
-      >
-        <img
-          th:src="@{/assets/img/slider1_1.jpg}"
-          class="img-fluid w-100 h-100 bg-secondary rounded"
-          alt="First slide"
-        />
+      <div class="container py-5">
+        <div class="row g-5 align-items-center">
+          <div
+                  class="carousel slide position-relative"
+                  data-bs-ride="carousel"
+          >
+            <div class="carousel-inner" role="listbox">
+              <div class="carousel-item active rounded">
+                <img
+                        th:src="@{/assets/img/slider1_1.jpg}"
+                        class="img-fluid w-100 h-100 bg-secondary rounded"
+                        alt="First slide"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- Banner Section End -->
 
@@ -439,11 +443,14 @@
       <script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
 
       <!-- Template Javascript -->
+      <script>
+        const isLoggedIn = [[${session.isLoggedIn}]]
+      </script>
       <script th:src="@{/assets/js/main.js}"></script>
       <script th:src="@{/assets/callAPI/SendAPI.js}"></script>
-<!--      <script type="module" th:src="@{/assets/callAPI/home.js}"></script>-->
+      <script th:src="@{/assets/callAPI/home.js}"></script>
       <script th:src="@{/assets/callAPI/logout.js}"></script>
-<!--      <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>-->
+      <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </div>
   </body>

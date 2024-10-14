@@ -64,7 +64,7 @@
     <div th:replace="~{fragment/navbar.html :: navbar}"></div>
     <!-- Navbar End -->
     <!-- Fruits Shop Start-->
-    <div class="container-fluid fruite py-5 mb-5 hero-header">
+    <div class="container-fluid fruite py-5 mb-5">
       <div class="container py-5">
         <h1 class="mb-4">Sản phẩm</h1>
         <div class="row g-4">
@@ -162,13 +162,13 @@
                         >
                           <h5
                             class="fw-bold me-2"
-                            th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + 'đ' : ''"
+                            th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
                           >
                             2.99 $
                           </h5>
                           <h5
                             class="text-danger text-decoration-line-through"
-                            th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + 'đ'"
+                            th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
                           >
                             4.11 $
                           </h5>
@@ -220,22 +220,29 @@
                             Product Name
                           </h4>
                         </a>
-                        <p></p>
+                        <br>
                         <div class="d-flex justify-content-start flex-lg-wrap">
                           <p
                             th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
                             th:style="${product.Discount} != null ? 'height: 46px':'height: 46px'"
-                            th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + 'đ'"
+                            th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
                           >
                             Price
                           </p>
-                          <p
-                            class="text-danger fs-5 fw-bold"
-                            th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + 'đ' : ''"
-                          >
-                            Price
-                          </p>
+
                         </div>
+                        <p
+                                class="text-danger fs-5 fw-bold"
+                                th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
+                        >
+                          Price
+                        </p>
+                        <p
+                                th:if="${product.Discount} == null"
+                                style="visibility: hidden;margin-bottom: 0px;height: 30px;"
+                        >
+                          &nbsp;
+                        </p>
                         <br />
                         <div class="d-flex justify-content-end">
                           <a
@@ -349,6 +356,5 @@
     <script th:src="@{/assets/callAPI/sendAPI.js}"></script>
     <script th:src="@{/assets/js/main.js}"></script>
     <script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
-    <script type="module" th:src="@{/assets/callAPI/home.js}"></script>
   </body>
 </html>
