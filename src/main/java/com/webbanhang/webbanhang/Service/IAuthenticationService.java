@@ -10,7 +10,5 @@ public interface IAuthenticationService {
     AuthenticationResponse login(AuthenticationRequest request);
     AuthenticationResponse refreshToken(RefreshRequest request);
     boolean logout(String token);
-
-    
 }
     

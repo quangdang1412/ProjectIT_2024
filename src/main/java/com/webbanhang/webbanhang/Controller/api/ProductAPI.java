@@ -17,6 +17,8 @@ import com.webbanhang.webbanhang.Util.LoadData;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,31 +40,40 @@ public class ProductAPI {
     private final IUserService userService;
     private final ICartService cartService;
     private final LoadData loadData;
+    private final CheckLogin login;
     @PostMapping("/api/addtocart/{productId}/{quantity}")
-    public ResponseEntity<?> addToCart(@PathVariable("productId") String productId,@PathVariable("quantity") int quantity, Model model, HttpSession session) {
-        //checkLogin.checkLogin(session,model,userService);
-        UserModel user = (UserModel) session.getAttribute("UserLogin");
-        ProductModel product = productService.getProductByID(productId);
-        CartModel cartItem = cartService.findCartItemByUserAndProduct(user.getUserID(), product);
+    public ResponseEntity<?> addToCart(@PathVariable("productId") String productId,@PathVariable("quantity") int quantity,HttpSession session) {
+       try{
+           //checkLogin.checkLogin(session,model,userService);
+           UserModel a = (UserModel) session.getAttribute("UserLogin");
+           UserModel user = userService.findUserByID(a.getUserID());
+           ProductModel product = productService.getProductByID(productId);
+           CartModel cartItem = cartService.findCartItemByUserAndProduct(user.getUserID(), product);
 
-        String successMessage = null;
-        String errorMessage = null;
-        if (cartItem != null) {
-            cartItem.setQuantity(cartItem.getQuantity() + quantity);
-            cartService.updateCart(cartItem);
-            successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
-        }
-        else {
-            CartModel newCartItem = new CartModel(user, product, quantity);
-            boolean success = cartService.addCart(newCartItem);
-            if (success) {
-                successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
-            } else {
-                errorMessage ="Không thêm được sản phẩm vào giỏ hàng";
-            }
-        }
-        String responseMessage = successMessage != null ? successMessage : errorMessage;
-        return ResponseEntity.ok(responseMessage);
+           String successMessage = null;
+           String errorMessage = null;
+           if (cartItem != null) {
+               cartItem.setQuantity(cartItem.getQuantity() + quantity);
+               cartService.updateCart(cartItem);
+               successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
+               login.refreshUser(session);
+           }
+           else {
+               CartModel newCartItem = new CartModel(user, product, quantity);
+               boolean success = cartService.addCart(newCartItem);
+               if (success) {
+                   successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
+                   login.refreshUser(session);
+               } else {
+                   errorMessage ="Không thêm được sản phẩm vào giỏ hàng";
+               }
+           }
+           String responseMessage = successMessage != null ? successMessage : errorMessage;
+           return ResponseEntity.ok(responseMessage);
+       }catch (Exception e){
+           log.error(e.getMessage());
+           return ResponseEntity.ok("Không thêm được sản phẩm vào giỏ hàng");
+       }
     }
     @DeleteMapping("/api/deleteproduct/{productId}")
     public ResponseEntity<?> deleteProInCart(@PathVariable("productId") String id,HttpSession session)
@@ -75,6 +86,7 @@ public class ProductAPI {
         String errorMessage = null;
         if (success) {
             successMessage= "Đã xóa sản phẩm khỏi giỏ hàng";
+            login.refreshUser(session);
         } else {
             errorMessage ="Không thể xóa sản phẩm khỏi giỏ hàng";
         }
@@ -97,11 +109,13 @@ public class ProductAPI {
 
     }
     @PostMapping(value ="/api/product/add")
-    public ResponseData<?> addProduct(@RequestParam Map<String,String> allParams, @RequestParam(value = "ImageCode", required = false) MultipartFile fileImage)
+    public ResponseData<?> addProduct(@RequestParam Map<String,String> allParams, @RequestParam(value = "ImageCode")  MultipartFile fileImage)
     {
         try {
             log.info("Request add Product: {}", allParams.get("ProductName"));
             checkEmpty(allParams);
+            if(fileImage.isEmpty())
+                throw new CustomException("Image cannot be blank");
             ProductRequestDTO productRequestDTO = changeToDTO(allParams);
             return new ResponseData<>(HttpStatus.OK.value(),"Success",productService.saveProduct(productRequestDTO,fileImage));
         }

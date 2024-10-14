@@ -8,6 +8,7 @@ import com.webbanhang.webbanhang.Model.CartModel;
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.ICartService;
 import com.webbanhang.webbanhang.Service.IOrderService;
+import com.webbanhang.webbanhang.Util.CheckLogin;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.Map;
 public class OrderAPI {
     private final IOrderService orderService;
     private final ICartService cartService;
+    private final CheckLogin login;
     @PostMapping("/placeOrder")
     public ResponseData<String> addOrder(@Valid @RequestBody OrderRequestDTO orderRequestDTO, HttpSession session)
     {
@@ -35,6 +37,7 @@ public class OrderAPI {
             String orderID = orderService.save(orderRequestDTO,userModel.getUserID()) ;
             for(CartModel x :userModel.getUserCart())
                 cartService.deleteCart(x);
+            login.refreshUser(session);
             return new ResponseData<>(HttpStatus.CREATED.value(),"Success",orderID);
         }
         catch (Exception e){
@@ -61,11 +64,12 @@ public class OrderAPI {
         }
     }
     @DeleteMapping("/delete/{orderID}")
-    public ResponseData<String>  deleteOrder(@PathVariable("orderID")  String id)
+    public ResponseData<String>  deleteOrder(@PathVariable("orderID")  String id,HttpSession session)
     {
         try{
             String orderID =orderService.deleteOrder(id);
             log.info("Request Delete Order: {}",orderID);
+            login.refreshUser(session);
             return new ResponseData<>(HttpStatus.CREATED.value(),"Success",orderID);
         }
         catch (Exception e){

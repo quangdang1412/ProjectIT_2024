@@ -16,6 +16,4 @@ public interface IUserService {
     UserModel updateUser(String id, UserModel user);
     UserModel createUser(UserModel user);
     boolean existsByEmail(String email);
-
-
 }

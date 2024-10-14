@@ -48,7 +48,7 @@ public class OrderServiceImpl implements IOrderService {
             LocalDate today = LocalDate.now();
             LocalDate fastDay = today.plusDays(4);
             LocalDate normalDay = today.plusDays(8);
-            if(a.getPaymentMethod().equals("50000"))
+            if(a.getShippingOption().equals("50000"))
             {
                 order.setDeliveryTime(Date.valueOf(normalDay));
                 order.setTransportFee(50000.0);

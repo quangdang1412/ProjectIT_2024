@@ -33,7 +33,7 @@ public class YourOrderController {
     public String yourOrder(Model model, @ModelAttribute("productId") String productId, HttpSession session) {
        // checkLogin.checkLogin(session,model,userService);
         UserModel a = (UserModel)session.getAttribute("UserLogin");
-        List<OrderModel> listOrder =  a.getUserOrder();
+        List<OrderModel> listOrder =  userService.findUserByID(a.getUserID()).getUserOrder();
         model.addAttribute("listOrder",listOrder);
         return "/web/your-order";
     }

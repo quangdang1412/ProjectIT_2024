@@ -1,6 +1,8 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
+import com.webbanhang.webbanhang.Model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,11 +16,6 @@ import com.webbanhang.webbanhang.Exception.EmailAlreadyExistsException;
 import com.webbanhang.webbanhang.Exception.InvalidPasswordException;
 import com.webbanhang.webbanhang.Exception.TokenException;
 import com.webbanhang.webbanhang.Mapper.UserMapper;
-import com.webbanhang.webbanhang.Model.AuthenticationResponse;
-import com.webbanhang.webbanhang.Model.RegisterRequest;
-import com.webbanhang.webbanhang.Model.RoleModel;
-import com.webbanhang.webbanhang.Model.Token;
-import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Repository.ITokenRepository;
 import com.webbanhang.webbanhang.Repository.IUserRepository;
 import com.webbanhang.webbanhang.Service.IAuthenticationService;
@@ -28,6 +25,7 @@ import com.webbanhang.webbanhang.Service.IUserService;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements IAuthenticationService {
     private final IUserRepository userRepository;
@@ -36,7 +34,6 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     private final IUserService userService;
     private final IRoleService roleService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
@@ -115,7 +112,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             return false;
         }
         tokenEntity.setRevoked(true);
-        tokenRepository.save(tokenEntity);
+        tokenRepository.delete(tokenEntity);
         return true;
     }
 }

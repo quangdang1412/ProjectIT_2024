@@ -1,5 +1,3 @@
-
-
 services:
   api-service:
     container_name: TapHoaIT
