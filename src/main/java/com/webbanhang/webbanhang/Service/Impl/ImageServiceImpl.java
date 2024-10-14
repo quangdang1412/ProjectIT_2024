@@ -86,9 +86,9 @@ public class ImageServiceImpl implements IImageService {
     @Override
     public String upload(MultipartFile multipartFile) {
         try {
-            String fileName = multipartFile.getOriginalFilename();                        // to get original file name
-            File file = this.convertToFile(multipartFile, fileName);                      // to convert multipartFile to File
-            String URL = this.uploadFile(file, fileName);                                   // to get uploaded file link
+            String fileName = multipartFile.getOriginalFilename();
+            File file = this.convertToFile(multipartFile, fileName);
+            String URL = this.uploadFile(file, fileName);
             if (file.delete()) {
                 System.out.println("File deleted successfully");
             } else {

@@ -17,6 +17,8 @@ import com.webbanhang.webbanhang.Util.LoadData;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,6 +40,7 @@ public class ProductAPI {
     private final IUserService userService;
     private final ICartService cartService;
     private final LoadData loadData;
+    private final CheckLogin login;
     @PostMapping("/api/addtocart/{productId}/{quantity}")
     public ResponseEntity<?> addToCart(@PathVariable("productId") String productId,@PathVariable("quantity") int quantity,HttpSession session) {
        try{
@@ -53,12 +56,14 @@ public class ProductAPI {
                cartItem.setQuantity(cartItem.getQuantity() + quantity);
                cartService.updateCart(cartItem);
                successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
+               login.refreshUser(session);
            }
            else {
                CartModel newCartItem = new CartModel(user, product, quantity);
                boolean success = cartService.addCart(newCartItem);
                if (success) {
                    successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
+                   login.refreshUser(session);
                } else {
                    errorMessage ="Không thêm được sản phẩm vào giỏ hàng";
                }
@@ -81,6 +86,7 @@ public class ProductAPI {
         String errorMessage = null;
         if (success) {
             successMessage= "Đã xóa sản phẩm khỏi giỏ hàng";
+            login.refreshUser(session);
         } else {
             errorMessage ="Không thể xóa sản phẩm khỏi giỏ hàng";
         }
@@ -103,11 +109,13 @@ public class ProductAPI {
 
     }
     @PostMapping(value ="/api/product/add")
-    public ResponseData<?> addProduct(@RequestParam Map<String,String> allParams, @RequestParam(value = "ImageCode", required = false) MultipartFile fileImage)
+    public ResponseData<?> addProduct(@RequestParam Map<String,String> allParams, @RequestParam(value = "ImageCode")  MultipartFile fileImage)
     {
         try {
             log.info("Request add Product: {}", allParams.get("ProductName"));
             checkEmpty(allParams);
+            if(fileImage.isEmpty())
+                throw new CustomException("Image cannot be blank");
             ProductRequestDTO productRequestDTO = changeToDTO(allParams);
             return new ResponseData<>(HttpStatus.OK.value(),"Success",productService.saveProduct(productRequestDTO,fileImage));
         }

@@ -95,8 +95,8 @@
                 <td th:text="${order.OrderID}"></td>
                 <td th:text="${order.OrderDate}"></td>
                 <td th:text="${order.DeliveryTime}"></td>
-                <td th:text="${order.TransportFee}"></td>
-                <td th:text="${order.TotalPrice}"></td>
+                <td th:text="${#numbers.formatDecimal(order.TransportFee, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                <td th:text="${#numbers.formatDecimal(order.TotalPrice, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
                 <td th:text="${order.Status}"></td>
                 <td>
                   <a
