@@ -14,7 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -63,30 +65,37 @@ public class WebSecurityConfig {
     private String []role_more = {"SELLER", "SHIPPER", "ADMIN"};
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(requests -> requests
-                .requestMatchers( WHITE_LITS).permitAll()
-                .requestMatchers(EMPLOYEE_LIST).hasAnyAuthority(role_more)
-                .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
-                .anyRequest().authenticated()
+    
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .authorizeHttpRequests(requests -> requests
+            .requestMatchers(WHITE_LITS).permitAll()
+            .requestMatchers(EMPLOYEE_LIST).hasAnyAuthority("SELLER", "SHIPPER", "ADMIN")
+            .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
+            .anyRequest().authenticated()
+        )
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .oauth2Login(oauth2 -> oauth2
+            .loginPage("/login")  
+            .defaultSuccessUrl("/home", true)
+        )
+        .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        .authenticationProvider(authenticationProvider)
+        .exceptionHandling(exception -> exception
+            .authenticationEntryPoint((request, response, authException) ->
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
             )
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .formLogin(Customizer.withDefaults()) // Sử dụng trang login mặc định của Spring Security
-            .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class) // Thêm JWT filter
-            .authenticationProvider(authenticationProvider) // Cấu hình provider
-            .exceptionHandling(exception -> exception
-                .authenticationEntryPoint((request, response, authException) ->
-                    response.sendError(403, "Access Denied")
-                )
-            );
-            http.exceptionHandling(exceptionHandling -> exceptionHandling
-                          .accessDeniedPage("/404")
-            );
-        http.csrf(AbstractHttpConfigurer::disable);
-        return http.build();
-    }
+            .accessDeniedHandler((request, response, accessDeniedException) ->
+                response.sendRedirect("/404")
+            )
+        )
+        .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
+        .csrf(AbstractHttpConfigurer::disable);
+    
+    return http.build();
+}
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
