@@ -23,7 +23,6 @@ function sendOrderData(check) {
       },
       error: function (xhr, status, error) {
         console.error("Có lỗi xảy ra:", error);
-        // Xử lý lỗi tại đây
       },
     });
   } else {
