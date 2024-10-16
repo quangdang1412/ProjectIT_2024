@@ -1,0 +1,53 @@
+/* Tùy chỉnh phần container chính của Select2 */
+.select2-container--default .select2-selection--single {
+  display: block;
+  height: 37.6px;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #747d88;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 10px;
+}
+
+/* Tùy chỉnh phần text hiển thị khi chưa chọn gì */
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__placeholder {
+  color: #999; /* Màu chữ của placeholder */
+  font-style: italic; /* Chữ nghiêng cho placeholder */
+}
+
+/* Tùy chỉnh biểu tượng mũi tên (dropdown arrow) */
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__arrow
+  b {
+  border-color: #007bff transparent transparent transparent; /* Thay đổi màu mũi tên */
+}
+
+/* Tùy chỉnh dropdown của Select2 */
+.select2-container--default .select2-dropdown {
+  background-color: #f0f0f0; /* Thay đổi màu nền của dropdown */
+  border: 1px solid #007bff; /* Màu viền dropdown */
+  border-radius: 5px; /* Bo góc dropdown */
+}
+
+/* Tùy chỉnh các mục (option) bên trong dropdown */
+.select2-container--default .select2-results__option {
+  color: #333; /* Màu chữ */
+  padding: 10px; /* Khoảng cách giữa các mục */
+}
+
+/* Tùy chỉnh mục được hover */
+.select2-container--default .select2-results__option--highlighted {
+  background-color: #007bff; /* Màu nền khi hover */
+  color: #fff; /* Màu chữ khi hover */
+}

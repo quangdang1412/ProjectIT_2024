@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -47,7 +49,9 @@ public class WebSecurityConfig {
             "/cart",
             "/checkout",
             "/admin/**",
-            "/test"};
+            "/test",
+            "/api/payments/**"
+        };
     private final String[] EMPLOYEE_LIST={
             "/api/order/update",
     };
@@ -68,25 +72,25 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers( WHITE_LITS).permitAll()
-                        .requestMatchers(EMPLOYEE_LIST).hasAnyAuthority(role_more)
-                        .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
-                        .anyRequest().authenticated()
+            .authorizeHttpRequests(requests -> requests
+                .requestMatchers( WHITE_LITS).permitAll()
+                .requestMatchers(EMPLOYEE_LIST).hasAnyAuthority(role_more)
+                .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .formLogin(Customizer.withDefaults()) // Sử dụng trang login mặc định của Spring Security
+            .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class) // Thêm JWT filter
+            .authenticationProvider(authenticationProvider) // Cấu hình provider
+            .exceptionHandling(exception -> exception
+                .authenticationEntryPoint((request, response, authException) ->
+                    response.sendError(403, "Access Denied")
                 )
-                .oauth2Login(Customizer.withDefaults())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class) // Thêm JWT filter
-                .authenticationProvider(authenticationProvider) // Cấu hình provider
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) ->
-                                response.sendError(403, "Access Denied")
-                        )
-                );
-        http.exceptionHandling(exceptionHandling -> exceptionHandling
-                .accessDeniedPage("/404")
-        );
+            );
+            http.exceptionHandling(exceptionHandling -> exceptionHandling
+                          .accessDeniedPage("/404")
+            );
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }

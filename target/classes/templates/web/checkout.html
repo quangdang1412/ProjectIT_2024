@@ -50,110 +50,11 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
       rel="stylesheet"
     />
-
+    <link th:href="@{/assets/css/custom.css}" rel="stylesheet" />
     <!-- Select2 JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-    <script>
-      $(document).ready(function () {
-        // Load provinces dropdown on page load
-        $.ajax({
-          url: "http://localhost:8080/locations",
-          type: "GET",
-          success: function (data) {
-            var provinces = [];
-            var districts = {};
-            var communes = {};
-
-            // Process data to populate arrays
-            data.forEach(function (location) {
-              if (!provinces.includes(location.provinceName)) {
-                provinces.push(location.provinceName);
-              }
-
-              // Initialize district array if not exists
-              if (!districts[location.provinceName]) {
-                districts[location.provinceName] = [];
-              }
-              if (
-                !districts[location.provinceName].includes(
-                  location.districtName
-                )
-              ) {
-                districts[location.provinceName].push(location.districtName);
-              }
-
-              // Initialize commune array if not exists
-              if (!communes[location.districtName]) {
-                communes[location.districtName] = [];
-              }
-              if (
-                !communes[location.districtName].includes(location.communeName)
-              ) {
-                communes[location.districtName].push(location.communeName);
-              }
-            });
-
-            // Populate provinces dropdown
-            var provinceDropdown = $("#provinceDropdown");
-            provinceDropdown.empty();
-            provinceDropdown.append(
-              '<option selected="true" disabled>Chọn tỉnh thành</option>'
-            );
-            provinces.forEach(function (province) {
-              provinceDropdown.append(
-                $("<option></option>").attr("value", province).text(province)
-              );
-            });
-
-            // Initialize Select2 for provinces dropdown
-            provinceDropdown.select2();
-
-            // Handle province change event to load districts
-            provinceDropdown.change(function () {
-              var selectedProvince = $(this).val();
-              var districtDropdown = $("#districtDropdown");
-              districtDropdown.empty();
-              districtDropdown.append(
-                '<option selected="true" disabled>Choose thành phố/huyện </option>'
-              );
-              districts[selectedProvince].forEach(function (district) {
-                districtDropdown.append(
-                  $("<option></option>").attr("value", district).text(district)
-                );
-              });
-
-              // Refresh Select2 after updating options
-              districtDropdown.select2("destroy").select2();
-            });
-
-            // Initialize Select2 for districts dropdown
-            $("#districtDropdown").select2();
-
-            // Handle district change event to load communes
-            $("#districtDropdown").change(function () {
-              var selectedDistrict = $(this).val();
-              var communeDropdown = $("#communeDropdown");
-              communeDropdown.empty();
-              communeDropdown.append(
-                '<option selected="true" disabled>Chọn phường/xã</option>'
-              );
-              communes[selectedDistrict].forEach(function (commune) {
-                communeDropdown.append(
-                  $("<option></option>").attr("value", commune).text(commune)
-                );
-              });
-
-              // Refresh Select2 after updating options
-              communeDropdown.select2("destroy").select2();
-            });
-
-            // Initialize Select2 for communes dropdown
-            $("#communeDropdown").select2();
-          },
-        });
-      });
-    </script>
+    <script th:src="@{/assets/js/ProvinceDistrictCommune.js}"></script>
   </head>
 
   <body>
@@ -167,16 +68,18 @@
     <!-- Spinner End -->
 
     <!-- Navbar start -->
-    <div th:replace="~{fragment/navbar.html :: navbar}">
-
-    </div>
+    <div th:replace="~{fragment/navbar.html :: navbar}"></div>
     <!-- Navbar End -->
 
     <!-- Checkout Page Start -->
-    <div class="container-fluid py-5 mb-5 hero-header">
+<<<<<<< HEAD
+    <div class="container-fluid py-5 mb-5">
+=======
+    <div class="container-fluid py-5 mb-5 ">
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
       <div class="container py-5">
         <h1 class="mb-4">Đơn hàng</h1>
-        <form >
+        <form>
           <div class="row g-5">
             <div class="col-md-12 col-lg-6 col-xl-5">
               <h5>Thông tin khách hàng</h5>
@@ -257,7 +160,7 @@
                   >Dự kiến giao hàng vào: <span th:text="${fastDate}"></span
                 ></span>
                 <span class="text-muted fw-normal d-block"
-                  >Phí vận chuyển: 100,000 đ</span
+                  >Phí vận chuyển: 100,000 VND</span
                 >
               </div>
 
@@ -278,7 +181,7 @@
                   >Dự kiến giao hàng vào: <span th:text="${normalDate}"></span
                 ></span>
                 <span class="text-muted fw-normal d-block"
-                  >Phí vận chuyển: 50,000 đ</span
+                  >Phí vận chuyển: 50,000 VND</span
                 >
               </div>
               <hr />
@@ -300,21 +203,7 @@
                       >Online Banking</label
                     >
                   </div>
-                  <div id="BankInfor">
-                    <p class="text-start text-dark">Ngân hàng: MBBank</p>
-                    <p class="text-start text-dark">Số tài khoản: tphong934</p>
-                    <p class="text-start text-dark">
-                      Vui lòng nhập đầy đủ thông tin như mã hóa đơn, số điện
-                      thoại vào nội dung chuyển khoản để đảm bảo bạn có thể
-                      thanh toán đúng đơn hàng mình muốn. Đơn hàng của bạn sẽ
-                      không được vận chuyển cho tới khi bạn thanh toán
-                    </p>
-                    <p class="text-start text-dark">
-                      Ví dụ nội dung chuyển khoản: O001 081*********
-                    </p>
-                  </div>
-                </div>
-                <div class="col-12">
+
                   <div class="form-check text-start my-3">
                     <input
                       type="radio"
@@ -332,23 +221,42 @@
               </div>
             </div>
             <div class="col-md-12 col-lg-6 col-xl-7">
+              <h5>Chi tiết đơn hàng</h5>
               <div class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">Sản phẩm</th>
-                      <th scope="col">Tên</th>
-                      <th scope="col">Giá</th>
-                      <th scope="col">Số lượng</th>
-                      <th scope="col" style="min-width: 100px">Tổng</th>
+                      <th class="border-top-0" scope="col">Sản phẩm</th>
+<<<<<<< HEAD
+                      <th class="border-top-0" scope="col">
+                        Chi tiết sản phẩm
+                      </th>
+                      <th class="border-top-0" scope="col">Giảm</th>
+                      <th
+                        class="border-top-0"
+                        scope="col"
+                        style="min-width: 100px"
+                        colspan="3"
+                      >
+                        Tổng
+                      </th>
+=======
+                      <th class="border-top-0" scope="col">Chi tiết sản phẩm</th>
+                      <th class="border-top-0" scope="col">Giảm</th>
+                      <th class="border-top-0" scope="col" style="min-width: 100px" colspan="3">Tổng</th>
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                     </tr>
                   </thead>
                   <tbody>
-                    <tr th:each="cart: ${carts}">
+                    <tr th:each="cart: ${carts}" class="border-bottom-0">
+<<<<<<< HEAD
                       <th scope="row">
+=======
+                      <th scope="row" >
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                         <div class="d-flex align-items-center">
                           <img
-                            th:src="@{'/ImageProduct/' + ${cart.ProductCart.Image?.ImageCode}}"
+                            th:src="${#strings.contains(cart.ProductCart.Image?.ImageCode, 'https') ? cart.ProductCart.Image.ImageCode : '/ImageProduct/' + cart.ProductCart.Image.ImageCode}"
                             th:alt="${cart.ProductCart.Image?.ImageCode}"
                             class="img-fluid me-5 rounded-circle"
                             style="width: 80px; height: 80px"
@@ -356,85 +264,111 @@
                         </div>
                       </th>
                       <td>
+<<<<<<< HEAD
+                        <a
+                          th:href="@{/detail/{id}(id=${cart.ProductCart.productID})}"
+                        >
+                          <h5
+                            class="mb-0 mt-4 font-size-16 text-dark"
+                            style="max-width: 300px; word-wrap: break-word"
+                            th:text="${cart.ProductCart.ProductName}"
+                          ></h5>
+                        </a>
                         <p
                           class="mb-0 mt-4"
-                          th:text="${cart.ProductCart.ProductName}"
-                          style="max-width: 400px; word-wrap: break-word"
+                          th:text="${cart.ProductCart.Discount} != null
+=======
+                        <a th:href="@{/detail/{id}(id=${cart.ProductCart.productID})}">
+                          <h5 class="mb-0 mt-4 font-size-16 text-dark"
+                              style="max-width: 300px; word-wrap: break-word"
+                              th:text="${cart.ProductCart.ProductName}">
+                          </h5>
+                        </a>
+                        <p
+                                class="mb-0 mt-4"
+                                th:text="${cart.ProductCart.Discount} != null
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
+                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100, 1, 'COMMA', 0, 'POINT')} + ' VND x '  + ${cart.Quantity}
+                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND x ' + ${cart.Quantity}"
+                        >
+                          ">
+                        </p>
+                      </td>
+                      <td>
+                        <p
+<<<<<<< HEAD
+                          class="mb-0 mt-4"
+                          th:text="${cart.ProductCart.Discount} != null
+=======
+                                class="mb-0 mt-4"
+                                th:text="${cart.ProductCart.Discount} != null
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
+                                             ? '-'+${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (cart.ProductCart.Discount.Percentage) / 100*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
+                                             : '0 VND'"
                         ></p>
                       </td>
-                      <td>
+                      <td colspan="3">
+<<<<<<< HEAD
                         <p
                           class="mb-0 mt-4"
                           th:text="${cart.ProductCart.Discount} != null
-                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100, 1, 'COMMA', 0, 'POINT')} + 'đ'
-                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice, 1, 'COMMA', 0, 'POINT')} + 'đ'"
-                        >
-                          ">
+                           ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100 * cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
+                           : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+                        ></p>
+=======
+                        <p class="mb-0 mt-4" th:text="${cart.ProductCart.Discount} != null
+                           ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100 * cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
+                           : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'">
                         </p>
-                      </td>
-                      <td>
-                        <p class="mb-0 mt-4" th:text="${cart.Quantity}"></p>
-                      </td>
-                      <td>
-                        <p
-                          class="mb-0 mt-4"
-                          th:text="${cart.ProductCart.Discount} != null
-                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + 'đ'
-                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + 'đ'"
-                        >
-                          ">
-                        </p>
-                      </td>
-                      <td>
-                        <a
-                          th:attr="onclick=|deleteProinCart('${cart.ProductCart.ProductID}')|"
-                          class="btn btn-md rounded-circle bg-light border mt-4"
-                        >
-                          <i class="fa fa-times text-danger"></i>
-                        </a>
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                       </td>
                     </tr>
-                    <tr>
-                      <th scope="row"></th>
-                      <td class="py-5"></td>
-                      <td class="py-5"></td>
-                      <td class="py-5">
-                        <h5 class="mb-0 text-dark py-3">Tổng tiền:</h5>
+
+                    <tr class="border-bottom-0">
+                      <td colspan="3">
+<<<<<<< HEAD
+                        <h5 class="mb-0 text-dark py-3 font-size-14">
+                          TỔNG TIỀN:
+                        </h5>
+=======
+                        <h5 class="mb-0 text-dark py-3 font-size-14">TỔNG TIỀN:</h5>
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                       </td>
-                      <td class="py-5">
-                        <div class="py-3 border-bottom border-top">
+                      <td colspan="3">
+                        <div class="py-3">
                           <p
+<<<<<<< HEAD
                             class="mb-0 text-dark"
                             id="totalAmount"
                             th:value="${totalAmount}"
-                            th:text="${#numbers.formatDecimal(totalAmount, 1, 'COMMA', 0, 'POINT')} + 'đ'"
+                            th:text="${#numbers.formatDecimal(totalAmount, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+=======
+                                  class="mb-0 text-dark"
+                                  id="totalAmount"
+                                  th:value="${totalAmount}"
+                                  th:text="${#numbers.formatDecimal(totalAmount, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                           ></p>
                         </div>
                       </td>
                     </tr>
-                    <tr>
-                      <th scope="row"></th>
-                      <td class="py-5"></td>
-                      <td class="py-5"></td>
-                      <td class="py-5">
+                    <tr class="border-bottom-0">
+                      <td colspan="3">
                         <h5 class="mb-0 text-dark py-3">Phí vận chuyển:</h5>
                       </td>
-                      <td class="py-5">
-                        <div class="py-3 border-bottom border-top">
+                      <td colspan="3">
+                        <div class="py-3">
                           <p class="mb-0 text-dark" id="shippingCost">
-                            50,000đ
+                            50,000 VND
                           </p>
                         </div>
                       </td>
                     </tr>
-                    <tr>
-                      <th scope="row"></th>
-                      <td class="py-5"></td>
-                      <td class="py-5"></td>
-                      <td class="py-5">
+                    <tr class="border-bottom-0">
+                      <td colspan="3">
                         <h5 class="mb-0 text-dark py-3">Thành tiền:</h5>
                       </td>
-                      <td class="py-5">
+                      <td colspan="3">
                         <div class="py-3 border-bottom border-top">
                           <p class="mb-0 text-dark" id="totalElement">0</p>
                         </div>
@@ -466,7 +400,6 @@
     <div th:replace="~{fragment/footer.html}"></div>
     <!-- Footer End -->
 
-
     <!-- Back to Top -->
     <a
       href="#"
@@ -486,14 +419,17 @@
     <script th:src="@{/assets/callAPI/SendAPI.js}"></script>
     <script th:src="@{/assets/callAPI/OrderAPI.js}"></script>
     <script>
+      // Định dạng tiền tệ
       function formatCurrency(amount) {
-        return amount.toFixed(0).replace(/\d(?=(\d{3})+$)/g, "$&,");
+        return amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
 
+      // Cập nhật phí vận chuyển
       function updateShippingCost() {
         const shippingOptions = document.getElementsByName("shippingOption");
         let selectedValue = 0;
 
+        // Kiểm tra radio button nào được chọn
         for (let i = 0; i < shippingOptions.length; i++) {
           if (shippingOptions[i].checked) {
             selectedValue = parseInt(shippingOptions[i].value, 10);
@@ -501,52 +437,79 @@
           }
         }
 
+        // Cập nhật phí vận chuyển
         const shippingCostElement = document.getElementById("shippingCost");
-        shippingCostElement.textContent = formatCurrency(selectedValue);
+<<<<<<< HEAD
+        shippingCostElement.textContent =
+          formatCurrency(selectedValue) + " VND";
+=======
+        shippingCostElement.textContent = formatCurrency(selectedValue) + " VND";
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
 
+        // Cập nhật tổng tiền với phí vận chuyển
         updateTotal(selectedValue);
       }
 
+      // Cập nhật tổng tiền
       function updateTotal(shippingCost) {
+        // Giá trị mặc định của phí vận chuyển nếu không truyền vào
         if (shippingCost === undefined) {
           shippingCost = 50000;
         }
 
+        // Lấy tổng tiền từ HTML và loại bỏ dấu phẩy, VND
+        const totalAmountElement = document.getElementById("totalAmount");
         const totalAmount = parseFloat(
-          document
-            .getElementById("totalAmount")
-            .textContent.replace("đ", "")
-            .replace(",", "")
+<<<<<<< HEAD
+          totalAmountElement.textContent.replace(/[^0-9.-]+/g, "")
+=======
+                totalAmountElement.textContent.replace(/[^0-9.-]+/g, "")
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
         );
 
+        // Tính tổng tiền với phí vận chuyển
         const total = shippingCost + totalAmount;
+
+        // Cập nhật giá trị tổng cộng vào DOM
         document.getElementById("totalElement").textContent =
-          formatCurrency(total) + "đ";
+<<<<<<< HEAD
+          formatCurrency(total) + " VND";
+=======
+                formatCurrency(total) + " VND";
       }
 
-      // Khởi chạy tính toán tổng
-      updateTotal();
-      //bank infor
+      // Hiển thị thông tin ngân hàng khi chọn phương thức thanh toán chuyển khoản
       function toggleBankInfo() {
         const transferRadio = document.getElementById("Transfer-1");
         const bankInfo = document.getElementById("BankInfor");
 
+        // Hiển thị thông tin nếu chọn chuyển khoản
         if (transferRadio.checked) {
           bankInfo.style.display = "block";
         } else {
           bankInfo.style.display = "none";
         }
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
       }
 
+      // Khi trang load, chạy tính toán và kiểm tra ban đầu
       document.addEventListener("DOMContentLoaded", () => {
         const radios = document.getElementsByName("paymentMethod");
+
+<<<<<<< HEAD
+=======
+        // Lắng nghe sự kiện thay đổi phương thức thanh toán
         radios.forEach((radio) => {
           radio.addEventListener("change", toggleBankInfo);
         });
-        // Initial check on page load
+
+        // Kiểm tra trạng thái ban đầu
         toggleBankInfo();
+
+>>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
+        // Cập nhật tổng tiền ngay khi trang load
+        updateTotal();
       });
     </script>
-
   </body>
 </html>
