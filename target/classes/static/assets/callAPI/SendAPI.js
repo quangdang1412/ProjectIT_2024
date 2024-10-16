@@ -240,3 +240,49 @@ if (isTokenExpired(token)) {
     },
   });
 }
+
+//Token
+function isTokenExpired(token) {
+    if (token == null) {
+        return true;
+    }
+
+    try {
+        const payload = token.split(".")[1];
+
+        const decodedPayload = JSON.parse(
+            atob(payload.replace(/-/g, "+").replace(/_/g, "/"))
+        );
+
+        const currentTime = Date.now() / 1000; // Đổi sang giây
+        return decodedPayload.exp < currentTime;
+    } catch (error) {
+        console.error("Token không hợp lệ:", error);
+        return true;
+    }
+}
+var token = localStorage.getItem("token");
+if (isTokenExpired(token)) {
+    localStorage.removeItem("token");
+} else {
+    // Nếu token còn hiệu lực, gửi yêu cầu AJAX
+    $.ajax({
+        url: "/", // API GET đến "/"
+        method: "GET",
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+        success: function (response) {
+            var $responseHTML = $(response);
+            var $newDropdownMenu = $responseHTML.find(".dropdown-menu").html();
+            $("#dropdownContainer").html($newDropdownMenu);
+        },
+        error: function (xhr, status, error) {
+            console.log("Error: " + error);
+            localStorage.removeItem("token"); // Xóa token khi có lỗi
+            window.location.href = "/login"; // Chuyển đến trang đăng nhập
+        },
+    });
+}
+
+
