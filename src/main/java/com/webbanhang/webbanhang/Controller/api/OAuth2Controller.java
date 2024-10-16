@@ -52,7 +52,7 @@ public class OAuth2Controller {
                         .email(userModel.getEmail())
                         .password(userModel.getPassword())
                         .build();
-                response = authenticationService.login(request);
+                response = authenticationService.login(request,"oauth2");
             }
             else{
                 RegisterRequest registerRequest = RegisterRequest.builder()

@@ -84,4 +84,24 @@ public class MailService {
             log.error("Error while sending email: " + e.getMessage(), e);
         }
     }
+    public void sendResetPasswordMail(String url,String email) throws MessagingException, UnsupportedEncodingException {
+        log.info("Sending Confirm Link.....");
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message,true,"UTF-8");
+        Context context = new Context();
+        Map<String,Object> properties = new HashMap<>();
+        properties.put("urlReset",url);
+        context.setVariables(properties);
+        helper.setFrom(emailFrom,"TapHoaIT");
+        helper.setTo(email);
+        helper.setSubject("Reset mặt khẩu TapHoaIT");
+        try {
+            String html = templateEngine.process("ResetPasswordMail", context);
+            helper.setText(html, true);
+            javaMailSender.send(message);
+            log.info("Sent successfully .....");
+        } catch (Exception e) {
+            log.error("Error while sending email: " + e.getMessage(), e);
+        }
+    }
 }

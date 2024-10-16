@@ -23,10 +23,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements IUserService,UserDetailsService {
+public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
     private final IRoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public UserDetailsService userDetailService() {
+        return email -> userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
     @Transactional
     @Override
     public List<UserModel> getAllUser() {
@@ -36,16 +42,6 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
     @Override
     public UserModel findUserByID(String id) {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String email) {
-        // UserModel user = userRepository.getUserByEmail(email);
-        // if (user == null) {
-        //     throw new UsernameNotFoundException(email);
-        // }
-        // return new UserLogin(user);
-        return null;
     }
 
     @Override
