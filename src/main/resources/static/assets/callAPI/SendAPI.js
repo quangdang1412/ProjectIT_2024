@@ -127,8 +127,8 @@ function sendRequest(method,endpoint1,endpoint2,data,url){
     xhr.open(method, `http://localhost:8080/api/${endpoint1}/${endpoint2}`, true);
     if(endpoint1 !=="product" && endpoint2 !=="add")
         xhr.setRequestHeader("Content-Type", "application/json");
-        const token = localStorage.getItem("token");
-        xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+    const token = localStorage.getItem("token");
+    xhr.setRequestHeader("Authorization", `Bearer ${token}`);
 
     xhr.onreadystatechange = function () {
         notify(xhr,url,data)

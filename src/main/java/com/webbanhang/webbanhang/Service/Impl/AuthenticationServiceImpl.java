@@ -2,6 +2,7 @@ package com.webbanhang.webbanhang.Service.Impl;
 
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.*;
+import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,6 +26,9 @@ import com.webbanhang.webbanhang.Service.IUserService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -34,6 +38,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     private final JwtServiceImpl jwtService;
     private final IUserService userService;
     private final IRoleService roleService;
+    private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -90,8 +96,19 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .build();
     }
     @Override
-    public AuthenticationResponse login(AuthenticationRequest request) {
+    public AuthenticationResponse login(AuthenticationRequest request,String typeLogin) {
+        if (typeLogin.equals("normal")) {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        }
         UserModel user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new ResourceNotFoundException("Tài khoản hoặc mật khẩu không chính xác"));
+//        if (request.getPassword().user.getPassword())) {
+//            throw new ResourceNotFoundException("Tài khoản hoặc mật khẩu không chính xác");
+//        }
         String jwtToken = jwtService.generateToken(user);
         Token token = Token.builder()
                 .email(user.getEmail())
@@ -121,16 +138,19 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     }
 
     @Override
-    public String forgotPassword(String email) {
-
-        return null;
-    }
-
-    @Override
-    public String resetPassword(String key) {
-        final String email = jwtService.extractUsername(key);
-        var user = userService.findByEmail(email);
-        return null;
+    public String forgotPassword(String email) throws MessagingException, UnsupportedEncodingException {
+        try{
+            if (userService.existsByEmail(email)) {
+                String confirmLink = "http://localhost:8080/reset-password?email="+email;
+                mailService.sendResetPasswordMail(confirmLink,email);
+                return "Success";
+            }
+            else
+                return "Failed";
+        }
+        catch (Exception e){
+            return "Failed";
+        }
     }
 }
 

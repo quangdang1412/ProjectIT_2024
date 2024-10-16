@@ -15,6 +15,7 @@
         <form enctype="multipart/form-data">
           <h1>Đổi mật khẩu</h1>
           <input
+            th:if="${resetPassword} == null"
             type="password"
             name="oldpassword"
             placeholder="Mật khẩu cũ"
@@ -32,7 +33,7 @@
             placeholder="Xác nhận mật khẩu mới"
             required=""
           />
-          <button  type="button" th:attr="onclick=|changeUserPassword()|">Xong</button>
+          <button  type="button" th:attr="onclick=|changeUserPassword('${email}')|">Xong</button>
         </form>
       </div>
     </div>
