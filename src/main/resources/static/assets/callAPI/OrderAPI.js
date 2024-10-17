@@ -7,6 +7,8 @@ function sendOrderData(check) {
   const paymentMethod = order.paymentMethod;
   const pricetoal = order.finalTotal.replace(/[^0-9]/g, ""); // Lấy phần chữ số
   if (paymentMethod === "Transfer") {
+    localStorage.setItem("orderId", order.orderID);
+    sendRequest(method, "order", endpoint, order, url);
     $.ajax({
       url: "/api/payments/createcheckout",
       type: "POST",
@@ -14,7 +16,7 @@ function sendOrderData(check) {
       data: JSON.stringify({
         finalTotal: pricetoal,
         orderId: order.orderID,
-        returnUrl: "http://localhost:8080/yourOrder",
+        returnUrl: "http://localhost:8080/checkout",
         cancelUrl: "http://localhost:8080/checkout",
       }),
       success: function (response) {
