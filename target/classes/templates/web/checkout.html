@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8" />
     <title>Fruitables - Vegetable Website Template</title>
@@ -59,6 +59,8 @@
 
   <body>
     <!-- Spinner Start -->
+    <div id="status" style="display: none" th:text="${status}"></div>
+    <div id="cancel" style="display: none" th:text="${cancel}"></div>
     <div
       id="spinner"
       class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center"
@@ -72,11 +74,7 @@
     <!-- Navbar End -->
 
     <!-- Checkout Page Start -->
-<<<<<<< HEAD
     <div class="container-fluid py-5 mb-5">
-=======
-    <div class="container-fluid py-5 mb-5 ">
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
       <div class="container py-5">
         <h1 class="mb-4">Đơn hàng</h1>
         <form>
@@ -227,7 +225,6 @@
                   <thead>
                     <tr>
                       <th class="border-top-0" scope="col">Sản phẩm</th>
-<<<<<<< HEAD
                       <th class="border-top-0" scope="col">
                         Chi tiết sản phẩm
                       </th>
@@ -240,20 +237,11 @@
                       >
                         Tổng
                       </th>
-=======
-                      <th class="border-top-0" scope="col">Chi tiết sản phẩm</th>
-                      <th class="border-top-0" scope="col">Giảm</th>
-                      <th class="border-top-0" scope="col" style="min-width: 100px" colspan="3">Tổng</th>
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                     </tr>
                   </thead>
                   <tbody>
                     <tr th:each="cart: ${carts}" class="border-bottom-0">
-<<<<<<< HEAD
                       <th scope="row">
-=======
-                      <th scope="row" >
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                         <div class="d-flex align-items-center">
                           <img
                             th:src="${#strings.contains(cart.ProductCart.Image?.ImageCode, 'https') ? cart.ProductCart.Image.ImageCode : '/ImageProduct/' + cart.ProductCart.Image.ImageCode}"
@@ -264,7 +252,6 @@
                         </div>
                       </th>
                       <td>
-<<<<<<< HEAD
                         <a
                           th:href="@{/detail/{id}(id=${cart.ProductCart.productID})}"
                         >
@@ -277,17 +264,6 @@
                         <p
                           class="mb-0 mt-4"
                           th:text="${cart.ProductCart.Discount} != null
-=======
-                        <a th:href="@{/detail/{id}(id=${cart.ProductCart.productID})}">
-                          <h5 class="mb-0 mt-4 font-size-16 text-dark"
-                              style="max-width: 300px; word-wrap: break-word"
-                              th:text="${cart.ProductCart.ProductName}">
-                          </h5>
-                        </a>
-                        <p
-                                class="mb-0 mt-4"
-                                th:text="${cart.ProductCart.Discount} != null
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                                              ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100, 1, 'COMMA', 0, 'POINT')} + ' VND x '  + ${cart.Quantity}
                                              : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND x ' + ${cart.Quantity}"
                         >
@@ -296,58 +272,35 @@
                       </td>
                       <td>
                         <p
-<<<<<<< HEAD
                           class="mb-0 mt-4"
                           th:text="${cart.ProductCart.Discount} != null
-=======
-                                class="mb-0 mt-4"
-                                th:text="${cart.ProductCart.Discount} != null
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                                              ? '-'+${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (cart.ProductCart.Discount.Percentage) / 100*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
                                              : '0 VND'"
                         ></p>
                       </td>
                       <td colspan="3">
-<<<<<<< HEAD
                         <p
                           class="mb-0 mt-4"
                           th:text="${cart.ProductCart.Discount} != null
                            ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100 * cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
                            : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'"
                         ></p>
-=======
-                        <p class="mb-0 mt-4" th:text="${cart.ProductCart.Discount} != null
-                           ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100 * cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
-                           : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'">
-                        </p>
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                       </td>
                     </tr>
 
                     <tr class="border-bottom-0">
                       <td colspan="3">
-<<<<<<< HEAD
                         <h5 class="mb-0 text-dark py-3 font-size-14">
                           TỔNG TIỀN:
                         </h5>
-=======
-                        <h5 class="mb-0 text-dark py-3 font-size-14">TỔNG TIỀN:</h5>
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                       </td>
                       <td colspan="3">
                         <div class="py-3">
                           <p
-<<<<<<< HEAD
                             class="mb-0 text-dark"
                             id="totalAmount"
                             th:value="${totalAmount}"
                             th:text="${#numbers.formatDecimal(totalAmount, 1, 'COMMA', 0, 'POINT')} + ' VND'"
-=======
-                                  class="mb-0 text-dark"
-                                  id="totalAmount"
-                                  th:value="${totalAmount}"
-                                  th:text="${#numbers.formatDecimal(totalAmount, 1, 'COMMA', 0, 'POINT')} + ' VND'"
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
                           ></p>
                         </div>
                       </td>
@@ -439,12 +392,8 @@
 
         // Cập nhật phí vận chuyển
         const shippingCostElement = document.getElementById("shippingCost");
-<<<<<<< HEAD
         shippingCostElement.textContent =
           formatCurrency(selectedValue) + " VND";
-=======
-        shippingCostElement.textContent = formatCurrency(selectedValue) + " VND";
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
 
         // Cập nhật tổng tiền với phí vận chuyển
         updateTotal(selectedValue);
@@ -460,11 +409,7 @@
         // Lấy tổng tiền từ HTML và loại bỏ dấu phẩy, VND
         const totalAmountElement = document.getElementById("totalAmount");
         const totalAmount = parseFloat(
-<<<<<<< HEAD
           totalAmountElement.textContent.replace(/[^0-9.-]+/g, "")
-=======
-                totalAmountElement.textContent.replace(/[^0-9.-]+/g, "")
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
         );
 
         // Tính tổng tiền với phí vận chuyển
@@ -472,44 +417,17 @@
 
         // Cập nhật giá trị tổng cộng vào DOM
         document.getElementById("totalElement").textContent =
-<<<<<<< HEAD
           formatCurrency(total) + " VND";
-=======
-                formatCurrency(total) + " VND";
-      }
-
-      // Hiển thị thông tin ngân hàng khi chọn phương thức thanh toán chuyển khoản
-      function toggleBankInfo() {
-        const transferRadio = document.getElementById("Transfer-1");
-        const bankInfo = document.getElementById("BankInfor");
-
-        // Hiển thị thông tin nếu chọn chuyển khoản
-        if (transferRadio.checked) {
-          bankInfo.style.display = "block";
-        } else {
-          bankInfo.style.display = "none";
-        }
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
       }
 
       // Khi trang load, chạy tính toán và kiểm tra ban đầu
       document.addEventListener("DOMContentLoaded", () => {
         const radios = document.getElementsByName("paymentMethod");
 
-<<<<<<< HEAD
-=======
-        // Lắng nghe sự kiện thay đổi phương thức thanh toán
-        radios.forEach((radio) => {
-          radio.addEventListener("change", toggleBankInfo);
-        });
-
-        // Kiểm tra trạng thái ban đầu
-        toggleBankInfo();
-
->>>>>>> 51f15a95bed756f6a6f7ba62229107675830e7de
         // Cập nhật tổng tiền ngay khi trang load
         updateTotal();
       });
     </script>
+    <script th:src="@{/assets/callAPI/checkpaid.js}"></script>
   </body>
 </html>
