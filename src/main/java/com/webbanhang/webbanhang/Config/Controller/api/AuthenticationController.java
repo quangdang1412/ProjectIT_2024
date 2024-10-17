@@ -4,8 +4,10 @@ import com.webbanhang.webbanhang.DTO.response.ResponseData;
 import com.webbanhang.webbanhang.DTO.response.ResponseError;
 import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
+import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.IUserService;
 import com.webbanhang.webbanhang.Util.CheckLogin;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServlet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.webbanhang.webbanhang.DTO.request.User.AuthenticationRequest;
 import com.webbanhang.webbanhang.DTO.request.User.RefreshRequest;
@@ -32,6 +30,7 @@ import com.webbanhang.webbanhang.Service.Impl.AuthenticationServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -42,6 +41,8 @@ import java.util.Map;
 public class AuthenticationController {
     private final AuthenticationServiceImpl authenticationService;
     private final CheckLogin checkLogin;
+    private final IUserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
@@ -72,7 +73,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest request,HttpServletRequest httpServletRequest) {
         try{
-            AuthenticationResponse response = authenticationService.login(request);
+            AuthenticationResponse response = authenticationService.login(request,"normal");
             HttpSession session = httpServletRequest.getSession();
             session.setAttribute("token", response.getToken());
             session.setAttribute("userdata", response.getUserDto());
@@ -108,5 +109,39 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token not found");
         }
     }
+    @PostMapping("/forgot_password")
+    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) throws MessagingException, UnsupportedEncodingException {
+        String email = request.get("email");
+        String response = authenticationService.forgotPassword(email);
+        if ("Success".equals(response)) {
+            return ResponseEntity.ok("Password reset link sent successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email not found.");
+        }
+    }
+
+    @PutMapping("/resetPassword")
+    public ResponseData<String> resetPassword(@RequestBody  Map<String, String> allParams) {
+        try{
+            String email = allParams.get("email");
+            String newPassword = allParams.get("newPassword");
+            String confirmPassword = allParams.get("confirmPassword");
+            UserModel user = userService.findByEmail(email);
+            if (user == null) {
+                return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Người dùng không tồn tại.");
+            }
+            if (!newPassword.equals(confirmPassword)) {
+                return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Mật khẩu mới và mật khẩu xác nhận không khớp.");
+            }
+            user.setPassword(passwordEncoder.encode(newPassword));
+
+            String userId = userService.changePassword(user.getUserID(),user.getPassword());
+            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
+        }
+        catch (Exception e){
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Reset failed");
+        }
+    }
+
     
 }

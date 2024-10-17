@@ -44,6 +44,7 @@ public class WebSecurityConfig {
             "/login/**",
             "/inforuser",
             "/changePassword",
+            "/reset-password",
             "/yourOrder/**",
             "/cart",
             "/checkout",
@@ -94,11 +95,6 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

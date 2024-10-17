@@ -2,10 +2,12 @@ package com.webbanhang.webbanhang.Service;
 
 import com.webbanhang.webbanhang.DTO.request.User.UserRequestDTO;
 import com.webbanhang.webbanhang.Model.UserModel;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
 public interface IUserService {
+    UserDetailsService userDetailService();
     List<UserModel> getAllUser();
     UserModel findUserByID(String id);
     UserModel findByEmail(String email);
