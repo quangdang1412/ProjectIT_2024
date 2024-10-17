@@ -129,6 +129,7 @@ function sendRequest(method, endpoint1, endpoint2, data, url) {
   const token = localStorage.getItem("token");
   xhr.setRequestHeader("Authorization", `Bearer ${token}`);
 
+
   xhr.onreadystatechange = function () {
     notify(xhr, url, data);
   };
