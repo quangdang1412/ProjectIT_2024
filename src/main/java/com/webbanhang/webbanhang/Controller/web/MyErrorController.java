@@ -1,4 +1,4 @@
-package com.webbanhang.webbanhang.Config.Controller.web;
+package com.webbanhang.webbanhang.Controller.web;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.webbanhang.webbanhang.Config.Controller.api;
+package com.webbanhang.webbanhang.Controller.api;
 
 import com.webbanhang.webbanhang.DTO.request.Order.OrderRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.ResponseData;

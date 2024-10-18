@@ -1,4 +1,4 @@
-package com.webbanhang.webbanhang.Config.Controller.admin;
+package com.webbanhang.webbanhang.Controller.admin;
 
 import com.webbanhang.webbanhang.Model.RoleModel;
 import com.webbanhang.webbanhang.Model.UserModel;

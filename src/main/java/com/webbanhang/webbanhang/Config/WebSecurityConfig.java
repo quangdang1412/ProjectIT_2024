@@ -50,8 +50,7 @@ public class WebSecurityConfig {
             "/checkout",
             "/admin/**",
             "/test",
-            "/api/payments/**",
-            "/updatePaymentStatus/**"
+            "/api/payments/**"
         };
     private final String[] EMPLOYEE_LIST={
             "/api/order/update",

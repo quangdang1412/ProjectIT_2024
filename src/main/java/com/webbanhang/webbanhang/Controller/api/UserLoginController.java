@@ -1,4 +1,4 @@
-package com.webbanhang.webbanhang.Config.Controller.api;
+package com.webbanhang.webbanhang.Controller.api;
 
 import java.util.List;
 

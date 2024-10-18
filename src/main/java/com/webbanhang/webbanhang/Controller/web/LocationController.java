@@ -1,4 +1,4 @@
-package com.webbanhang.webbanhang.Config.Controller.web;
+package com.webbanhang.webbanhang.Controller.web;
 
 import java.io.IOException;
 import java.util.List;
