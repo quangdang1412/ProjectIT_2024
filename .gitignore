@@ -2,5 +2,5 @@
 *.env
 /.idea/
 /.vscode/
-/target/classes/
+/target/
 
