@@ -1,4 +1,4 @@
-package com.webbanhang.webbanhang.Config.Controller.api;
+package com.webbanhang.webbanhang.Controller.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.webbanhang.webbanhang.Config.Controller.web;
+package com.webbanhang.webbanhang.Controller.web;
 
 import com.webbanhang.webbanhang.Model.BrandModel;
 import com.webbanhang.webbanhang.Model.ProductModel;
