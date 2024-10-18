@@ -1,4 +1,4 @@
-package com.webbanhang.webbanhang.Config.Controller.api;
+package com.webbanhang.webbanhang.Controller.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
