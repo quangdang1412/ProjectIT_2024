@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -146,5 +147,26 @@ public class OrderServiceImpl implements IOrderService {
     public OrderModel getOrderByID(String id) {
         return orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
-
+    @Override
+    public boolean updateStatus(String orderId) {
+        Optional<OrderModel> optionalOrder = orderRepository.findById(orderId);
+        
+        if (optionalOrder.isPresent()) {
+            OrderModel order = optionalOrder.get();
+    
+            PaymentModel payment = order.getPaymentModel();
+            if (payment == null) {
+                payment = new PaymentModel();
+                order.setPaymentModel(payment);// Set lại payment cho order
+            }
+    
+            payment.setStatus("Đã thanh toán");
+    
+            orderRepository.save(order);
+            return true;
+        }
+    
+        return false;
+    }
+    
 }

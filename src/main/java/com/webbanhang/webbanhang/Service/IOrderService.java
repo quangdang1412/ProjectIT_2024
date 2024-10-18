@@ -13,4 +13,5 @@ public interface IOrderService {
     String deleteOrder(String id);
     List<OrderModel> getOrderByStatus(String id);
     OrderModel getOrderByID(String id);
+    boolean updateStatus(String id);
 }
