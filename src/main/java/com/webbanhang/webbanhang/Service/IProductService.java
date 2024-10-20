@@ -15,6 +15,6 @@ public interface IProductService {
     String deleteProduct(String a);
     List<ProductModel> findCategory(String id);
     Page<ProductModel> findCategoryForPage(String id,Integer a);
-    Page<ProductModel> getProductForPage(Integer a);
+    Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy);
     PageResponse<?> getAllProductWithSortBy(int pageNo, int pageSize, String sortBy);
 }

@@ -2,6 +2,7 @@ package com.webbanhang.webbanhang.Util;
 
 import com.webbanhang.webbanhang.Model.AuthenticationResponse;
 import com.webbanhang.webbanhang.Model.UserModel;
+import com.webbanhang.webbanhang.Service.ICategoryService;
 import com.webbanhang.webbanhang.Service.IUserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 @RequiredArgsConstructor
 public class CheckLogin {
     private final IUserService userService;
+    private final ICategoryService categoryService;
     public void checkLogin(HttpSession session, AuthenticationResponse response )
     {
         if (response != null) {
