@@ -124,19 +124,33 @@ function notify(xhr, url, data) {
 function sendRequest(method, endpoint1, endpoint2, data, url) {
   let xhr = new XMLHttpRequest();
   xhr.open(method, `http://localhost:8080/api/${endpoint1}/${endpoint2}`, true);
-  if (endpoint1 !== "product" && endpoint2 !== "add")
+  if (endpoint1 !== "product" && endpoint2 !== "add") {
     xhr.setRequestHeader("Content-Type", "application/json");
+  }
+
   const token = localStorage.getItem("token");
   xhr.setRequestHeader("Authorization", `Bearer ${token}`);
 
-
   xhr.onreadystatechange = function () {
-    notify(xhr, url, data);
+    // Khi request hoàn thành và nhận được phản hồi
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      // Kiểm tra nếu token không hợp lệ (status 401 hoặc 403)
+      if (xhr.status === 401 || xhr.status === 403) {
+        extendToken(); // Gọi hàm extendToken để gia hạn token
+      } else {
+        // Nếu token hợp lệ, tiếp tục xử lý phản hồi
+        notify(xhr, url, data);
+      }
+    }
   };
-  if (endpoint1 !== "product" && endpoint2 !== "add")
+
+  if (endpoint1 !== "product" && endpoint2 !== "add") {
     xhr.send(JSON.stringify(data));
-  else xhr.send(data);
+  } else {
+    xhr.send(data);
+  }
 }
+
 function getAccess(url) {
   fetch("/{url}", {
     method: "GET",
