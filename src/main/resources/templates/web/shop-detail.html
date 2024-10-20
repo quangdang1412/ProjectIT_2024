@@ -130,7 +130,7 @@
                         aria-controls="nav-about"
                         aria-selected="true"
                 >
-                  Miêu tả sản phẩm
+                  Mô tả sản phẩm
                 </button>
               </div>
             </nav>
@@ -142,7 +142,7 @@
                       aria-labelledby="nav-about-tab"
               >
 
-                <p class="mb-4" th:text="${product.Description}"></p>
+                <div id="descriptionContent" class="mb-4" th:utext="${product.Description}"></div>
 
               </div>
               <div
@@ -393,6 +393,7 @@
 <!-- Template Javascript -->
 <script th:src="@{/assets/js/main.js}"></script>
 <script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
+<script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
 
 </body>
 </html>

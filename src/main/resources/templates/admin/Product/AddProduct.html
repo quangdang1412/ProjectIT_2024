@@ -1,224 +1,356 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
+  <head>
+    <meta charset="utf-8" />
     <title>Tạp hóa IT</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <meta content="" name="keywords"/>
-    <meta content="" name="description"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="keywords" />
+    <meta content="" name="description" />
 
     <!-- Google Web Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect"/>
-    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
     <link
-            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
-            rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
+      rel="stylesheet"
     />
 
     <!-- Icon Font Stylesheet -->
     <link
-            href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
-            rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+      rel="stylesheet"
     />
     <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
-            rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+      rel="stylesheet"
     />
     <link
-            href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css"
-            rel="stylesheet"
+      href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css"
+      rel="stylesheet"
     />
     <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
-            rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
     />
     <!-- Libraries Stylesheet -->
     <link
-            rel="stylesheet"
-            th:href="@{/assets/lib/lightbox/css/lightbox.min.css}"
+      rel="stylesheet"
+      th:href="@{/assets/lib/lightbox/css/lightbox.min.css}"
     />
     <link
-            rel="stylesheet"
-            th:href="@{/assets/lib/owlcarousel/assets/owl.carousel.min.css}"
+      rel="stylesheet"
+      th:href="@{/assets/lib/owlcarousel/assets/owl.carousel.min.css}"
     />
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}" />
 
     <!-- Template Stylesheet -->
-    <link rel="stylesheet" th:href="@{/asset-admin/css/table.css}"/>
-    <link rel="stylesheet" th:href="@{/assets/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/asset-admin/css/table.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}" />
+    <link
+      rel="stylesheet"
+      href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
+    />
+  </head>
 
-</head>
+  <body>
+    <!-- Spinner Start -->
+    <div
+      class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center"
+      id="spinner"
+    >
+      <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+    <!-- Spinner End -->
 
-<body>
-<!-- Spinner Start -->
-<div
-        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center"
-        id="spinner"
->
-    <div class="spinner-grow text-primary" role="status"></div>
-</div>
-<!-- Spinner End -->
-
-<!-- Navbar start -->
-<div th:replace="~{fragment/navbar_admin.html}"></div>
-<!-- Navbar End -->
-<!-- Fruits Shop Start-->
-<div class="container-fluid py-5">
-    <div class="container py-5">
+    <!-- Navbar start -->
+    <div th:replace="~{fragment/navbar_admin.html}"></div>
+    <!-- Navbar End -->
+    <!-- Fruits Shop Start-->
+    <div class="container-fluid py-5">
+      <div class="container py-5">
         <h1 class="mb-4">Thông tin sản phẩm</h1>
-        <form th:object="${Product}" id="formID" enctype="multipart/form-data" method="post">
-            <div class="row  justify-content-center">
-                <div class="col-md-12 col-lg-6 col-xl-7">
-                    <div class="form-item ">
-                        <label class="form-label my-3">Mã sản phẩm<sup>*</sup></label>
-                        <input type="text" class="form-control"  name="ProductID"  th:value="${ProductID}" required   readonly />
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Tên sản phẩm<sup>*</sup></label>
-                        <input type="text" class="form-control"  name="ProductName" th:value="${ProductName}" required />
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Thương hiệu<sup>*</sup></label>
-                        <select class="form-select" aria-label="Default select example"  name="BrandID" required>
-                            <option></option>
-                            <option  th:each="brand : ${listBrand}" th:value="${brand.BrandID}" th:text="${brand.BrandName}" th:selected="${brand.BrandName == BrandName}"></option>
-                        </select>
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Danh mục<sup>*</sup></label>
-                        <select class="form-select" aria-label="Default select example"  name="CategoryID" required>
-                            <option></option>
-                            <option  th:each="category : ${listCategory}" th:value="${category.CategoryID}" th:text="${category.CategoryName}" th:selected="${category.CategoryName == CategoryName}"></option>
-                        </select>
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Mã khuyến mãi</label>
-                        <select class="form-select" aria-label="Default select example"  name="DiscountID"  >
-                            <option></option>
-                            <option  th:each="discount : ${listDiscount}" th:value="${discount.DiscountID}" th:text="${discount.DiscountID}"  th:selected="${discount.DiscountID == DiscountID}">></option>
-                        </select>
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Nhà cung cấp<sup>*</sup></label>
-                        <select class="form-select" aria-label="Default select example"  name="SupplierID" required>
-                            <option></option>
-                            <option  th:each="supplier : ${listSupplier}" th:value="${supplier.supplierID}" th:text="${supplier.supplierName}" th:selected="${supplier.supplierName == SupplierName}"></option>
-                        </select>
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Giá nhập<sup>*</sup></label>
-                        <input type="number" class="form-control" name="UnitCost" th:value="${UnitCost}" required/>
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Giá bán<sup>*</sup></label>
-                        <input type="number" class="form-control" name="UnitPrice" th:value="${UnitPrice}" required/>
-                    </div>
+        <form
+          th:object="${Product}"
+          id="formID"
+          enctype="multipart/form-data"
+          method="post"
+        >
+          <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-6 col-xl-7">
+              <div class="form-item">
+                <label class="form-label my-3">Mã sản phẩm<sup>*</sup></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="ProductID"
+                  th:value="${ProductID}"
+                  required
+                  readonly
+                />
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3">Tên sản phẩm<sup>*</sup></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="ProductName"
+                  th:value="${ProductName}"
+                  required
+                />
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3">Thương hiệu<sup>*</sup></label>
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  name="BrandID"
+                  required
+                >
+                  <option></option>
+                  <option
+                    th:each="brand : ${listBrand}"
+                    th:value="${brand.BrandID}"
+                    th:text="${brand.BrandName}"
+                    th:selected="${brand.BrandName == BrandName}"
+                  ></option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3">Danh mục<sup>*</sup></label>
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  name="CategoryID"
+                  required
+                >
+                  <option></option>
+                  <option
+                    th:each="category : ${listCategory}"
+                    th:value="${category.CategoryID}"
+                    th:text="${category.CategoryName}"
+                    th:selected="${category.CategoryName == CategoryName}"
+                  ></option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3">Mã khuyến mãi</label>
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  name="DiscountID"
+                >
+                  <option></option>
+                  <option
+                    th:each="discount : ${listDiscount}"
+                    th:value="${discount.DiscountID}"
+                    th:text="${discount.DiscountID}"
+                    th:selected="${discount.DiscountID == DiscountID}"
+                  ></option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3">Nhà cung cấp<sup>*</sup></label>
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  name="SupplierID"
+                  required
+                >
+                  <option></option>
+                  <option
+                    th:each="supplier : ${listSupplier}"
+                    th:value="${supplier.supplierID}"
+                    th:text="${supplier.supplierName}"
+                    th:selected="${supplier.supplierName == SupplierName}"
+                  ></option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3">Giá nhập<sup>*</sup></label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="UnitCost"
+                  th:value="${UnitCost}"
+                  required
+                />
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3">Giá bán<sup>*</sup></label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="UnitPrice"
+                  th:value="${UnitPrice}"
+                  required
+                />
+              </div>
 
-                    <div class="form-item">
-                        <label class="form-label my-3">Số lượng<sup>*</sup></label>
-                        <input type="number" class="form-control" name="Quantity" th:value="${Quantity}" required />
+              <div class="form-item">
+                <label class="form-label my-3">Số lượng<sup>*</sup></label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="Quantity"
+                  th:value="${Quantity}"
+                  required
+                />
+              </div>
+              <div class="form-item">
+                <label for="formFile" class="form-label my-3"
+                  >Hình ảnh sản phẩm<sup>*</sup></label
+                >
+                <input
+                  name="ImageCode"
+                  th:value="${ImageProduct}"
+                  type="file"
+                  class="form-control"
+                  id="formFile"
+                  accept="image/*"
+                  onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])"
+                  style="background-color: #ffffff"
+                />
+                <br />
+                <img
+                  id="blah"
+                  width="200"
+                  height="250"
+                  th:src="${ImageProduct != null ? (#strings.contains(ImageProduct, 'https') ? ImageProduct : '/ImageProduct/' + ImageProduct) : ''}"
+                />
+              </div>
+              <div class="form-item">
+                <label class="form-label my-3"
+                  >Mô tả sản phẩm<sup>*</sup></label
+                >
 
-                    </div>
-                    <div class="form-item">
-                        <label for="formFile" class="form-label my-3">Hình ảnh sản phẩm<sup>*</sup></label>
-                        <input name="ImageCode"  th:value="${ImageProduct}" type="file" class="form-control" id="formFile" accept="image/*" onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])" style="background-color: #ffffff">
-                        <br>
-                        <img id="blah" width="200" height="250"
-                             th:src="${ImageProduct != null ? (#strings.contains(ImageProduct, 'https') ? ImageProduct : '/ImageProduct/' + ImageProduct) : ''}">
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Mô tả sản phẩm<sup>*</sup></label>
-                        <textarea
-                                th:text="${Description}"
-                                name="Description"
-                                class="form-control"
-                                spellcheck="false"
-                                cols="30"
-                                rows="11"
-                                placeholder="Oreder Notes (Optional)"
-                        ></textarea>
-                    </div>
-                </div>
-                <div class ="d-flex col-md-12 col-lg-6 col-xl-7 justify-content-end">
-                    <button type="button" class="btn btn-success mt-2 me-2"
-                            th:attr="onclick=|sendProductData('${checkPro == null ? 'insert' : 'update'}')|"
-                    >Save</button>
-                    <a href="Product?action=list" class="btn btn-secondary mt-2">Cancel</a>
-                </div>
+                <div
+                  id="descriptionContent"
+                  th:utext="${Description}"
+                  style="display: none"
+                ></div>
+
+                <!-- Div để khởi tạo Toast UI Editor -->
+                <div id="productDescription"></div>
+
+                <!-- Hidden input để lưu trữ nội dung markdown -->
+                <input type="hidden" name="Description" id="descriptionInput" />
+              </div>
             </div>
-
+            <div class="d-flex col-md-12 col-lg-6 col-xl-7 justify-content-end">
+              <button
+                type="button"
+                class="btn btn-success mt-2 me-2"
+                th:attr="onclick=|sendProductData('${checkPro == null ? 'insert' : 'update'}')|"
+              >
+                Save
+              </button>
+              <a href="Product?action=list" class="btn btn-secondary mt-2"
+                >Cancel</a
+              >
+            </div>
+          </div>
         </form>
+      </div>
     </div>
-</div>
-<!-- Fruits Shop End-->
-<!-- Modal Search Start -->
-<div
-        aria-hidden="true"
-        aria-labelledby="exampleModalLabel"
-        class="modal fade"
-        id="searchModal"
-        tabindex="-1"
->
-    <div class="modal-dialog modal-fullscreen">
+    <!-- Fruits Shop End-->
+    <!-- Modal Search Start -->
+    <div
+      aria-hidden="true"
+      aria-labelledby="exampleModalLabel"
+      class="modal fade"
+      id="searchModal"
+      tabindex="-1"
+    >
+      <div class="modal-dialog modal-fullscreen">
         <div class="modal-content rounded-0">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Search by keyword
-                </h5>
-                <button
-                        aria-label="Close"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        type="button"
-                ></button>
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Search by keyword
+            </h5>
+            <button
+              aria-label="Close"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              type="button"
+            ></button>
+          </div>
+          <div class="modal-body d-flex align-items-center">
+            <div class="input-group w-75 mx-auto d-flex">
+              <input
+                aria-describedby="search-icon-1"
+                class="form-control p-3"
+                placeholder="keywords"
+                type="search"
+              />
+              <span class="input-group-text p-3" id="search-icon-1"
+                ><i class="fa fa-search"></i
+              ></span>
             </div>
-            <div class="modal-body d-flex align-items-center">
-                <div class="input-group w-75 mx-auto d-flex">
-                    <input
-                            aria-describedby="search-icon-1"
-                            class="form-control p-3"
-                            placeholder="keywords"
-                            type="search"
-                    />
-                    <span class="input-group-text p-3" id="search-icon-1"
-                    ><i class="fa fa-search"></i
-                    ></span>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-<!-- Modal Search End -->
+    <!-- Modal Search End -->
 
+    <!-- Footer Start -->
+    <div th:replace="~{fragment/footer.html}"></div>
 
-<!-- Footer Start -->
-<div th:replace="~{fragment/footer.html}"></div>
+    <!-- Back to Top -->
+    <a
+      class="btn btn-primary border-3 border-primary rounded-circle back-to-top"
+      href="#"
+      ><i class="fa fa-arrow-up"></i
+    ></a>
 
-<!-- Back to Top -->
-<a
-        class="btn btn-primary border-3 border-primary rounded-circle back-to-top"
-        href="#"
-><i class="fa fa-arrow-up"></i
-></a>
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-<!-- JavaScript Libraries -->
-<script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script  src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-<script  src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+    <script th:src="@{/assets/lib/easing/easing.min.js}"></script>
+    <script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
+    <script th:src="@{/assets/lib/lightbox/js/lightbox.min.js}"></script>
+    <script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Template Javascript -->
+    <script th:src="@{/assets/js/main.js}"></script>
+    <script th:src="@{/asset-admin/js/table.js}"></script>
+    <script th:src="@{/assets/callAPI/SendAPI.js}"></script>
+    <script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
 
-<script th:src="@{/assets/lib/easing/easing.min.js}"></script>
-<script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
-<script th:src="@{/assets/lib/lightbox/js/lightbox.min.js}"></script>
-<script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Template Javascript -->
-<script th:src="@{/assets/js/main.js}"></script>
-<script th:src="@{/asset-admin/js/table.js}"></script>
-<script th:src="@{/assets/callAPI/SendAPI.js}"></script>
-<script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
-</body>
+    <script
+      src="https://cdn.tiny.cloud/1/vl9mxy965718fijinl1656zu16jredu9zth2di0lgmn57i4l/tinymce/7/tinymce.min.js"
+      referrerpolicy="origin"
+    ></script>
+
+    <script>
+      // Lấy nội dung từ th:utext (dữ liệu từ server)
+      const initialDescription =
+        document.getElementById("descriptionContent").innerHTML;
+
+      tinymce.init({
+        selector: "#productDescription",
+        height: 400,
+        branding: false,
+        statusbar: false,
+        plugins: "lists link code markdown",
+        toolbar: [
+          "undo redo | styles | bold italic | bullist numlist | link | code | markdown",
+        ],
+        setup: function (editor) {
+          editor.on("change", function () {
+            const content = editor.getContent({ format: "html" });
+            document.getElementById("descriptionInput").value = content;
+          });
+        },
+        init_instance_callback: function (editor) {
+          editor.setContent(initialDescription);
+        },
+      });
+    </script>
+  </body>
 </html>

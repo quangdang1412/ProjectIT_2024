@@ -2,10 +2,9 @@ function addToCart(productId) {
   let quantityElement = document.getElementById("quantityInput");
   let quantity = quantityElement ? quantityElement.value : 1;
   console.log(quantity);
-  const token = localStorage.getItem("token")
-  if(token === null)
-    window.location.href = "/login";
-  else{
+  const token = localStorage.getItem("token");
+  if (token === null) window.location.href = "/login";
+  else {
     $.ajax({
       url: "/api/addtocart/" + productId + "/" + quantity,
       type: "POST",
@@ -16,7 +15,6 @@ function addToCart(productId) {
       success: function (response) {
         console.log("Server response:", response); // Debugging log
         if (response.includes("Đã cập nhật sản phẩm vào giỏ hàng")) {
-
           Swal.fire({
             icon: "success",
             title: "Thông báo.",
@@ -54,7 +52,6 @@ function deleteProinCart(productId) {
           title: "Thông báo.",
           text: response,
         });
-        // Remove the table row
         $(`tr:has(a[onclick*='${productId}'])`).remove();
         let countElement = document.getElementById("countProductInCart");
         let currentCount = parseInt(countElement.textContent) || 0;
@@ -71,6 +68,8 @@ function deleteProinCart(productId) {
 }
 
 function sendProductData(check) {
+  const htmlContent = tinymce.get("productDescription").getContent();
+  document.getElementById("descriptionInput").value = htmlContent;
   var form = document.getElementById("formID");
   var data = new FormData(form);
   const method = check === "insert" ? "POST" : "PUT";
