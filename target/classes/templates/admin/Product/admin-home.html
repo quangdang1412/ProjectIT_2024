@@ -77,41 +77,41 @@
 
             <table id="example" class="table table-striped " style="width:100%">
                 <thead>
-                <tr>
-                    <th>Hình sản phẩm</th>
-                    <th>Mã sản phẩm</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Mã thương hiệu</th>
-                    <th>Mã danh mục</th>
-                    <th>Mã khuyến mãi</th>
-                    <th>Giá bán</th>
-                    <th>Số lượng</th>
-                    <th></th>
-                    <th></th>
-                </tr>
+                    <tr>
+                        <th>Hình sản phẩm</th>
+                        <th>Mã sản phẩm</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Mã thương hiệu</th>
+                        <th>Mã danh mục</th>
+                        <th>Mã khuyến mãi</th>
+                        <th>Giá bán</th>
+                        <th>Số lượng</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr th:each="product : ${listProduct}">
-                    <td>
-                        <img th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
-                             th:alt="${product.Image?.ImageCode}"/>
-                    </td>
-                    <td th:text="${product.ProductID}"></td>
-                    <td th:text="${product.ProductName}"></td>
-                    <td th:text="${product.Brand?.BrandID}"></td>
-                    <td th:text="${product.Category?.CategoryID}"></td>
-                    <td th:if="${product.Discount != null}" th:text="${product.Discount?.DiscountID}"></td>
-                    <td th:unless="${product.Discount != null}"></td>
-                    <td th:text="${#numbers.formatDecimal(product.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
-                    <td th:text="${product.Quantity}"></td>
-                    <td>
-                        <a th:href="@{/admin/Product(action='edit', id=${product.ProductID})}" class="btn btn-info">Update</a>
-                    </td>
-                    <td>
-                        <a th:attr="onclick=|deleteProduct('${product.ProductID}')|" class="btn btn-danger"
-                           onclick="return confirm('Are you sure?')">Delete</a>
-                    </td>
-                </tr>
+                    <tr th:each="product : ${listProduct}">
+                        <td>
+                            <img th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
+                                 th:alt="${product.Image?.ImageCode}"/>
+                        </td>
+                        <td th:text="${product.ProductID}"></td>
+                        <td th:text="${product.ProductName}"></td>
+                        <td th:text="${product.Brand?.BrandID}"></td>
+                        <td th:text="${product.Category?.CategoryID}"></td>
+                        <td th:if="${product.Discount != null}" th:text="${product.Discount?.DiscountID}"></td>
+                        <td th:unless="${product.Discount != null}"></td>
+                        <td th:text="${#numbers.formatDecimal(product.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                        <td th:text="${product.Quantity}"></td>
+                        <td>
+                            <a th:href="@{/admin/Product(action='edit', id=${product.ProductID})}" class="btn btn-info">Update</a>
+                        </td>
+                        <td>
+                            <a th:attr="onclick=|deleteProduct('${product.ProductID}')|" class="btn btn-danger"
+                               onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -159,116 +159,7 @@
 
 
 <!-- Footer Start -->
-<div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5">
-    <div class="container py-5">
-        <div
-                class="pb-4 mb-4"
-                style="border-bottom: 1px solid rgba(226, 175, 24, 0.5)"
-        >
-            <div class="row g-4">
-                <div class="col-lg-3">
-                    <a href="#">
-                        <h1 class="text-primary mb-0">Fruitables</h1>
-                        <p class="text-secondary mb-0">Fresh products</p>
-                    </a>
-                </div>
-                <div class="col-lg-6">
-                    <div class="position-relative mx-auto">
-                        <input
-                                class="form-control border-0 w-100 py-3 px-4 rounded-pill"
-                                placeholder="Your Email"
-                                type="number"
-                        />
-                        <button
-                                class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white"
-                                style="top: 0; right: 0"
-                                type="submit"
-                        >
-                            Subscribe Now
-                        </button>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="d-flex justify-content-end pt-3">
-                        <a
-                                class="btn btn-outline-secondary me-2 btn-md-square rounded-circle"
-                                href=""
-                        ><i class="fab fa-twitter"></i
-                        ></a>
-                        <a
-                                class="btn btn-outline-secondary me-2 btn-md-square rounded-circle"
-                                href=""
-                        ><i class="fab fa-facebook-f"></i
-                        ></a>
-                        <a
-                                class="btn btn-outline-secondary me-2 btn-md-square rounded-circle"
-                                href=""
-                        ><i class="fab fa-youtube"></i
-                        ></a>
-                        <a
-                                class="btn btn-outline-secondary btn-md-square rounded-circle"
-                                href=""
-                        ><i class="fab fa-linkedin-in"></i
-                        ></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row g-5">
-            <div class="col-lg-3 col-md-6">
-                <div class="footer-item">
-                    <h4 class="text-light mb-3">Why People Like us!</h4>
-                    <p class="mb-4">
-                        typesetting, remaining essentially unchanged. It was popularised
-                        in the 1960s with the like Aldus PageMaker including of Lorem
-                        Ipsum.
-                    </p>
-                    <a
-                            class="btn border-secondary py-2 px-4 rounded-pill text-primary"
-                            href=""
-                    >Read More</a
-                    >
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="d-flex flex-column text-start footer-item">
-                    <h4 class="text-light mb-3">Shop Info</h4>
-                    <a class="btn-link" href="">About Us</a>
-                    <a class="btn-link" href="">Contact Us</a>
-                    <a class="btn-link" href="">Privacy Policy</a>
-                    <a class="btn-link" href="">Terms & Condition</a>
-                    <a class="btn-link" href="">Return Policy</a>
-                    <a class="btn-link" href="">FAQs & Help</a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="d-flex flex-column text-start footer-item">
-                    <h4 class="text-light mb-3">Account</h4>
-                    <a class="btn-link" href="">My Account</a>
-                    <a class="btn-link" href="">Shop details</a>
-                    <a class="btn-link" href="">Shopping Cart</a>
-                    <a class="btn-link" href="">Wishlist</a>
-                    <a class="btn-link" href="">Order History</a>
-                    <a class="btn-link" href="">International Orders</a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="footer-item">
-                    <h4 class="text-light mb-3">Contact</h4>
-                    <p>Address: 1429 Netus Rd, NY 48247</p>
-                    <p>Email: Example@gmail.com</p>
-                    <p>Phone: +0123 4567 8910</p>
-                    <p>Payment Accepted</p>
-                    <img
-                            alt=""
-                            class="img-fluid"
-                            th:src="@{/assets/img/payment.png}"
-                    />
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="~{fragment/footer.html}"></div>
 <!-- Footer End -->
 
 <!-- Copyright Start -->
@@ -306,18 +197,12 @@
 ><i class="fa fa-arrow-up"></i
 ></a>
 
-<script>
-    var newLink = document.createElement('a');
-    newLink.href = '/admin/Product?action=new';
-    newLink.className = 'btn btn-success d-flex m-2 py-2';
-    newLink.textContent = 'Thêm';
-</script>
 <!-- JavaScript Libraries -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
-
 
 <script th:src="@{/assets/lib/easing/easing.min.js}"></script>
 <script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
@@ -325,6 +210,12 @@
 <script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Template Javascript -->
+<script>
+    var newLink = document.createElement('a');
+    newLink.href = '/admin/Product?action=new';
+    newLink.className = 'btn btn-success d-flex m-2 py-2';
+    newLink.textContent = 'Thêm';
+</script>
 <script th:src="@{/assets/js/main.js}"></script>
 <script th:src="@{/asset-admin/js/table.js}"></script>
 <script th:src="@{/assets/callAPI/SendAPI.js}"></script>

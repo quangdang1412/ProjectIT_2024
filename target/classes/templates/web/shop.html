@@ -89,15 +89,19 @@
                   class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4"
                 >
                   <label for="fruits">Sắp xếp:</label>
-                  <select
-                    id="fruits"
-                    name="fruitlist"
-                    class="border-0 form-select-sm bg-light me-3"
-                  >
-                    <option value="volvo">Nothing</option>
-                    <option value="saab">Giá thấp đến cao</option>
-                    <option value="opel">Giá cao đến thấp</option>
-                  </select>
+                  <th:block th:with="url = ${queryString != null and queryString.contains('category') ? (queryString.contains('&sortBy=') ? queryString.substring(0, queryString.indexOf('&sortBy=')) : queryString): null}">
+                    <select
+                            id="fruits"
+                            name="fruitlist"
+                            class="border-0 form-select-sm bg-light me-3"
+                            onchange="location = this.value"
+
+                    >
+                      <option th:value="volvo">Nothing</option>
+                      <option th:value="${url != null ? '?' + url + '&sortBy=asc' : '?sortBy=asc' }">Giá thấp đến cao</option>
+                      <option th:value="${url != null ? '?' + url + '&sortBy=desc' : '?sortBy=desc' }">Giá cao đến thấp</option>
+                    </select>
+                  </th:block>
                 </div>
               </div>
             </div>
@@ -113,7 +117,7 @@
                             class="d-flex justify-content-between fruite-name"
                           >
                             <a
-                              th:href="@{/shop/category/{categoryId}(categoryId=${category.categoryID})}"
+                              th:href="@{/shop(categoryId=${category.categoryID})}"
                             >
                               <span th:text="${category.categoryName}"></span>
                             </a>
@@ -258,73 +262,75 @@
                   </div>
                 </div>
                 <br />
-                <div
-                  class="dt-paging paging_full_numbers d-flex justify-content-end"
-                >
-                  <ul class="pagination">
-                    <li class="dt-paging-button page-item disabled">
-                      <a
-                        class="page-link first"
-                        aria-controls="example"
-                        aria-disabled="true"
-                        aria-label="First"
-                        data-dt-idx="first"
-                        tabindex="-1"
-                        th:href="@{'?pageNo=1'}"
+                <th:block th:with="fullUrl='?' + ${queryString}">
+                  <div
+                          class="dt-paging paging_full_numbers d-flex justify-content-end"
+                  >
+                    <ul class="pagination">
+                      <li class="dt-paging-button page-item disabled">
+                        <a
+                                class="page-link first"
+                                aria-controls="example"
+                                aria-disabled="true"
+                                aria-label="First"
+                                data-dt-idx="first"
+                                tabindex="-1"
+                                th:href="${fullUrl + '&pageNo=1'}"
                         >«</a
-                      >
-                    </li>
-                    <li class="dt-paging-button page-item disabled">
-                      <a
-                        class="page-link previous"
-                        aria-controls="example"
-                        aria-disabled="true"
-                        aria-label="Previous"
-                        data-dt-idx="previous"
-                        tabindex="-1"
-                        th:href="@{'?pageNo=' + (currentPage-1)}"
+                        >
+                      </li>
+                      <li class="dt-paging-button page-item " th:classappend="${currentPage == 1} ? 'disabled' : ''" >
+                        <a
+                                class="page-link previous"
+                                aria-controls="example"
+                                aria-disabled="true"
+                                aria-label="Previous"
+                                data-dt-idx="previous"
+                                tabindex="-1"
+                                th:href="${fullUrl + '&pageNo=' + (currentPage - 1)}"
                         >‹</a
+                        >
+                      </li>
+                      <li
+                              class="dt-paging-button page-item"
+                              th:each="i : ${#numbers.sequence(1, totalPages)}"
+                              th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1}"
+                              th:classappend="${currentPage == i} ? 'active' : ''"
                       >
-                    </li>
-                    <li
-                      class="dt-paging-button page-item"
-                      th:each="i : ${#numbers.sequence(1, totalPages)}"
-                      th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1}"
-                      th:classappend="${currentPage == i} ? 'active' : ''"
-                    >
-                      <a
-                        class="page-link"
-                        th:href="@{'?pageNo=' + ${i}}"
-                        aria-controls="example"
-                        th:text="${i}"
-                      ></a>
-                    </li>
-                    <li class="dt-paging-button page-item disabled">
-                      <a
-                        class="page-link next"
-                        aria-controls="example"
-                        aria-disabled="true"
-                        aria-label="Next"
-                        data-dt-idx="next"
-                        tabindex="-1"
-                        th:href="@{'?pageNo=' + ${currentPage+1}}"
+                        <a
+                                class="page-link"
+                                th:href="${fullUrl + '&pageNo=' + i}"
+                                aria-controls="example"
+                                th:text="${i}"
+                        ></a>
+                      </li>
+                      <li class="dt-paging-button page-item " th:classappend="${currentPage == totalPages} ? 'disabled' : ''" >
+                        <a
+                                class="page-link next"
+                                aria-controls="example"
+                                aria-disabled="true"
+                                aria-label="Next"
+                                data-dt-idx="next"
+                                tabindex="-1"
+                                th:href="${fullUrl + '&pageNo=' + (currentPage + 1)}"
                         >›</a
-                      >
-                    </li>
-                    <li class="dt-paging-button page-item disabled">
-                      <a
-                        class="page-link last"
-                        aria-controls="example"
-                        aria-disabled="true"
-                        aria-label="Last"
-                        data-dt-idx="last"
-                        tabindex="-1"
-                        th:href="@{'?pageNo='+(totalPages-1)}"
+                        >
+                      </li>
+                      <li class="dt-paging-button page-item " th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+                        <a
+                                class="page-link last"
+                                aria-controls="example"
+                                aria-disabled="true"
+                                aria-label="Last"
+                                data-dt-idx="last"
+                                tabindex="-1"
+                                th:href="${fullUrl + '&pageNo=' + (totalPages)}"
                         >»</a
-                      >
-                    </li>
-                  </ul>
-                </div>
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </th:block>
               </div>
             </div>
           </div>
