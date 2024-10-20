@@ -29,7 +29,7 @@ public class HomeController {
     public String home(Model model,HttpSession session) {
         loadData.loadProduct(model);
         loadData.loadOrderDetail(model);
-        loadData.loadCategory(model);
+        loadData.loadCategory(model,session);
         return "/web/index";
     }
     @GetMapping("/contact")

@@ -1,12 +1,10 @@
 package com.webbanhang.webbanhang.DAO.Impl;
-
 import com.webbanhang.webbanhang.DAO.IProductDAO;
-import com.webbanhang.webbanhang.Model.ImageModel;
 import com.webbanhang.webbanhang.Model.ProductModel;
-import com.webbanhang.webbanhang.Model.UserModel;
 import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,8 +12,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.webbanhang.webbanhang.Util.AppConst.LIKE_FORMAT;
+
 @Repository
 public class ProductDAOImpl implements IProductDAO {
     @Autowired
@@ -112,16 +116,36 @@ public class ProductDAOImpl implements IProductDAO {
     }
 
     @Override
-    public Page<ProductModel> getProductForPage(Integer a) {
+    public Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy) {
         Session currentSession = entityManager.unwrap(Session.class);
+        StringBuilder sqlQuery = new StringBuilder("SELECT p FROM ProductModel p WHERE 1=1");
+        if (StringUtils.hasLength(categoryID) && StringUtils.hasLength(brandID)) {
+            sqlQuery.append(" AND lower(p.category.categoryID) like lower(:categoryID)");
+            sqlQuery.append(" AND lower(p.brand.brandID) like lower(:brandID)");
+        } else if (StringUtils.hasLength(categoryID) && !StringUtils.hasLength(brandID)) {
+            sqlQuery.append(" AND lower(p.category.categoryID) like lower(:categoryID)");
+        }
+
+        if (StringUtils.hasLength(sortBy)) {
+            //asc|desc
+            sqlQuery.append(String.format(" ORDER BY p.unitPrice %s", sortBy.toUpperCase()));
+        }
+
+        jakarta.persistence.Query selectQuery = entityManager.createQuery(sqlQuery.toString());
+        if (StringUtils.hasLength(categoryID) && StringUtils.hasLength(brandID)) {
+            selectQuery.setParameter("categoryID", String.format(LIKE_FORMAT,categoryID));
+            selectQuery.setParameter("brandID", String.format(LIKE_FORMAT, brandID));
+        } else if (StringUtils.hasLength(categoryID) && !StringUtils.hasLength(brandID)) {
+            selectQuery.setParameter("categoryID", String.format(LIKE_FORMAT,categoryID));
+        }
         Pageable pageable = PageRequest.of(a-1,9);
-        Query<ProductModel> query = currentSession.createQuery("SELECT p FROM ProductModel p", ProductModel.class);
-        query.setFirstResult((a - 1) * 9);
-        query.setMaxResults(9);
-        List<ProductModel> products = query.getResultList();
+        selectQuery.setFirstResult((a - 1) * 9);
+        selectQuery.setMaxResults(9);
+        List<?> products = selectQuery.getResultList();
         Query<Long> countQuery = currentSession.createQuery("SELECT COUNT(p) FROM ProductModel p", Long.class);
         Long total = countQuery.getSingleResult();
-        return new PageImpl<>(products,pageable,total);
+        Page<ProductModel> page = (Page<ProductModel>) new PageImpl<>(products,pageable,total);
+        return page;
     }
 
 }

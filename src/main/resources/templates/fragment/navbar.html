@@ -22,7 +22,19 @@
       <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
         <div class="navbar-nav mx-auto">
           <a href="/static" class="nav-item nav-link fs-5 fw-bold" >Home</a>
-          <a href="/shop" class="nav-item nav-link fs-5 fw-bold" >Sản phẩm</a>
+          <div class="nav-item dropdown">
+            <a class="nav-link  fs-5 fw-bold" href="/shop">Sản phẩm</a>
+            <div class="dropdown-menu bg-secondary m-0 rounded-0">
+              <div class="nav-item dropend " th:each="category : ${session.categories}">
+                <a class="nav-link fs-7 fw-bold" th:href="@{/shop(category=${category.categoryID})}" th:text="${category.categoryName}">
+                </a>
+
+                <div class="dropdown-menu">
+                  <a  class="dropdown-item " th:each="brand : ${category.brandSet}" th:href="@{/shop(category=${category.categoryID}, brand=${brand.brandID})}" th:text="${brand.brandName}"></a>
+                </div>
+              </div>
+            </div>
+          </div>
           <a href="/cart" class="nav-item nav-link fs-5 fw-bold" >Giỏ hàng</a>
           <a href="/checkout" class="nav-item nav-link fs-5 fw-bold" >Thanh toán</a>
         </div>

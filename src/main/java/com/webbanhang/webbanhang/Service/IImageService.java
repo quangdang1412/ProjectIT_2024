@@ -11,6 +11,6 @@ import java.util.List;
 public interface IImageService {
     List<ImageModel> getAllImage();
     ImageModel findOneImage(String id);
-    Boolean addImage(String code);
+    void addImage(String code);
     String upload(MultipartFile multipartFile);
 }

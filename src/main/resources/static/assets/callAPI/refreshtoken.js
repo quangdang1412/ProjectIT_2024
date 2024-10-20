@@ -10,7 +10,6 @@ function extendToken() {
     console.warn("Không có token hiện tại.");
     return;
   }
-
   fetch("/api/auth/refresh", {
     method: "POST",
     headers: {

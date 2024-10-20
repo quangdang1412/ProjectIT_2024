@@ -44,7 +44,7 @@ public class ShopDetailController {
     public String detail(Model model, @ModelAttribute("productId") String productId,HttpSession session) {
         loadData.loadProduct(model);
         loadData.loadOrderDetail(model);
-        loadData.loadCategory(model);
+        loadData.loadCategory(model,session);
         ProductModel product = productService.getProductByID(productId);
         List<ProductModel> productDiscount = new ArrayList<>();
         for(ProductModel x : productService.getAllProduct())

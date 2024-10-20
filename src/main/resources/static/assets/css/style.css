@@ -1,4 +1,16 @@
 /*** Spinner Start ***/
+.dropdown  .dropdown-menu .dropend .dropdown-menu{
+  display: none;
+}
+.dropdown  .dropdown-menu .dropend:hover > .dropdown-menu{
+  display: block;
+  margin-top: .125em;
+}
+.dropdown  .dropdown-menu .dropend:hover > .dropdown-menu{
+  position: absolute;
+  top:0;
+  left:100%;
+}
 #spinner {
   opacity: 0;
   visibility: hidden;

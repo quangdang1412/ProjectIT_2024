@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,4 +25,6 @@ public class CategoryModel {
     @JsonBackReference
     private List<ProductModel> products;
 
+    @Transient
+    private Set<BrandModel> brandSet;
 }

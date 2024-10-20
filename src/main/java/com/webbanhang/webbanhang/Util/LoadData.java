@@ -1,9 +1,13 @@
 package com.webbanhang.webbanhang.Util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.webbanhang.webbanhang.Model.BrandModel;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
@@ -27,12 +31,17 @@ public class LoadData {
     
 
     
-    public void loadCategory(Model model) {
+    public void loadCategory(Model model, HttpSession session) {
         List<CategoryModel> categories = categoryService.getAllCategory();
         for (CategoryModel category : categories) {
             List<ProductModel> products = productService.findCategory(category.getCategoryID());
             category.setProducts(products);
+            Set<BrandModel> brandSet = new HashSet<>();
+            for(ProductModel productModel : products)
+                brandSet.add(productModel.getBrand());
+            category.setBrandSet(brandSet);
         }
+        session.setAttribute("categories", categories);
         model.addAttribute("categories", categories);
 
     }

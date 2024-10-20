@@ -9,6 +9,7 @@ import com.webbanhang.webbanhang.Service.IUserService;
 import com.webbanhang.webbanhang.Util.CheckLogin;
 import com.webbanhang.webbanhang.Util.LoadData;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import com.webbanhang.webbanhang.Service.ICategoryService;
 import com.webbanhang.webbanhang.Service.IProductService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.util.StringUtils;
 
 @Controller
 @RequiredArgsConstructor
@@ -49,9 +51,9 @@ public class ShopController {
 
     }
 
-    public void productPage(Model model,int pageNo)
+    public void productPage(Model model,int pageNo,String categoryID,String brandID,String sortBy)
     {
-        Page<ProductModel> products = productService.getProductForPage(pageNo);
+        Page<?> products = productService.getProductForPage(pageNo,categoryID,brandID,sortBy);
         model.addAttribute("totalPages",products.getTotalPages());
         model.addAttribute("currentPage",pageNo);
         model.addAttribute("products", products);
@@ -60,10 +62,19 @@ public class ShopController {
     
 
     @GetMapping("/shop")
-    public String shop(Model model,@RequestParam(name = "pageNo",defaultValue = "1") Integer pageNo,HttpSession session){
+    public String shop(Model model, @RequestParam(name = "pageNo",defaultValue = "1") Integer pageNo, @RequestParam(name = "category",required = false) String categoryID, @RequestParam(name = "brand",required = false) String brandID, @RequestParam(name = "sortBy",required = false) String sortBy, HttpServletRequest servletRequest){
         loadCategory(model);
-        productPage(model,pageNo);
+        productPage(model,pageNo,categoryID,brandID,sortBy);
         loadData.ProductDiscount(model);
+        String queryString = servletRequest.getQueryString();
+        if (!StringUtils.isEmpty(queryString) && queryString.contains("&pageNo=")) {
+            int startIndex = queryString.indexOf("&pageNo=");
+            if (startIndex != -1) {
+                queryString = queryString.substring(0, startIndex);
+            }
+        }
+        model.addAttribute("currentURL", servletRequest.getRequestURL());
+        model.addAttribute("queryString",queryString);
         //checkLogin.checkLogin(session,model,userService);
         return "/web/shop";
     }

@@ -6,8 +6,8 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import com.webbanhang.webbanhang.DAO.IImageDAO;
 import com.webbanhang.webbanhang.Model.ImageModel;
+import com.webbanhang.webbanhang.Repository.IImageRepository;
 import com.webbanhang.webbanhang.Service.IImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,14 +22,12 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ImageServiceImpl implements IImageService {
 
-    private final IImageDAO imageDAO;
+    private final IImageRepository imageRepository;
     @Value("${app.firebase.bucket}")
     private String BUCKET_NAME;
     @Value("${app.firebase.file}")
@@ -41,12 +39,14 @@ public class ImageServiceImpl implements IImageService {
 
     @Override
     public ImageModel findOneImage(String id) {
-        return imageDAO.findOneImage(id);
+        return imageRepository.findById(id).get();
     }
 
     @Override
-    public Boolean addImage(String code) {
-        return imageDAO.addImage(code);
+    public void addImage(String code) {
+        ImageModel imageModel = new ImageModel();
+        imageModel.setImageCode(code);
+        imageRepository.save(imageModel);
     }
 
 
