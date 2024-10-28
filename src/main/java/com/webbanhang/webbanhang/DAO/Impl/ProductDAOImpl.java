@@ -27,7 +27,7 @@ public class ProductDAOImpl implements IProductDAO {
     @Override
     public List<ProductModel> getAllProduct() {
         Session currentSession = entityManager.unwrap(Session.class);
-        Query<ProductModel> query = currentSession.createQuery("from ProductModel where deleteProduct = 1", ProductModel.class);
+        Query<ProductModel> query = currentSession.createQuery("from ProductModel where active = true", ProductModel.class);
         return query.getResultList();
     }
 
@@ -81,7 +81,7 @@ public class ProductDAOImpl implements IProductDAO {
         try {
             Session currentSession = entityManager.unwrap(Session.class);
             transaction = currentSession.beginTransaction();
-            a.setDeleteProduct(0);
+            a.setActive(false);
             currentSession.update(a);
             transaction.commit();
             return true;

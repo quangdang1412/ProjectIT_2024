@@ -81,7 +81,7 @@ public class ProductController {
         model.addAttribute("listProduct", productService.getAllProduct());
         model.addAttribute("listBrand", brandService.getAllBrand());
         model.addAttribute("listCategory", categoryService.getAllCategory());
-        model.addAttribute("listDiscount", discountService.getAllDiscount());
+        model.addAttribute("listDiscount", discountService.getAllDiscountActive());
         model.addAttribute("listSupplier", supplierService.getAllSupplier());
         model.addAttribute("checkPro","update");
 

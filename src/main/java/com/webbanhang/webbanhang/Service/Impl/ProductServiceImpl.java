@@ -9,6 +9,7 @@ import com.webbanhang.webbanhang.Model.ImageModel;
 import com.webbanhang.webbanhang.Model.ProductModel;
 import com.webbanhang.webbanhang.Repository.IProductRepository;
 import com.webbanhang.webbanhang.Service.*;
+import com.webbanhang.webbanhang.Util.LoadData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -38,7 +40,13 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public List<ProductModel> getAllProduct() {
-        return productDAO.getAllProduct();
+        for(ProductModel productModel : productRepository.findAll()){
+            if(productModel.getDiscount() != null && productModel.getDiscount().getEndDate().toLocalDate().isBefore(LocalDate.now())){
+                    productModel.setDiscount(null);
+                    productRepository.save(productModel);
+            }
+        }
+        return productRepository.findAll();
     }
 
     @Override
@@ -61,7 +69,7 @@ public class ProductServiceImpl implements IProductService {
                     .unitCost(productRequestDTO.getUnitCost())
                     .unitPrice(productRequestDTO.getUnitPrice())
                     .supplier(supplierService.findSupplierByID(productRequestDTO.getSupplierID()))
-                    .deleteProduct(1)
+                    .active(false)
                     .build();
             ImageModel imageProduct = null;
             if(!file.isEmpty()){
@@ -90,7 +98,7 @@ public class ProductServiceImpl implements IProductService {
     public String deleteProduct(String id) {
         try{
             ProductModel productModel = getProductByID(id);
-            productModel.setDeleteProduct(0);
+            productModel.setActive(!productModel.isActive());
             productRepository.save(productModel);
             return productModel.getProductID();
         }catch (Exception e){

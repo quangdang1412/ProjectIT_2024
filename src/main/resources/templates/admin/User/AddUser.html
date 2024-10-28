@@ -106,6 +106,7 @@
                   name="UserName"
                   th:value="${UserName}"
                   required
+                  th:readonly="${checkUser == 'update'}"
                 />
               </div>
               <div class="form-item">
@@ -116,6 +117,7 @@
                   name="Email"
                   th:value="${Email}"
                   required
+                  th:readonly="${checkUser == 'update'}"
                 />
               </div>
               <div class="form-item">
@@ -126,6 +128,7 @@
                   name="Address"
                   th:value="${Address}"
                   required
+                  th:readonly="${checkUser == 'update'}"
                 />
               </div>
               <div class="form-item">
@@ -136,6 +139,7 @@
                   name="Phone"
                   th:value="${Phone}"
                   required
+                  th:readonly="${checkUser == 'update'}"
                 />
               </div>
               <div class="form-item">
@@ -162,6 +166,7 @@
                   name="Password"
                   th:value="${Password}"
                   required
+                  th:readonly="${checkUser == 'update'}"
                 />
               </div>
               <div class="form-item">

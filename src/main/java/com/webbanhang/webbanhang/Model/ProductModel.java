@@ -40,7 +40,7 @@ public class ProductModel {
     @Column
     private Integer quantity;
     @Column
-    private Integer deleteProduct;
+    private boolean active;
     @Column
     private Double unitCost;
 

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface IDiscountService {
     List<DiscountModel> getAllDiscount();
+    List<DiscountModel> getAllDiscountActive();
     DiscountModel findDiscountByID(String id);
     String save(DiscountRequestDTO a);
+
 }

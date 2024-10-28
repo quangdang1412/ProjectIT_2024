@@ -92,7 +92,7 @@
                         <th>Giá bán</th>
                         <th>Số lượng</th>
                         <th></th>
-                        <th></th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -113,8 +113,8 @@
                             <a th:href="@{/admin/Product(action='edit', id=${product.ProductID})}" class="btn btn-info">Update</a>
                         </td>
                         <td>
-                            <a th:attr="onclick=|deleteProduct('${product.ProductID}')|" class="btn btn-danger"
-                               onclick="return confirm('Are you sure?')">Delete</a>
+                            <a th:attr="onclick=|deleteProduct('${product.ProductID}')|" class="btn btn-warning" id="btn-Active"
+                               onclick="return confirm('Are you sure?')" th:text="${product.Active} ? 'Inactive' : 'Active&nbsp&nbsp&nbsp'"></a>
                         </td>
                     </tr>
                 </tbody>

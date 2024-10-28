@@ -26,6 +26,8 @@ public class DiscountModel {
     private Date startDate;
     @Column
     private Date endDate;
+    @Column
+    private boolean active;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "discount", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<ProductModel> products;

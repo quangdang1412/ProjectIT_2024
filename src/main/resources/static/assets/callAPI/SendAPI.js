@@ -105,7 +105,16 @@ function notify(xhr, url, data) {
           if (url !== "delete" && data.paymentMethod !== "Transfer")
             window.location.href = url;
         });
-        if (url === "delete") $(`tr:has(a[onclick*='${data}'])`).remove();
+        if (url === "delete") {
+          const $link = $(`a[onclick*='${data}']`);
+          const currentStatus = $link.text().trim();
+          // Đổi trạng thái giữa Active và Inactive
+          if (currentStatus === "Active") {
+            $link.html("Inactive");
+          } else {
+            $link.html("Active" + String.fromCharCode(160).repeat(3)); // Thêm 3 khoảng trắng
+          }
+        }
       } else {
         Swal.fire({
           icon: "error",

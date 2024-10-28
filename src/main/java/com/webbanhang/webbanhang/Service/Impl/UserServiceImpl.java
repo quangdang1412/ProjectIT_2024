@@ -77,7 +77,8 @@ public class UserServiceImpl implements IUserService {
     public String deleteUser(String id) {
         try{
             UserModel userModel = findUserByID(id);
-            userRepository.delete(userModel);
+            userModel.setActive(!userModel.isActive());
+            userRepository.save(userModel);
             return id;
         }catch (Exception e){
             String error = e.getMessage();
