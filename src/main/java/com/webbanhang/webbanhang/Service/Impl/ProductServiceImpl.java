@@ -107,6 +107,11 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    public List<ProductModel> getProductOutOfStock() {
+        return productRepository.getProductOutOfStock();
+    }
+
+    @Override
     public Page<ProductModel> findCategoryForPage(String id,Integer a) {
        return productDAO.findCategoryForPage(id,a);
     }

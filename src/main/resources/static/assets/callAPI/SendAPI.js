@@ -102,7 +102,8 @@ function notify(xhr, url, data) {
           title: "Thông báo.",
           text: response.message,
         }).then(() => {
-          if (url !== "delete") window.location.href = url;
+          if (url !== "delete" && data.paymentMethod !== "Transfer")
+            window.location.href = url;
         });
         if (url === "delete") $(`tr:has(a[onclick*='${data}'])`).remove();
       } else {

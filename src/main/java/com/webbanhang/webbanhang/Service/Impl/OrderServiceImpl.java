@@ -1,6 +1,7 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
 import com.webbanhang.webbanhang.DTO.request.Order.OrderRequestDTO;
+import com.webbanhang.webbanhang.DTO.response.DashboardResponse;
 import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.*;
@@ -9,14 +10,16 @@ import com.webbanhang.webbanhang.Service.IOrderService;
 import com.webbanhang.webbanhang.Service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.WeekFields;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -168,5 +171,74 @@ public class OrderServiceImpl implements IOrderService {
     
         return false;
     }
-    
+    @Override
+    public DashboardResponse dataChart(LocalDate startDate,LocalDate endDate){
+        // chart Area
+        List<OrderModel> listOrder = orderRepository.revenue(startDate, endDate);
+        Map<String, Double> totalRevenueByDate = new TreeMap<>();
+        long numberDays = ChronoUnit.DAYS.between(startDate, endDate);
+        for (OrderModel orderModel : listOrder) {
+            String orderDateStr;
+            LocalDate orderDate = orderModel.getOrderDate().toLocalDate();
+
+            if (numberDays <= 1) {
+                orderDateStr = orderModel.getOrderDate().toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            } else if (numberDays <= 30) {
+                orderDateStr = orderDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            } else if (numberDays <= 92) {
+                int week = orderDate.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+                orderDateStr = "Week " + week + ", " + orderDate.getYear();
+            } else if (numberDays <= 365*2) {
+                orderDateStr = orderDate.format(DateTimeFormatter.ofPattern("MM-yyyy"));
+            } else {
+                orderDateStr = orderDate.format(DateTimeFormatter.ofPattern("yyyy"));
+            }
+            double totalAmount = orderModel.getTotalPrice() + orderModel.getTransportFee();
+            totalRevenueByDate.put(orderDateStr, totalRevenueByDate.getOrDefault(orderDateStr, 0.0) + totalAmount);
+        }
+        List<String> time = new ArrayList<>(totalRevenueByDate.keySet());
+        List<String> data = totalRevenueByDate.values().stream()
+                .map(String::valueOf)
+                .collect(Collectors.toList());
+        // chart Pie
+        List<String> top5 = new ArrayList<>();
+        List<String> dataTop5 = new ArrayList<>();
+        List<Object[]> listProduct = orderRepository.topSeller(startDate, endDate);
+        for(int i=0;i<Math.min(5, listProduct.size());i++){
+            Object[] productInfo = listProduct.get(i);
+            if (productInfo != null && productInfo.length > 0) {
+                top5.add(String.valueOf(productInfo[0]));
+                dataTop5.add(String.valueOf(productInfo[1]));
+            }
+        }
+        return DashboardResponse.builder()
+                .time(time)
+                .data(data)
+                .top5(top5)
+                .dataTop5(dataTop5)
+                .build();
+    }
+
+    @Override
+    public Integer orderNeedToProcess() {
+        return orderRepository.countOrderNeedToProcess();
+    }
+
+    @Override
+    public Double revenueTotal() {
+        return orderRepository.revenueTotal();
+    }
+
+    @Override
+    public Double revenuePerMonth() {
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = LocalDate.of(endDate.getYear(),endDate.getMonth(),1);
+        return orderRepository.revenuePerMonth(startDate,endDate);
+    }
+
+    @Override
+    public Double profitTotal() {
+        return orderRepository.profitTotal();
+    }
+
 }

@@ -16,6 +16,7 @@ $(document).ready(function () {
           title: "Đăng nhập thành công!",
           text: "Chào mừng bạn trở lại!",
           icon: "success",
+          timer: 1500
         }).then(() => {
           // Lưu JWT vào localStorage
           localStorage.setItem("token", response.token);
@@ -43,7 +44,6 @@ $(document).ready(function () {
           });
           return; // Ngừng xử lý tiếp
         }
-
         Swal.fire({
           title: "Đăng nhập thất bại!",
           text: errorMessage,
