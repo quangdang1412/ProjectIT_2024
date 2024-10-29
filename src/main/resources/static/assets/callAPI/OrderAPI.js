@@ -5,7 +5,7 @@ function sendOrderData(check) {
   const url = check === "insert" ? "/" : "/admin/Order";
 
   const paymentMethod = order.paymentMethod;
-  const pricetoal = order.finalTotal.replace(/[^0-9]/g, ""); // Lấy phần chữ số
+  const finalTotal = check === "insert" ? order.finalTotal.replace(/[^0-9]/g, "") : order.finalTotal;
   if (paymentMethod === "Transfer") {
     localStorage.setItem("orderId", order.orderID);
     sendRequest(method, "order", endpoint, order, url);
@@ -14,7 +14,7 @@ function sendOrderData(check) {
       type: "POST",
       contentType: "application/json",
       data: JSON.stringify({
-        finalTotal: pricetoal,
+        finalTotal: finalTotal,
         orderId: order.orderID,
         returnUrl: "http://localhost:8080/checkout",
         cancelUrl: "http://localhost:8080/checkout",

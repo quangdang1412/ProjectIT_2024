@@ -42,6 +42,9 @@ public class UserModel implements UserDetails {
     @Column
     private String password;
 
+    @Column
+    private boolean active;
+
     @ManyToOne()
     @JsonManagedReference
     @JoinColumn(name = "type")

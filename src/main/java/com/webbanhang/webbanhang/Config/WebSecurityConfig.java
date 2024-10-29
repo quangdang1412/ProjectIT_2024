@@ -30,7 +30,8 @@ public class WebSecurityConfig {
     private final String[] WHITE_LITS ={ "/",
             "/static/**",
             "/template/**",
-            "/signinoauth2","/loginSuccess",
+            "/signinoauth2",
+            "/loginSuccess",
             "/error",
             "/api/auth/**",
             "/assets/**",
@@ -61,6 +62,7 @@ public class WebSecurityConfig {
             "/api/other/**",
             "/api/product/add",
             "/api/product/update",
+            "/api/dashboard/**",
             "/api/product/delete/**",
             "/api/supplier/**",
             "/api/user/add",
@@ -78,9 +80,10 @@ public class WebSecurityConfig {
                 .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
                 .anyRequest().authenticated()
             )
+            .oauth2Login(Customizer.withDefaults())
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .formLogin(Customizer.withDefaults()) // Sử dụng trang login mặc định của Spring Security
+            .formLogin(Customizer.withDefaults())// Sử dụng trang login mặc định của Spring Security
             .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class) // Thêm JWT filter
             .authenticationProvider(authenticationProvider) // Cấu hình provider
             .exceptionHandling(exception -> exception

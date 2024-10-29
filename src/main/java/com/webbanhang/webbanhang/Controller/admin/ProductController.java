@@ -38,7 +38,7 @@ public class ProductController {
     @GetMapping(value ={"/Product","/"})
     public String checkActionGet(Model model, @RequestParam Map<String,String> allParams, HttpSession session)
     {
-        if(!session.getAttribute("UserLoginRole").equals("ADMIN")) {
+        if(session.getAttribute("UserLoginRole") == null ||!session.getAttribute("UserLoginRole").equals("ADMIN")) {
             return "redirect:/404";
         }
         String action = allParams.get("action");
@@ -81,7 +81,7 @@ public class ProductController {
         model.addAttribute("listProduct", productService.getAllProduct());
         model.addAttribute("listBrand", brandService.getAllBrand());
         model.addAttribute("listCategory", categoryService.getAllCategory());
-        model.addAttribute("listDiscount", discountService.getAllDiscount());
+        model.addAttribute("listDiscount", discountService.getAllDiscountActive());
         model.addAttribute("listSupplier", supplierService.getAllSupplier());
         model.addAttribute("checkPro","update");
 

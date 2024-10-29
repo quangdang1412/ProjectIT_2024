@@ -97,7 +97,6 @@ public class OtherAPI {
             log.info("Request add discount: {}",discountRequestDTO);
             String discountID = discountService.save(discountRequestDTO) ;
             return new ResponseData<>(HttpStatus.CREATED.value(),"Success",discountID);
-
         }
         catch (Exception e){
             log.error("errorMessage={}",e.getMessage(),e.getCause());

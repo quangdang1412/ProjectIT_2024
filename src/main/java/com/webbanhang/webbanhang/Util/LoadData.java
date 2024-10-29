@@ -46,6 +46,7 @@ public class LoadData {
 
     }
     public void loadProduct(Model model) {
+
         List<ProductModel> products = productService.getAllProduct();
         model.addAttribute("products", products);
     }

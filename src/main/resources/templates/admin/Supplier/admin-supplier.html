@@ -2,7 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Tạp Hóa IT</title>
+    <title>Tạp Hoá IT</title>
+    <link
+            rel="shortcut icon"
+            type="image/png"
+            th:href="@{/assets/img/logoit3.png}"
+    />
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="keywords"/>
     <meta content="" name="description"/>
@@ -299,6 +304,7 @@
 <!-- JavaScript Libraries -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
 
@@ -318,24 +324,5 @@
 <script th:src="@{/asset-admin/js/table.js}"></script>
 <script th:src="@{/assets/callAPI/SendAPI.js}"></script>
 <script th:src="@{/assets/callAPI/SupplierAPI.js}"></script>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var success = [[${successMessage}]];
-    if (success) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Thông báo.',
-            text: success
-        });
-    }
-    var error = [[${errorMessage}]];
-    if (error) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Thông báo.',
-            text: success
-        });
-    }
-</script>
 </body>
 </html>

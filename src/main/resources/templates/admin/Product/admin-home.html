@@ -2,7 +2,12 @@
 <html >
 <head>
     <meta charset="utf-8"/>
-    <title>Tạp Hóa IT</title>
+    <title>Tạp Hoá IT</title>
+    <link
+            rel="shortcut icon"
+            type="image/png"
+            th:href="@{/assets/img/logoit3.png}"
+    />
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="keywords"/>
     <meta content="" name="description"/>
@@ -87,7 +92,7 @@
                         <th>Giá bán</th>
                         <th>Số lượng</th>
                         <th></th>
-                        <th></th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,8 +113,8 @@
                             <a th:href="@{/admin/Product(action='edit', id=${product.ProductID})}" class="btn btn-info">Update</a>
                         </td>
                         <td>
-                            <a th:attr="onclick=|deleteProduct('${product.ProductID}')|" class="btn btn-danger"
-                               onclick="return confirm('Are you sure?')">Delete</a>
+                            <a th:attr="onclick=|deleteProduct('${product.ProductID}')|" class="btn btn-warning" id="btn-Active"
+                               onclick="return confirm('Are you sure?')" th:text="${product.Active} ? 'Inactive' : 'Active&nbsp&nbsp&nbsp'"></a>
                         </td>
                     </tr>
                 </tbody>

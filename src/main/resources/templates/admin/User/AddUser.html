@@ -2,7 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8" />
-    <title>Tạp hóa IT</title>
+    <title>Tạp Hoá IT</title>
+    <link
+            rel="shortcut icon"
+            type="image/png"
+            th:href="@{/assets/img/logoit3.png}"
+    />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="" name="keywords" />
     <meta content="" name="description" />
@@ -101,6 +106,7 @@
                   name="UserName"
                   th:value="${UserName}"
                   required
+                  th:readonly="${checkUser == 'update'}"
                 />
               </div>
               <div class="form-item">
@@ -111,6 +117,7 @@
                   name="Email"
                   th:value="${Email}"
                   required
+                  th:readonly="${checkUser == 'update'}"
                 />
               </div>
               <div class="form-item">
@@ -121,6 +128,7 @@
                   name="Address"
                   th:value="${Address}"
                   required
+                  th:readonly="${checkUser == 'update'}"
                 />
               </div>
               <div class="form-item">
@@ -131,6 +139,7 @@
                   name="Phone"
                   th:value="${Phone}"
                   required
+                  th:readonly="${checkUser == 'update'}"
                 />
               </div>
               <div class="form-item">
@@ -157,6 +166,7 @@
                   name="Password"
                   th:value="${Password}"
                   required
+                  th:readonly="${checkUser == 'update'}"
                 />
               </div>
               <div class="form-item">

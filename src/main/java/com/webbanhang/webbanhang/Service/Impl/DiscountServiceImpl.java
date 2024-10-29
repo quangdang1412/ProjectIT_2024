@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @Slf4j
@@ -23,6 +25,12 @@ public class DiscountServiceImpl implements IDiscountService {
         return (List<DiscountModel>) discountRepository.findAll();
     }
 
+    @Override
+    public List<DiscountModel> getAllDiscountActive() {
+        LocalDate date = LocalDate.now();
+        discountRepository.validDiscount(date);
+        return (List<DiscountModel>) discountRepository.findAll().stream().filter(DiscountModel::isActive).toList();
+    }
     @Override
     public DiscountModel findDiscountByID(String id) {
         return discountRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Discount not found"));
@@ -36,6 +44,7 @@ public class DiscountServiceImpl implements IDiscountService {
                     .percentage(a.getPercentage())
                     .startDate(Date.valueOf(a.getStartDate()))
                     .endDate(Date.valueOf(a.getEndDate()))
+                    .active(true)
                     .build();
             discountRepository.save(discountModel);
             return a.getDiscountID();

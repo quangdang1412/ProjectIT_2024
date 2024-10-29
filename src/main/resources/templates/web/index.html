@@ -277,7 +277,7 @@
                       class="col-md-6 col-lg-4 col-xl-3 list-item"
                       th:each="product, iterStat : ${products}"
                       th:data-category-id="${product.category?.categoryID}"
-                      th:if="${iterStat.index < 12}"
+                      th:if="${iterStat.index < 8}"
                     >
                       <div class="rounded position-relative fruite-item">
                         <div class="fruite-img">
@@ -289,46 +289,46 @@
                               style="height: 240px"
                             />
                           </a>
-                          <div
-                            th:text="${product.category?.categoryName}"
-                            class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                            style="top: 10px; left: 10px"
-                          ></div>
-                          <div
-                            class="p-4 border border-secondary border-top-0 rounded-bottom"
+                        </div>
+                        <div
+                                th:text="${product.category?.categoryName}"
+                                class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                style="top: 10px; left: 10px"
+                        ></div>
+                        <div
+                                class="p-4 border border-secondary border-top-0 rounded-bottom"
+                        >
+                          <a
+                                  th:href="@{/detail/{id}(id=${product.productID})}"
                           >
-                            <a
-                              th:href="@{/detail/{id}(id=${product.productID})}"
-                            >
-                              <h4
-                                style="
+                            <h4
+                                    style="
                                   min-height: 115px;
                                   display: -webkit-box;
                                   -webkit-line-clamp: 4;
                                   -webkit-box-orient: vertical;
                                   overflow: hidden;
                                 "
-                                th:text="${product.productName}"
-                              >
-                                Grapes
-                              </h4>
-                            </a>
-                            <div
-                              class="d-flex justify-content-between flex-lg-wrap"
+                                    th:text="${product.productName}"
                             >
-                              <p
-                                class="text-dark fs-5 fw-bold mb-0"
-                                th:text="${#numbers.formatDecimal(product.unitPrice,1,'COMMA',0,'POINT')} + 'đ'"
-                              ></p>
-                              <a
-                                href="#"
-                                class="btn border border-secondary rounded-pill px-3 text-primary"
-                                ><i
-                                  class="fa fa-shopping-bag me-2 text-primary"
-                                ></i>
-                                Giỏ hàng</a
-                              >
-                            </div>
+                              Grapes
+                            </h4>
+                          </a>
+                          <div
+                                  class="d-flex justify-content-between flex-lg-wrap"
+                          >
+                            <p
+                                    class="text-dark fs-5 fw-bold mb-0"
+                                    th:text="${#numbers.formatDecimal(product.unitPrice,1,'COMMA',0,'POINT')} + 'đ'"
+                            ></p>
+                            <a
+                                    href="#"
+                                    class="btn border border-secondary rounded-pill px-3 text-primary"
+                            ><i
+                                    class="fa fa-shopping-bag me-2 text-primary"
+                            ></i>
+                              Giỏ hàng</a
+                            >
                           </div>
                         </div>
                       </div>

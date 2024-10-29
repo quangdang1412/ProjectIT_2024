@@ -2,7 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8" />
-    <title>Tạp Hóa IT</title>
+    <title>Tạp Hoá IT</title>
+    <link
+            rel="shortcut icon"
+            type="image/png"
+            th:href="@{/assets/img/logoit3.png}"
+    />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="" name="keywords" />
     <meta content="" name="description" />
@@ -17,12 +22,20 @@
 
     <!-- Icon Font Stylesheet -->
     <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+            href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+            rel="stylesheet"
     />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
-      rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
+            rel="stylesheet"
     />
 
     <!-- Libraries Stylesheet -->
@@ -72,7 +85,6 @@
                 <tr>
                   <th>Mã người dùng</th>
                   <th>Tên người dùng</th>
-                  <th>Địa chỉ</th>
                   <th>Số điện thoại</th>
                   <th>Giới tính</th>
                   <th>Email</th>
@@ -85,7 +97,6 @@
                 <tr th:each="user : ${listUser}">
                   <td th:text="${user.UserID}"></td>
                   <td th:text="${user.Username}"></td>
-                  <td th:text="${user.Address}"></td>
                   <td th:text="${user.Phone}"></td>
                   <td th:text="${user.Gender}"></td>
                   <td th:text="${user.Email}"></td>
@@ -99,9 +110,10 @@
                   </td>
                   <td>
                     <a
-                      th:attr="onclick=|if(confirm('Are you sure you want to delete this user?')) deleteUser('${user.UserID}')|"
-                      class="btn btn-danger"
-                      >Delete</a
+                      th:attr="onclick=|if(confirm('Are you sure you want to change status this user?')) deleteUser('${user.UserID}')|"
+                      class="btn btn-warning"
+                      th:text="${user.Active} ? 'Inactive' : 'Active&nbsp&nbsp&nbsp'"
+                      ></a
                     >
                   </td>
                 </tr>
