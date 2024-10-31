@@ -68,7 +68,7 @@
     <!-- Navbar End -->
 
     <!-- Hero Start -->
-    <div class="container-fluid py-5 mb-5 ">
+    <div class="container-fluid py-5 mb-5">
       <div class="container py-5">
         <div class="row g-5 align-items-center">
           <div
@@ -291,42 +291,40 @@
                           </a>
                         </div>
                         <div
-                                th:text="${product.category?.categoryName}"
-                                class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                style="top: 10px; left: 10px"
+                          th:text="${product.category?.categoryName}"
+                          class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                          style="top: 10px; left: 10px"
                         ></div>
                         <div
-                                class="p-4 border border-secondary border-top-0 rounded-bottom"
+                          class="p-4 border border-secondary border-top-0 rounded-bottom"
                         >
-                          <a
-                                  th:href="@{/detail/{id}(id=${product.productID})}"
-                          >
+                          <a th:href="@{/detail/{id}(id=${product.productID})}">
                             <h4
-                                    style="
-                                  min-height: 115px;
-                                  display: -webkit-box;
-                                  -webkit-line-clamp: 4;
-                                  -webkit-box-orient: vertical;
-                                  overflow: hidden;
-                                "
-                                    th:text="${product.productName}"
+                              style="
+                                min-height: 115px;
+                                display: -webkit-box;
+                                -webkit-line-clamp: 4;
+                                -webkit-box-orient: vertical;
+                                overflow: hidden;
+                              "
+                              th:text="${product.productName}"
                             >
                               Grapes
                             </h4>
                           </a>
                           <div
-                                  class="d-flex justify-content-between flex-lg-wrap"
+                            class="d-flex justify-content-between flex-lg-wrap"
                           >
                             <p
-                                    class="text-dark fs-5 fw-bold mb-0"
-                                    th:text="${#numbers.formatDecimal(product.unitPrice,1,'COMMA',0,'POINT')} + 'đ'"
+                              class="text-dark fs-5 fw-bold mb-0"
+                              th:text="${#numbers.formatDecimal(product.unitPrice,1,'COMMA',0,'POINT')} + 'đ'"
                             ></p>
                             <a
-                                    href="#"
-                                    class="btn border border-secondary rounded-pill px-3 text-primary"
-                            ><i
-                                    class="fa fa-shopping-bag me-2 text-primary"
-                            ></i>
+                              href="#"
+                              class="btn border border-secondary rounded-pill px-3 text-primary"
+                              ><i
+                                class="fa fa-shopping-bag me-2 text-primary"
+                              ></i>
                               Giỏ hàng</a
                             >
                           </div>
@@ -345,16 +343,13 @@
       <!-- Banner Section Start-->
       <div class="container py-5">
         <div class="row g-5 align-items-center">
-          <div
-                  class="carousel slide position-relative"
-                  data-bs-ride="carousel"
-          >
+          <div class="carousel slide position-relative" data-bs-ride="carousel">
             <div class="carousel-inner" role="listbox">
               <div class="carousel-item active rounded">
                 <img
-                        th:src="@{/assets/img/slider1_1.jpg}"
-                        class="img-fluid w-100 h-100 bg-secondary rounded"
-                        alt="First slide"
+                  th:src="@{/assets/img/slider1_1.jpg}"
+                  class="img-fluid w-100 h-100 bg-secondary rounded"
+                  alt="First slide"
                 />
               </div>
             </div>
@@ -452,6 +447,7 @@
       <script th:src="@{/assets/callAPI/logout.js}"></script>
       <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script th:src="@{/assets/js/categoryFilter.js}"></script>
     </div>
   </body>
 </html>
