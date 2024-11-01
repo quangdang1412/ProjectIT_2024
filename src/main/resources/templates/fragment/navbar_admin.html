@@ -60,6 +60,7 @@
                     <div class="dropdown">
                         <a class="my-auto" data-bs-toggle="dropdown">
                             <i class="fas fa-user fa-2x"></i>
+                            <span class="fs-5 ms-2" th:text="${session.isLoggedIn==1} ? ${session.fullName} : ''"></span>
                         </a>
                         <div
                                 class="dropdown-menu dropdown-menu-end dropdown-menu-center m-0 bg-first rounded-2"

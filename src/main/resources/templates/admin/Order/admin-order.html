@@ -81,9 +81,9 @@
               <h1>Đơn hàng</h1>
             </div>
           </div>
-
-          <table id="example" class="table table-striped" style="width: 100%">
-            <thead>
+          <div  class="table-responsive">
+            <table id="example" class="table table-striped" style="width: 100%">
+              <thead>
               <tr>
                 <th>Mã hóa đơn</th>
                 <th>Ngày mua</th>
@@ -94,8 +94,8 @@
                 <th></th>
                 <th></th>
               </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
               <tr th:each="order : ${listOrder}">
                 <td th:text="${order.OrderID}"></td>
                 <td th:text="${order.OrderDate}"></td>
@@ -105,21 +105,23 @@
                 <td th:text="${order.Status}"></td>
                 <td>
                   <a
-                    th:href="@{/admin/Order(action='edit', id=${order.OrderID})}"
-                    class="btn btn-info"
-                    >Update</a
+                          th:href="@{/admin/Order(action='edit', id=${order.OrderID})}"
+                          class="btn btn-info"
+                  >Update</a
                   >
                 </td>
                 <td>
                   <a
-                    class="btn btn-danger"
-                    th:attr="onclick=|if(confirm('Are you sure you want to delete this order?')) deleteOrder('${order.OrderID}')|"
-                    >Delete</a
+                          class="btn btn-danger"
+                          th:attr="onclick=|if(confirm('Are you sure you want to delete this order?')) deleteOrder('${order.OrderID}')|"
+                  >Delete</a
                   >
                 </td>
               </tr>
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
     </div>
