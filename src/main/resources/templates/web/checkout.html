@@ -222,6 +222,28 @@
                   </div>
                 </div>
               </div>
+              <h5>Coupon</h5>
+              <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                <div class="col-12">
+                  <select
+                          class="form-select"
+                          aria-label="Default select example"
+                          name="couponSelect"
+                          id="couponSelect"
+                          onchange="updateCouponPercentage()"
+                  >
+                    <option></option>
+                    <option
+                            th:each="coupon : ${listCoupon}"
+                            th:value="${coupon.couponUser.couponID}"
+                            th:text="${coupon.couponUser.couponID}"
+                            th:data-percentage="${coupon.couponUser.percentage}"
+                    ></option>
+                  </select>
+                  <br>
+                  <span id="couponPercentageText" class="float-start">Giảm: 0%</span>
+                </div>
+              </div>
             </div>
             <div class="col-md-12 col-lg-6 col-xl-7">
               <h5>Chi tiết đơn hàng</h5>
@@ -329,6 +351,16 @@
                     </tr>
                     <tr class="border-bottom-0">
                       <td colspan="3">
+                        <h5 class="mb-0 text-dark py-3">Mã khuyến mãi:</h5>
+                      </td>
+                      <td colspan="3">
+                        <div class="py-3 ">
+                          <p class="mb-0 text-dark" id="totalCoupon">0</p>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="border-bottom-0">
+                      <td colspan="3">
                         <h5 class="mb-0 text-dark py-3">Thành tiền:</h5>
                       </td>
                       <td colspan="3">
@@ -383,6 +415,32 @@
     <script th:src="@{/assets/callAPI/OrderAPI.js}"></script>
     <script>
       // Định dạng tiền tệ
+      function updateCouponPercentage() {
+        const couponSelect = document.getElementById("couponSelect");
+        const selected = couponSelect.selectedOptions[0];
+        const per =  selected.getAttribute("data-percentage")
+
+        // Cập nhật nội dung của `span` với phần trăm giảm giá
+        document.getElementById("couponPercentageText").textContent = `Giảm: ${per === null ? 0 : per}%`;
+        // Lấy tổng tiền từ HTML và loại bỏ dấu phẩy, VND
+        const totalAmountElement = document.getElementById("totalAmount");
+        const totalAmount = parseFloat(
+                totalAmountElement.textContent.replace(/[^0-9.-]+/g, "")
+        );
+        const shippingCostElement = document.getElementById("shippingCost");
+        const shippingCost = parseFloat(
+                shippingCostElement.textContent.replace(/[^0-9.-]+/g, "")
+        );
+        // Tính tổng tiền với phí vận chuyển
+        const select = document.getElementById("couponSelect");
+        const selectedOption = select.options[select.selectedIndex];
+        const percentage = selectedOption.getAttribute("data-percentage");
+
+        // Cập nhật giá trị phần trăm vào phần tử totalCoupon
+        const totalCouponText = document.getElementById("totalCoupon");
+        totalCouponText.textContent = percentage ? formatCurrency((percentage/100)*(totalAmount+shippingCost)) + " VND"  : '0'; // Nếu không có phần trăm, hiển thị 0
+        updateTotal(shippingCost);
+      }
       function formatCurrency(amount) {
         return amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
@@ -415,16 +473,20 @@
         if (shippingCost === undefined) {
           shippingCost = 50000;
         }
-
         // Lấy tổng tiền từ HTML và loại bỏ dấu phẩy, VND
         const totalAmountElement = document.getElementById("totalAmount");
         const totalAmount = parseFloat(
           totalAmountElement.textContent.replace(/[^0-9.-]+/g, "")
         );
-
+        const totalCouponElement = document.getElementById("totalCoupon");
+        const totalCouponAmount = parseFloat(
+                totalCouponElement.textContent.replace(/[^0-9.-]+/g, "")
+        );
         // Tính tổng tiền với phí vận chuyển
-        const total = shippingCost + totalAmount;
+        const totalBeforeDiscount = shippingCost + totalAmount;
 
+        // Tính tổng tiền sau khi trừ số tiền giảm
+        const total = totalBeforeDiscount - totalCouponAmount;
         // Cập nhật giá trị tổng cộng vào DOM
         document.getElementById("totalElement").textContent =
           formatCurrency(total) + " VND";

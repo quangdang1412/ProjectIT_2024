@@ -31,15 +31,8 @@ import org.thymeleaf.util.StringUtils;
 public class ShopController {
     private final ICategoryService  categoryService;
     private final IProductService productService;
-
-    private final IUserService userService;
-
     private final ICartService cartService;
-
     private final LoadData loadData;
-
-    private final CheckLogin checkLogin;
-
     public void loadCategory(Model model) {
 
         List<CategoryModel> categories = categoryService.getAllCategory();

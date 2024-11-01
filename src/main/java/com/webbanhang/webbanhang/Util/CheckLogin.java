@@ -39,4 +39,7 @@ public class CheckLogin {
             session.setAttribute("countProductInCart", newUser.getUserCart() != null ? newUser.getUserCart().size() : 0);
         }
     }
+    public boolean checkRoleAdmin(HttpSession session) {
+        return session.getAttribute("UserLoginRole") == null || !session.getAttribute("UserLoginRole").equals("ADMIN");
+    }
 }

@@ -31,12 +31,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductAPI {
-
-    private final ICategoryService categoryService;
     private final IProductService productService;
     private final IUserService userService;
     private final ICartService cartService;
-    private final LoadData loadData;
     private final CheckLogin login;
     @PostMapping("/api/addtocart/{productId}/{quantity}")
     public ResponseEntity<?> addToCart(@PathVariable("productId") String productId,@PathVariable("quantity") int quantity,HttpSession session) {
@@ -66,6 +63,7 @@ public class ProductAPI {
                }
            }
            String responseMessage = successMessage != null ? successMessage : errorMessage;
+           login.refreshUser(session);
            return ResponseEntity.ok(responseMessage);
        }catch (Exception e){
            log.error(e.getMessage());
@@ -88,6 +86,7 @@ public class ProductAPI {
             errorMessage ="Không thể xóa sản phẩm khỏi giỏ hàng";
         }
         String responseMessage = successMessage != null ? successMessage : errorMessage;
+        login.refreshUser(session);
         return ResponseEntity.ok(responseMessage);
     }
     @GetMapping("/api/product/getAllProduct")

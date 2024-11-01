@@ -1,30 +1,21 @@
 package com.webbanhang.webbanhang.Config;
 
 import com.webbanhang.webbanhang.Model.UserModel;
-import com.webbanhang.webbanhang.Repository.IUserRepository;
 import com.webbanhang.webbanhang.Service.IUserService;
+import com.webbanhang.webbanhang.Service.Impl.JwtServiceImpl;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.webbanhang.webbanhang.Service.Impl.JwtServiceImpl;
 
 import java.io.IOException;
 

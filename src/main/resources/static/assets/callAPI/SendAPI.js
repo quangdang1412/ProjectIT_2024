@@ -64,6 +64,7 @@ function getPlaceOrderData() {
     totalAmount: document.getElementById("totalAmount").textContent,
     shippingCost: document.getElementById("shippingCost").textContent,
     finalTotal: document.getElementById("totalElement").textContent,
+    couponID: document.getElementById("couponSelect") ? document.getElementById("couponSelect").value : ''
   };
 }
 function getSupplierData() {

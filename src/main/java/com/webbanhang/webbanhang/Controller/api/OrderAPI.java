@@ -1,8 +1,6 @@
 package com.webbanhang.webbanhang.Controller.api;
 
 import com.webbanhang.webbanhang.DTO.request.Order.OrderRequestDTO;
-import com.webbanhang.webbanhang.DTO.request.Other.DashboardDateDTO;
-import com.webbanhang.webbanhang.DTO.response.DashboardResponse;
 import com.webbanhang.webbanhang.DTO.response.ResponseData;
 import com.webbanhang.webbanhang.DTO.response.ResponseError;
 import com.webbanhang.webbanhang.Exception.CustomException;
@@ -19,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.Map;
 
 @RestController

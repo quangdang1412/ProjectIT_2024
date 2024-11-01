@@ -2,12 +2,15 @@ package com.webbanhang.webbanhang.Controller.api;
 
 import com.webbanhang.webbanhang.DTO.request.Other.BrandRequestDTO;
 import com.webbanhang.webbanhang.DTO.request.Other.CategoryRequestDTO;
+import com.webbanhang.webbanhang.DTO.request.Other.CouponRequestDTO;
 import com.webbanhang.webbanhang.DTO.request.Other.DiscountRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.ResponseData;
 import com.webbanhang.webbanhang.DTO.response.ResponseError;
 import com.webbanhang.webbanhang.Exception.CustomException;
+import com.webbanhang.webbanhang.Model.CouponModel;
 import com.webbanhang.webbanhang.Service.IBrandService;
 import com.webbanhang.webbanhang.Service.ICategoryService;
+import com.webbanhang.webbanhang.Service.ICouponService;
 import com.webbanhang.webbanhang.Service.IDiscountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ public class OtherAPI {
     private final ICategoryService categoryService;
     private final IBrandService brandService;
     private final IDiscountService discountService;
+    private final ICouponService couponService;
     @PostMapping("/addCategory")
     public ResponseData<String> addCategory(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO)
     {
@@ -97,6 +101,27 @@ public class OtherAPI {
             log.info("Request add discount: {}",discountRequestDTO);
             String discountID = discountService.save(discountRequestDTO) ;
             return new ResponseData<>(HttpStatus.CREATED.value(),"Success",discountID);
+        }
+        catch (Exception e){
+            log.error("errorMessage={}",e.getMessage(),e.getCause());
+            if(e instanceof CustomException)
+                return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
+        }
+    }
+    @PostMapping("/addCoupon")
+    public ResponseData<String> addCoupon(@Valid @RequestBody CouponRequestDTO couponRequestDTO)
+    {
+        try{
+
+            log.info("Request add discount: {}",couponRequestDTO);
+            CouponModel a = CouponModel.builder()
+                    .active(true)
+                    .percentage(couponRequestDTO.getPercentage())
+                    .couponID(couponRequestDTO.getCouponID())
+                    .build();
+            String couponID = couponService.save(a) ;
+            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",couponID);
         }
         catch (Exception e){
             log.error("errorMessage={}",e.getMessage(),e.getCause());

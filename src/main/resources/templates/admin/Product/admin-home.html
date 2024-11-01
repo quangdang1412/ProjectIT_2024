@@ -79,9 +79,9 @@
                 </div>
 
             </div>
-
-            <table id="example" class="table table-striped " style="width:100%">
-                <thead>
+            <div  class="table-responsive">
+                <table id="example" class="table table-striped " style="width:100%">
+                    <thead>
                     <tr>
                         <th>Hình sản phẩm</th>
                         <th>Mã sản phẩm</th>
@@ -94,8 +94,8 @@
                         <th></th>
                         <th>Status</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     <tr th:each="product : ${listProduct}">
                         <td>
                             <img th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
@@ -117,8 +117,9 @@
                                onclick="return confirm('Are you sure?')" th:text="${product.Active} ? 'Inactive' : 'Active&nbsp&nbsp&nbsp'"></a>
                         </td>
                     </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -218,7 +219,7 @@
 <script>
     var newLink = document.createElement('a');
     newLink.href = '/admin/Product?action=new';
-    newLink.className = 'btn btn-success d-flex m-2 py-2';
+    newLink.className = 'btn border border-secondary rounded-pill px-3 text-primary m-2 py-2 float-start';
     newLink.textContent = 'Thêm';
 </script>
 <script th:src="@{/assets/js/main.js}"></script>

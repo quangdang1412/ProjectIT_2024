@@ -4,8 +4,10 @@ import com.webbanhang.webbanhang.DTO.request.User.UserRequestDTO;
 import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.RoleModel;
+import com.webbanhang.webbanhang.Model.UserCouponModel;
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Repository.IRoleRepository;
+import com.webbanhang.webbanhang.Repository.IUserCouponRepository;
 import com.webbanhang.webbanhang.Repository.IUserRepository;
 import com.webbanhang.webbanhang.Service.IUserService;
 
@@ -27,6 +29,7 @@ public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
     private final IRoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final IUserCouponRepository userCouponRepository;
 
     @Override
     public UserDetailsService userDetailService() {
@@ -129,6 +132,11 @@ public class UserServiceImpl implements IUserService {
     }
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public List<UserCouponModel> findByUserCoupon_UserID(String userId) {
+        return userCouponRepository.findByUserCoupon_UserID(userId);
     }
 
 

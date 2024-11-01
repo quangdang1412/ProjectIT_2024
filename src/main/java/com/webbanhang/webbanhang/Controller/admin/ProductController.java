@@ -1,21 +1,15 @@
 package com.webbanhang.webbanhang.Controller.admin;
 
 
-import com.webbanhang.webbanhang.Model.*;
+import com.webbanhang.webbanhang.Model.ProductModel;
 import com.webbanhang.webbanhang.Service.*;
-
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-//
-//import javax.servlet.annotation.MultipartConfig;
-//import javax.servlet.annotation.WebServlet;
-//import javax.servlet.http.*;
+
 import java.util.Map;
 
 

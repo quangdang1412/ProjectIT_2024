@@ -1,34 +1,24 @@
 package com.webbanhang.webbanhang.Controller.api;
 
-import com.webbanhang.webbanhang.DTO.response.ResponseData;
-import com.webbanhang.webbanhang.DTO.response.ResponseError;
-import com.webbanhang.webbanhang.Exception.CustomException;
-import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
-import com.webbanhang.webbanhang.Model.UserModel;
-import com.webbanhang.webbanhang.Service.IUserService;
-import com.webbanhang.webbanhang.Util.CheckLogin;
-import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServlet;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.*;
-
 import com.webbanhang.webbanhang.DTO.request.User.AuthenticationRequest;
 import com.webbanhang.webbanhang.DTO.request.User.RefreshRequest;
+import com.webbanhang.webbanhang.DTO.response.ResponseData;
+import com.webbanhang.webbanhang.DTO.response.ResponseError;
+import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.AuthenticationResponse;
 import com.webbanhang.webbanhang.Model.RegisterRequest;
+import com.webbanhang.webbanhang.Model.UserModel;
+import com.webbanhang.webbanhang.Service.IUserService;
 import com.webbanhang.webbanhang.Service.Impl.AuthenticationServiceImpl;
-
+import com.webbanhang.webbanhang.Util.CheckLogin;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;

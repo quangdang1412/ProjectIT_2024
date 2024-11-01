@@ -1,5 +1,5 @@
-let refreshInterval = 600000; // 10 phút
-let inactivityTimeout = 900000; // 15 phút không hoạt động
+let refreshInterval = 300000;
+let inactivityTimeout = 600000;
 let lastActivityTime = Date.now();
 
 // Hàm cập nhật thời gian hoạt động cuối cùng

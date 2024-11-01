@@ -1,6 +1,7 @@
 package com.webbanhang.webbanhang.Service;
 
 import com.webbanhang.webbanhang.DTO.request.User.UserRequestDTO;
+import com.webbanhang.webbanhang.Model.UserCouponModel;
 import com.webbanhang.webbanhang.Model.UserModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -18,4 +19,5 @@ public interface IUserService {
     UserModel updateUser(String id, UserModel user);
     UserModel createUser(UserModel user);
     boolean existsByEmail(String email);
+    List<UserCouponModel> findByUserCoupon_UserID(String userId);
 }

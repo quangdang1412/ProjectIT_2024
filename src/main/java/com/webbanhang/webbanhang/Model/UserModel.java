@@ -54,6 +54,8 @@ public class UserModel implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "userCart", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CartModel> userCart;
+
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "userOrder", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderModel> userOrder;
