@@ -1,4 +1,4 @@
-<div class="container-fluid " th:fragment="navbar">
+<div class="container-fluid " th:fragment="navbar" >
   <div class="container topbar bg-primary d-none d-lg-block">
     <div class="d-flex justify-content-between">
       <div class="top-info ps-2">
@@ -53,7 +53,7 @@
           <div class="dropdown">
             <a class="my-auto" data-bs-toggle="dropdown">
               <i class="fas fa-user fa-2x"></i>
-              <span class="fs-5 ms-2" th:text="${session.isLoggedIn==1} ? ${session.fullName} : ''"></span>
+              <span class="fs-5 ms-2" th:text="${session.isLoggedIn==1} ? ${session.fullName} : 'Anonymous'"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-center m-0 bg-first rounded-2">
               <div th:if="${session.isLoggedIn==1}">

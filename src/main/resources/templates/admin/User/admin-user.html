@@ -79,9 +79,9 @@
                 <h1>Người dùng</h1>
               </div>
             </div>
-
-            <table id="example" class="table table-striped" style="width: 100%">
-              <thead>
+            <div  class="table-responsive">
+              <table id="example" class="table table-striped" style="width: 100%">
+                <thead>
                 <tr>
                   <th>Mã người dùng</th>
                   <th>Tên người dùng</th>
@@ -92,8 +92,8 @@
                   <th></th>
                   <th></th>
                 </tr>
-              </thead>
-              <tbody>
+                </thead>
+                <tbody>
                 <tr th:each="user : ${listUser}">
                   <td th:text="${user.UserID}"></td>
                   <td th:text="${user.Username}"></td>
@@ -103,22 +103,23 @@
                   <td th:text="${user.Role.RoleName}"></td>
                   <td>
                     <a
-                      th:href="@{/admin/User(action='edit', id=${user.UserID})}"
-                      class="btn btn-info"
-                      >Update</a
+                            th:href="@{/admin/User(action='edit', id=${user.UserID})}"
+                            class="btn btn-info"
+                    >Update</a
                     >
                   </td>
                   <td>
                     <a
-                      th:attr="onclick=|if(confirm('Are you sure you want to change status this user?')) deleteUser('${user.UserID}')|"
-                      class="btn btn-warning"
-                      th:text="${user.Active} ? 'Inactive' : 'Active&nbsp&nbsp&nbsp'"
-                      ></a
+                            th:attr="onclick=|if(confirm('Are you sure you want to change status this user?')) deleteUser('${user.UserID}')|"
+                            class="btn btn-warning"
+                            th:text="${user.Active} ? 'Inactive' : 'Active&nbsp&nbsp&nbsp'"
+                    ></a
                     >
                   </td>
                 </tr>
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -189,7 +190,7 @@
     <script>
       var newLink = document.createElement("a");
       newLink.href = "/admin/User?action=new";
-      newLink.className = "btn btn-success d-flex m-2 py-2";
+      newLink.className = "btn border border-secondary rounded-pill px-3 text-primary m-2 py-2 float-start";
       newLink.textContent = "Thêm";
     </script>
     <script th:src="@{/assets/js/main.js}"></script>

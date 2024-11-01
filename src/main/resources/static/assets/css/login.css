@@ -1,4 +1,13 @@
+.mobile {
+    zoom: 70% !important;
+}
 
+/* Optional: For wider screens, reset zoom if needed */
+@media (min-width: 731px) {
+    .mobile {
+        zoom: 100% !important; /* Reset to normal */
+    }
+}
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
 * {
