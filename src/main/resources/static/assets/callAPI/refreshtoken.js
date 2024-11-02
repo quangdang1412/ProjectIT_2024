@@ -1,5 +1,5 @@
-let refreshInterval = 600000; // 10 phút
-let inactivityTimeout = 900000; // 15 phút không hoạt động
+let refreshInterval = 300000;
+let inactivityTimeout = 600000;
 let lastActivityTime = Date.now();
 
 // Hàm cập nhật thời gian hoạt động cuối cùng
@@ -63,7 +63,7 @@ function extendToken() {
     })
     .then((data) => {
       // Lưu lại token mới và cập nhật lại thời gian hoạt động
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.data.token);
       resetLastActivityTime(); // Cập nhật lại thời gian hoạt động
       console.log("Token đã được gia hạn thành công.");
     })
