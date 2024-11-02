@@ -142,6 +142,25 @@
                 </tr>
                 </tbody>
             </table>
+
+            <table th:id="${example4}" class="table table-striped " style="width:100%" th:if="${example4} == 'example'">
+                <thead>
+                <tr>
+                    <th>Mã Coupon</th>
+                    <th>Phần trăm giảm</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="coupon : ${listCoupon}">
+                    <td th:text="${coupon.couponID}"></td>
+                    <td th:text="${coupon.percentage} + '%'"></td>
+                    <td>
+                        <a th:href="@{/admin/Other(action='edit', id=${coupon.couponID},type='4')}" class="btn btn-info">Infor</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

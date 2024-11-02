@@ -23,6 +23,15 @@ function sendOtherData(check,action) {
         endpoint = action === 'update' ? 'updateBrand':'addBrand';
         url = `/admin/Other?type=${check}`;
     }
+    else if(check === '4'){
+        other = {
+            couponID: getValue("CouponID"),
+            percentage: getValue("Percentage"),
+        }
+        method = action === 'update' ? 'PUT':'POST';
+        endpoint = action === 'update' ? 'updateCoupon':'addCoupon';
+        url = `/admin/Other?type=${check}`;
+    }
     else{
         other = {
             discountID: getValue("DiscountID"),

@@ -5,7 +5,10 @@ import com.webbanhang.webbanhang.DTO.response.DashboardResponse;
 import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.*;
+import com.webbanhang.webbanhang.Model.PK.UserCouponID;
+import com.webbanhang.webbanhang.Repository.ICouponRepository;
 import com.webbanhang.webbanhang.Repository.IOrderRepository;
+import com.webbanhang.webbanhang.Repository.IUserCouponRepository;
 import com.webbanhang.webbanhang.Service.IOrderService;
 import com.webbanhang.webbanhang.Service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,8 @@ public class OrderServiceImpl implements IOrderService {
 
     private final IUserService userService;
     private final IOrderRepository orderRepository;
+    private final ICouponRepository couponRepository;
+    private final IUserCouponRepository userCouponRepository;
     private final MailService mailService;
 
     @Override
@@ -91,6 +96,9 @@ public class OrderServiceImpl implements IOrderService {
             order.setOrderDetails(orderDetailModels);
             order.setTotalPrice(totalPrice);
             orderRepository.save(order);
+            if(!a.getCouponID().isEmpty()){
+                deleteUserCoupon(order.getUserOrder(),a.getCouponID());
+            }
             return order.getOrderID();
         }catch (Exception e){
             String error = e.getMessage();
@@ -117,6 +125,8 @@ public class OrderServiceImpl implements IOrderService {
                 mailService.sendUpdateOrderMail(order,checkChangeStatus);
             else
                 mailService.sendUpdateOrderMail(order,checkChangeStatus);
+            if(order.getStatus().equals("Hoàn thành") && order.getPaymentModel().getStatus().equals("Đã thanh toán"))
+                applyCouponBasedOnTotalPrice(order,order.getTotalPrice());
             return order.getOrderID();
         }catch (Exception e){
             String error = e.getMessage();
@@ -241,4 +251,55 @@ public class OrderServiceImpl implements IOrderService {
         return orderRepository.profitTotal();
     }
 
+    public void applyCouponBasedOnTotalPrice(OrderModel order,Double totalPrice) {
+        UserModel user = order.getUserOrder();
+
+        if (totalPrice > 100000 && totalPrice < 300000) {
+            applyOrUpdateUserCoupon(user, "Cp1");
+        } else if (totalPrice >= 300000 && totalPrice < 500000) {
+            applyOrUpdateUserCoupon(user, "Cp2");
+        } else if (totalPrice >= 500000 && totalPrice < 1000000) {
+            applyOrUpdateUserCoupon(user, "Cp3");
+        } else if (totalPrice >= 1000000) {
+            applyOrUpdateUserCoupon(user, "Cp4");
+        }
+    }
+    private void applyOrUpdateUserCoupon(UserModel user, String couponCode) {
+        CouponModel coupon = couponRepository.findById(couponCode).orElseThrow(() ->
+                new NoSuchElementException("Coupon not found with code: " + couponCode)
+        );
+
+        UserCouponID userCouponID = new UserCouponID(user,coupon);
+        Optional<UserCouponModel> userCouponModel = userCouponRepository.findById(userCouponID);
+
+        if (userCouponModel.isPresent()) {
+            // Nếu đã tồn tại, tăng số lượng quantity lên 1
+            UserCouponModel existingCoupon = userCouponModel.get();
+            existingCoupon.setQuantity(existingCoupon.getQuantity() + 1);
+            userCouponRepository.save(existingCoupon);
+        } else {
+            // Nếu chưa tồn tại, tạo mới bản ghi với quantity = 1
+            UserCouponModel newUserCoupon = UserCouponModel.builder()
+                    .userCoupon(user)
+                    .couponUser(coupon)
+                    .quantity(1)
+                    .build();
+
+            userCouponRepository.save(newUserCoupon);
+        }
+    }
+    private void deleteUserCoupon(UserModel user, String couponCode){
+        CouponModel coupon = couponRepository.findById(couponCode).orElseThrow(() ->
+                new NoSuchElementException("Coupon not found with code: " + couponCode)
+        );
+        UserCouponID userCouponID = new UserCouponID(user,coupon);
+        Optional<UserCouponModel> userCouponModel = userCouponRepository.findById(userCouponID);
+        if (userCouponModel.isPresent()) {
+            UserCouponModel existingCoupon = userCouponModel.get();
+            existingCoupon.setQuantity(existingCoupon.getQuantity()-1);
+            if(existingCoupon.getQuantity() == 0)
+                userCouponRepository.delete(existingCoupon);
+            userCouponRepository.save(existingCoupon);
+        }
+    }
 }

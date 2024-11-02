@@ -3,28 +3,24 @@ package com.webbanhang.webbanhang.Controller.web;
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.IUserService;
 import com.webbanhang.webbanhang.Util.LoadData;
-
 import jakarta.servlet.http.HttpSession;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 import java.util.List;
 
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
-    @Autowired
-    private IUserService userService;
 
-    @Autowired
-    private  LoadData loadData;
+    private final IUserService userService;
+
+    private final LoadData loadData;
     @RequestMapping(value = {"/", "/index","/static"})
     public String home(Model model,HttpSession session) {
         loadData.loadProduct(model);

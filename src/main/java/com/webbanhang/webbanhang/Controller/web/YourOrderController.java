@@ -31,11 +31,15 @@ public class YourOrderController {
 
     @GetMapping("/yourOrder")
     public String yourOrder(Model model, @ModelAttribute("productId") String productId, HttpSession session) {
-       // checkLogin.checkLogin(session,model,userService);
-        UserModel a = (UserModel)session.getAttribute("UserLogin");
-        List<OrderModel> listOrder =  userService.findUserByID(a.getUserID()).getUserOrder();
-        model.addAttribute("listOrder",listOrder);
-        return "/web/your-order";
+        if((UserModel)session.getAttribute("UserLogin") != null) {
+
+            UserModel a = (UserModel)session.getAttribute("UserLogin");
+            List<OrderModel> listOrder =  userService.findUserByID(a.getUserID()).getUserOrder();
+            model.addAttribute("listOrder",listOrder);
+            model.addAttribute("listCoupon",userService.findByUserCoupon_UserID(a.getUserID()).isEmpty() ? null : userService.findByUserCoupon_UserID(a.getUserID()) );
+            return "/web/your-order";
+        }
+        return "redirect:/login";
     }
     @GetMapping("/yourOrder/updateorder")
     public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session)

@@ -1,14 +1,15 @@
 package com.webbanhang.webbanhang.Controller.admin;
 
-import com.webbanhang.webbanhang.Model.*;
+import com.webbanhang.webbanhang.Model.OrderDetailModel;
+import com.webbanhang.webbanhang.Model.OrderModel;
 import com.webbanhang.webbanhang.Service.IOrderService;
 import com.webbanhang.webbanhang.Service.IUserService;
+import com.webbanhang.webbanhang.Util.CheckLogin;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Map;
@@ -19,10 +20,11 @@ import java.util.Map;
 public class OrderController {
     private final IOrderService orderService;
     private final IUserService userService;
+    private final CheckLogin checkLogin;
     @GetMapping("/Order")
     public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session)
     {
-        if(session.getAttribute("UserLoginRole").equals("CUSTOMER")) {
+        if(checkLogin.checkRoleAdmin(session)) {
             return "redirect:/404";
         }
         String type = allParams.get("type");

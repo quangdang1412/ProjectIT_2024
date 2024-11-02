@@ -1,12 +1,13 @@
 package com.webbanhang.webbanhang.Controller.web;
 
-import com.webbanhang.webbanhang.Model.*;
+import com.webbanhang.webbanhang.Model.CartModel;
+import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.ICartService;
 import com.webbanhang.webbanhang.Service.IOrderService;
 import com.webbanhang.webbanhang.Service.IProductService;
 import com.webbanhang.webbanhang.Service.IUserService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,15 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class CheckOutController {
-    @Autowired
-    private IUserService userService;
-    @Autowired
-    private IProductService productService;
-    @Autowired
-    private IOrderService orderService;
-    @Autowired
-    private ICartService cartService;
+    private final IUserService userService;
+
+
+    private final IOrderService orderService;
 
     public void loadProduct(Model model,HttpSession session) {
         UserModel a = (UserModel) session.getAttribute("UserLogin");
@@ -56,6 +54,7 @@ public class CheckOutController {
         model.addAttribute("carts", carts);
         model.addAttribute("totalAmount",totalAmount);
         model.addAttribute("quantity",quantity);
+        model.addAttribute("listCoupon",userService.findByUserCoupon_UserID(a.getUserID()).isEmpty() ? null : userService.findByUserCoupon_UserID(a.getUserID()) );
 
     }
     @GetMapping("/checkout")

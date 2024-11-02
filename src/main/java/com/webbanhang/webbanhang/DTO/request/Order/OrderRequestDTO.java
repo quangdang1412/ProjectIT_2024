@@ -31,4 +31,6 @@ public class OrderRequestDTO {
     @NotNull
     private String paymentMethod;
 
+    private String couponID;
+
 }

@@ -2,12 +2,14 @@ package com.webbanhang.webbanhang.Controller.admin;
 
 import com.webbanhang.webbanhang.Model.BrandModel;
 import com.webbanhang.webbanhang.Model.CategoryModel;
+import com.webbanhang.webbanhang.Model.CouponModel;
 import com.webbanhang.webbanhang.Model.DiscountModel;
 import com.webbanhang.webbanhang.Service.IBrandService;
 import com.webbanhang.webbanhang.Service.ICategoryService;
+import com.webbanhang.webbanhang.Service.ICouponService;
 import com.webbanhang.webbanhang.Service.IDiscountService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +18,15 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = {"/admin"})
+@RequiredArgsConstructor
 public class OtherController {
-    @Autowired
-    private IDiscountService discountService;
-    @Autowired
-    private ICategoryService categoryService;
-    @Autowired
-    private IBrandService brandService;
+
+    private final IDiscountService discountService;
+
+    private final ICategoryService categoryService;
+
+    private final IBrandService brandService;
+    private final ICouponService couponService;
     @GetMapping("/Other")
     public String checkActionGet(@RequestParam Map<String,String> allParams, Model model,HttpSession session)
     {
@@ -39,7 +43,6 @@ public class OtherController {
                 return handleNewAction(type, model);
             case "edit":
                 return handleEditAction(type,allParams, model);
-
             default:
                 return handleListAction(type, model);
         }
@@ -50,6 +53,8 @@ public class OtherController {
                 return addBrandForm(model);
             case "1":
                 return addDiscountForm(model);
+            case "4":
+                return addCouponForm(model);
             default:
                 return addCategoryForm(model);
         }
@@ -60,6 +65,8 @@ public class OtherController {
                 return updateBrandForm(allParams,model);
             case "1":
                 return updateDiscountForm(allParams,model);
+            case "4":
+                return updateCouponForm(allParams,model);
             default:
                 return updateCategoryForm(allParams,model);
         }
@@ -70,13 +77,15 @@ public class OtherController {
                 return listBrand(model);
             case "1":
                 return listDiscount(model);
+            case "4":
+                return listCoupon(model);
             default:
                 return listCategory(model);
         }
     }
     @PostMapping("/Other")
     public String checkActionPost(@RequestParam Map<String,String> allParams, Model model, HttpSession session
-                                 , @ModelAttribute("Brand") BrandModel brand, @ModelAttribute("Category") CategoryModel category, @ModelAttribute("Discount") DiscountModel discount)
+                                 , @ModelAttribute("Brand") BrandModel brand, @ModelAttribute("Category") CategoryModel category, @ModelAttribute("Discount") DiscountModel discount,@ModelAttribute("Coupon") CouponModel Coupon)
         {    if(session.getAttribute("UserLoginRole").equals("CUSTOMER")) {
             return "redirect:/404";
         }
@@ -115,6 +124,14 @@ public class OtherController {
         model.addAttribute("type","1");
         return "/admin/Other/admin-other";
     }
+    public String listCoupon(Model model) {
+
+        model.addAttribute("listCoupon", couponService.getAllCoupon());
+        model.addAttribute("title","Coupon");
+        model.addAttribute("example4","example");
+        model.addAttribute("type","4");
+        return "/admin/Other/admin-other";
+    }
     public String addBrandForm(Model model)
     {
         model.addAttribute("checkBrand",null);
@@ -151,6 +168,18 @@ public class OtherController {
         model.addAttribute("Discount",new DiscountModel());
         return "/admin/Other/AddOther";
     }
+    public String addCouponForm(Model model)
+    {
+        model.addAttribute("checkDiscount",null);
+        int x= couponService.getAllCoupon().size()+1;
+        String s="Cp"+x;
+        model.addAttribute("CouponID",s);
+        model.addAttribute("title","Thông tin coupon");
+        model.addAttribute("example","Coupon");
+        model.addAttribute("type","4");
+        model.addAttribute("Coupon",new CouponModel());
+        return "/admin/Other/AddOther";
+    }
     public String updateBrandForm(@RequestParam Map<String,String> allParams, Model model)
     {
         model.addAttribute("checkBrand","update");
@@ -184,6 +213,17 @@ public class OtherController {
         model.addAttribute("title","Thông tin khuyến mãi");
         model.addAttribute("example","Discount");
         model.addAttribute("type","1");
+        return "/admin/Other/AddOther";
+    }
+    public String updateCouponForm(@RequestParam Map<String,String> allParams, Model model)
+    {
+        model.addAttribute("checkDiscount","update");
+        CouponModel a= couponService.findCouponByID(allParams.get("id"));
+        model.addAttribute("CouponID",a.getCouponID());
+        model.addAttribute("Percentage", a.getPercentage());
+        model.addAttribute("title","Thông tin coupon");
+        model.addAttribute("example","Coupon");
+        model.addAttribute("type","4");
         return "/admin/Other/AddOther";
     }
 

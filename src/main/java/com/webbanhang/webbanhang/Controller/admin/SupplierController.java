@@ -2,24 +2,28 @@ package com.webbanhang.webbanhang.Controller.admin;
 
 import com.webbanhang.webbanhang.Model.SupplierModel;
 import com.webbanhang.webbanhang.Service.ISuppilerService;
+import com.webbanhang.webbanhang.Util.CheckLogin;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
 @Controller
 @RequestMapping(value = {"/admin"})
+@RequiredArgsConstructor
 public class SupplierController {
-    @Autowired
-    private ISuppilerService suppilerService;
+
+    private final ISuppilerService suppilerService;
+    private final CheckLogin checkLogin;
     @GetMapping("/Supplier")
     public String checkActionGet(Model model, @RequestParam Map<String,String> allParams, HttpSession session)
     {
-        if(!session.getAttribute("UserLoginRole").equals("ADMIN")) {
+        if(checkLogin.checkRoleAdmin(session)) {
             return "redirect:/404";
         }
         String action = allParams.get("action");
