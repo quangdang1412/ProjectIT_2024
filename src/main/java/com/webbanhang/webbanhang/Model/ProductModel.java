@@ -1,13 +1,10 @@
 package com.webbanhang.webbanhang.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
+
 @Getter
 @Setter
 @Builder
@@ -36,13 +33,13 @@ public class ProductModel {
     @Column
     private String description;
     @Column
-    private Double unitPrice;
+    private Integer unitPrice;
     @Column
     private Integer quantity;
     @Column
     private boolean active;
     @Column
-    private Double unitCost;
+    private Integer unitCost;
 
 
     @ManyToOne()

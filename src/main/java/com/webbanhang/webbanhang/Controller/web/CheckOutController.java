@@ -1,6 +1,7 @@
 package com.webbanhang.webbanhang.Controller.web;
 
 import com.webbanhang.webbanhang.Model.CartModel;
+import com.webbanhang.webbanhang.Model.UserCouponModel;
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.ICartService;
 import com.webbanhang.webbanhang.Service.IOrderService;
@@ -48,13 +49,14 @@ public class CheckOutController {
         LocalDate normalDay = today.plusDays(8);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String id = "O"+ (orderService.getAllOrder().size()+1);
+        List<UserCouponModel> listCoupon= userService.findByUserCoupon_UserID(a.getUserID()).stream().filter(c->c.getCouponUser().isActive()).toList();
         model.addAttribute("OrderID",id);
         model.addAttribute("fastDate",fastDay.format(formatter));
         model.addAttribute("normalDate",normalDay.format(formatter));
         model.addAttribute("carts", carts);
         model.addAttribute("totalAmount",totalAmount);
         model.addAttribute("quantity",quantity);
-        model.addAttribute("listCoupon",userService.findByUserCoupon_UserID(a.getUserID()).isEmpty() ? null : userService.findByUserCoupon_UserID(a.getUserID()) );
+        model.addAttribute("listCoupon",listCoupon.isEmpty() ? null : listCoupon);
 
     }
     @GetMapping("/checkout")

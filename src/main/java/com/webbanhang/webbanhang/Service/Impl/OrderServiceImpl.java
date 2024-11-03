@@ -1,19 +1,24 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
+import com.google.api.client.util.ArrayMap;
 import com.webbanhang.webbanhang.DTO.request.Order.OrderRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.DashboardResponse;
+import com.webbanhang.webbanhang.DTO.response.ResponseError;
 import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.*;
 import com.webbanhang.webbanhang.Model.PK.UserCouponID;
 import com.webbanhang.webbanhang.Repository.ICouponRepository;
 import com.webbanhang.webbanhang.Repository.IOrderRepository;
+import com.webbanhang.webbanhang.Repository.IProductRepository;
 import com.webbanhang.webbanhang.Repository.IUserCouponRepository;
 import com.webbanhang.webbanhang.Service.IOrderService;
+import com.webbanhang.webbanhang.Service.IProductService;
 import com.webbanhang.webbanhang.Service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -33,6 +38,7 @@ public class OrderServiceImpl implements IOrderService {
     private final IOrderRepository orderRepository;
     private final ICouponRepository couponRepository;
     private final IUserCouponRepository userCouponRepository;
+    private final IProductRepository productRepository;
     private final MailService mailService;
 
     @Override
@@ -82,16 +88,24 @@ public class OrderServiceImpl implements IOrderService {
             }
             order.setPaymentModel(payment);
             List<OrderDetailModel> orderDetailModels = new ArrayList<>();
-            if(userModel.getUserCart()!= null)
+            if(!userModel.getUserCart().isEmpty())
             {
                 for (CartModel cart : userModel.getUserCart()) {
+                    ProductModel productModel = productRepository.findById(cart.getProductCart().getProductID()).get();
+                    if(productModel.getQuantity() < cart.getQuantity())
+                        throw new CustomException("Sản phẩm "+productModel.getProductName()+" không đủ số lượng");
                     if (cart.getProductCart().getDiscount() != null) {
                         totalPrice += cart.getProductCart().getUnitPrice() * (100 - cart.getProductCart().getDiscount().getPercentage()) / 100 * cart.getQuantity();
                     } else {
                         totalPrice += cart.getProductCart().getUnitPrice() * cart.getQuantity();
                     }
+                    productModel.setQuantity(productModel.getQuantity() - cart.getQuantity());
+                    productRepository.save(productModel);
                     orderDetailModels.add(new OrderDetailModel(order,cart.getProductCart(), cart.getQuantity()));
                 }
+            }
+            else{
+                throw new CustomException("Vui lòng thêm sản phẩm vào giỏ hàng");
             }
             order.setOrderDetails(orderDetailModels);
             order.setTotalPrice(totalPrice);
@@ -101,6 +115,8 @@ public class OrderServiceImpl implements IOrderService {
             }
             return order.getOrderID();
         }catch (Exception e){
+            if(e instanceof CustomException)
+                throw new CustomException(e.getMessage());
             String error = e.getMessage();
             String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
             log.info(error);
@@ -141,6 +157,11 @@ public class OrderServiceImpl implements IOrderService {
     public String deleteOrder(String a) {
         try{
             OrderModel orderModel =getOrderByID(a);
+            for (OrderDetailModel od : orderModel.getOrderDetails()) {
+                ProductModel productModel = productRepository.findById(od.getProductOrder().getProductID()).get();
+                productModel.setQuantity(productModel.getQuantity() + od.getQuantity());
+                productRepository.save(productModel);
+            }
             orderRepository.deleteOrder(a);
             return a;
         }catch (Exception e){
@@ -185,7 +206,7 @@ public class OrderServiceImpl implements IOrderService {
     public DashboardResponse dataChart(LocalDate startDate,LocalDate endDate){
         // chart Area
         List<OrderModel> listOrder = orderRepository.revenue(startDate, endDate);
-        Map<String, Double> totalRevenueByDate = new TreeMap<>();
+        Map<String, Double> totalRevenueByDate = new ArrayMap<>();
         long numberDays = ChronoUnit.DAYS.between(startDate, endDate);
         for (OrderModel orderModel : listOrder) {
             String orderDateStr;
@@ -272,20 +293,19 @@ public class OrderServiceImpl implements IOrderService {
         UserCouponID userCouponID = new UserCouponID(user,coupon);
         Optional<UserCouponModel> userCouponModel = userCouponRepository.findById(userCouponID);
 
-        if (userCouponModel.isPresent()) {
-            // Nếu đã tồn tại, tăng số lượng quantity lên 1
+        if (userCouponModel.isPresent() && userCouponModel.get().getCouponUser().isActive()) {
             UserCouponModel existingCoupon = userCouponModel.get();
             existingCoupon.setQuantity(existingCoupon.getQuantity() + 1);
             userCouponRepository.save(existingCoupon);
-        } else {
-            // Nếu chưa tồn tại, tạo mới bản ghi với quantity = 1
-            UserCouponModel newUserCoupon = UserCouponModel.builder()
-                    .userCoupon(user)
-                    .couponUser(coupon)
-                    .quantity(1)
-                    .build();
-
-            userCouponRepository.save(newUserCoupon);
+        } else{
+            if(coupon.isActive()){
+                UserCouponModel newUserCoupon = UserCouponModel.builder()
+                        .userCoupon(user)
+                        .couponUser(coupon)
+                        .quantity(1)
+                        .build();
+                userCouponRepository.save(newUserCoupon);
+            }
         }
     }
     private void deleteUserCoupon(UserModel user, String couponCode){

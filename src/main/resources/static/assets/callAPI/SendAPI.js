@@ -110,10 +110,16 @@ function notify(xhr, url, data) {
           const $link = $(`a[onclick*='${data}']`);
           const currentStatus = $link.text().trim();
           // Đổi trạng thái giữa Active và Inactive
-          if (currentStatus === "Active") {
-            $link.html("Inactive");
+          if ($link.hasClass("no-change")) {
+            // Delete the row instead of toggling status
+            $link.closest("tr").remove();
           } else {
-            $link.html("Active" + String.fromCharCode(160).repeat(3)); // Thêm 3 khoảng trắng
+            // Toggle status between Active and Inactive
+            if (currentStatus === "Active") {
+              $link.html("Inactive");
+            } else {
+              $link.html("Active" + String.fromCharCode(160).repeat(3)); // Add 3 spaces
+            }
           }
         }
       } else {
