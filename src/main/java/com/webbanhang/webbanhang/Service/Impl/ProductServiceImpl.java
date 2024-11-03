@@ -69,7 +69,7 @@ public class ProductServiceImpl implements IProductService {
                     .unitCost(productRequestDTO.getUnitCost())
                     .unitPrice(productRequestDTO.getUnitPrice())
                     .supplier(supplierService.findSupplierByID(productRequestDTO.getSupplierID()))
-                    .active(false)
+                    .active(true)
                     .build();
             ImageModel imageProduct = null;
             if(!file.isEmpty()){

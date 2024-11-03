@@ -2,13 +2,12 @@ package com.webbanhang.webbanhang.Controller.web;
 
 import com.webbanhang.webbanhang.Model.OrderDetailModel;
 import com.webbanhang.webbanhang.Model.OrderModel;
-import com.webbanhang.webbanhang.Model.ProductModel;
+import com.webbanhang.webbanhang.Model.UserCouponModel;
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.IOrderService;
 import com.webbanhang.webbanhang.Service.IUserService;
-import com.webbanhang.webbanhang.Util.CheckLogin;
 import jakarta.servlet.http.HttpSession;
-import org.apache.catalina.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,16 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 public class YourOrderController {
-    @Autowired
-    private IOrderService orderService;
-    @Autowired
-    private IUserService userService;
+    private final IOrderService orderService;
+    private final  IUserService userService;
 
     @GetMapping("/yourOrder")
     public String yourOrder(Model model, @ModelAttribute("productId") String productId, HttpSession session) {
@@ -35,8 +32,9 @@ public class YourOrderController {
 
             UserModel a = (UserModel)session.getAttribute("UserLogin");
             List<OrderModel> listOrder =  userService.findUserByID(a.getUserID()).getUserOrder();
+            List<UserCouponModel> listCoupon= userService.findByUserCoupon_UserID(a.getUserID()).stream().filter(c->c.getCouponUser().isActive()).toList();
             model.addAttribute("listOrder",listOrder);
-            model.addAttribute("listCoupon",userService.findByUserCoupon_UserID(a.getUserID()).isEmpty() ? null : userService.findByUserCoupon_UserID(a.getUserID()) );
+            model.addAttribute("listCoupon",listCoupon.isEmpty() ? null : listCoupon);
             return "/web/your-order";
         }
         return "redirect:/login";

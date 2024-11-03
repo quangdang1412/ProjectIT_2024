@@ -43,51 +43,48 @@
     <div class="container" id="container">
       <div class="form-container sign-up-container">
         <form id="signUpForm">
-          <h1>Create Account</h1>
-          <span>or use your email for registration</span>
-          <input type="text" placeholder="Username" name="UserName" required />
-          <input type="text" placeholder="Phone" name="Phone" required />
+          <h1>Tạo tài khoản</h1>
+          <input type="text" placeholder="Họ tên" name="UserName" required />
+          <input type="text" placeholder="Số điện thoại" name="Phone" required />
           <input type="email" placeholder="Email" name="Email" required />
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Mật khẩu"
             name="Password"
             required
           />
-          <button>Sign Up</button>
+          <button>Đăng ký</button>
         </form>
       </div>
       <div class="form-container sign-in-container">
         <form id="loginForm">
-          <h1>Sign in</h1>
+          <h1>Đăng nhập</h1>
           <div class="social-container">
             <a th:href="@{/oauth2/authorization/google}" class="social"><i class="fab fa-google-plus-g"></i></a>
           </div>
-          <span>or use your account</span>
+          <span>Có thể sử dụng tài khoản google</span>
           <input type="email" name="username" placeholder="Email" required />
           <input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder="Mật khẩu"
             required
           />
-          <a href="javascript:void(0);" onclick="resetPassword()">Forgot your password?</a>
-          <button>Sign In</button>
+          <a href="javascript:void(0);" onclick="resetPassword()">Quên mật khẩu?</a>
+          <button>Đăng nhập</button>
         </form>
       </div>
       <div class="overlay-container">
         <div class="overlay">
           <div class="overlay-panel overlay-left">
-            <h1>Welcome Back!</h1>
-            <p>
-              To keep connected with us please login with your personal info
-            </p>
-            <button class="ghost" id="signIn">Sign In</button>
+            <h1>Chào mừng bạn đã trở lại!</h1>
+            <br>
+            <button class="ghost" id="signIn">Đăng nhập</button>
           </div>
           <div class="overlay-panel overlay-right">
-            <h1>Hello, Friend!</h1>
-            <p>Enter your personal details and start journey with us</p>
-            <button class="ghost" id="signUp">Sign Up</button>
+            <h1>Chào mừng bạn đến với Tạp Hóa IT!</h1>
+            <p>Hãy tạo tài khoản để có thể mua hàng</p>
+            <button class="ghost" id="signUp">Đăng ký</button>
           </div>
         </div>
       </div>

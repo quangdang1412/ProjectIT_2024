@@ -128,7 +128,7 @@
                             class="d-flex justify-content-between fruite-name"
                           >
                             <a
-                              th:href="@{/shop(categoryId=${category.categoryID})}"
+                              th:href="@{/shop(category=${category.categoryID})}"
                             >
                               <span th:text="${category.categoryName}"></span>
                             </a>
@@ -142,7 +142,7 @@
                   </div>
 
                   <div class="col-lg-12">
-                    <h4 class="mb-3">Sản phẩm liên quan</h4>
+                    <h4 class="mb-3">Sản phẩm khuyến mãi</h4>
                     <div
                       class="d-flex align-items-center justify-content-start"
                       th:each="product: ${productDiscount}"
@@ -218,9 +218,7 @@
                       >
                         Fruits
                       </div>
-                      <div
-                        class="p-4 border border-secondary border-top-0 rounded-bottom"
-                      >
+                      <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                         <a th:href="@{/detail/{id}(id=${product.productID})}">
                           <h4
                             th:text="${product.ProductName}"
@@ -246,7 +244,7 @@
                           </p>
                         </div>
                         <p
-                          class="text-danger fs-5 fw-bold"
+                          class="text-danger fs-5 fw-bold d-flex justify-content-start"
                           th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
                         >
                           Price
@@ -257,9 +255,8 @@
                             visibility: hidden;
                             margin-bottom: 0px;
                             height: 30px;
-                          "
-                        >
-                          &nbsp;
+                          ">
+                          &nbsp
                         </p>
                         <br />
                         <div class="d-flex justify-content-end">
@@ -268,7 +265,7 @@
                             class="btn border border-secondary rounded-pill px-3 text-primary"
                           >
                             <i class="fa fa-shopping-bag me-2 text-primary"></i>
-                            Add to cart
+                            Giỏ hàng
                           </a>
                         </div>
                       </div>
@@ -281,77 +278,63 @@
                     class="dt-paging paging_full_numbers d-flex justify-content-end"
                   >
                     <ul class="pagination">
-                      <li class="dt-paging-button page-item disabled">
-                        <a
-                          class="page-link first"
-                          aria-controls="example"
-                          aria-disabled="true"
-                          aria-label="First"
-                          data-dt-idx="first"
-                          tabindex="-1"
-                          th:href="${fullUrl + '&pageNo=1'}"
-                          >«</a
-                        >
+                      <!-- First button -->
+                      <li class="dt-paging-button page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                        <a class="page-link first"
+                           aria-controls="example"
+                           th:attr="aria-disabled=${currentPage == 1}"
+                           aria-label="First"
+                           data-dt-idx="first"
+                           tabindex="-1"
+                           th:href="${currentPage > 1 ? fullUrl + '&pageNo=1' : '#'}"
+                        >«</a>
                       </li>
-                      <li
-                        class="dt-paging-button page-item"
-                        th:classappend="${currentPage == 1} ? 'disabled' : ''"
-                      >
-                        <a
-                          class="page-link previous"
-                          aria-controls="example"
-                          aria-disabled="true"
-                          aria-label="Previous"
-                          data-dt-idx="previous"
-                          tabindex="-1"
-                          th:href="${fullUrl + '&pageNo=' + (currentPage - 1)}"
-                          >‹</a
-                        >
+
+                      <!-- Previous button -->
+                      <li class="dt-paging-button page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                        <a class="page-link previous"
+                           aria-controls="example"
+                           th:attr="aria-disabled=${currentPage == 1}"
+                           aria-label="Previous"
+                           data-dt-idx="previous"
+                           tabindex="-1"
+                           th:href="${currentPage > 1 ? fullUrl + '&pageNo=' + (currentPage - 1) : '#'}"
+                        >‹</a>
                       </li>
-                      <li
-                        class="dt-paging-button page-item"
-                        th:each="i : ${#numbers.sequence(1, totalPages)}"
-                        th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1}"
-                        th:classappend="${currentPage == i} ? 'active' : ''"
-                      >
-                        <a
-                          class="page-link"
-                          th:href="${fullUrl + '&pageNo=' + i}"
-                          aria-controls="example"
-                          th:text="${i}"
-                        ></a>
+
+                      <!-- Page numbers -->
+                      <li class="dt-paging-button page-item"
+                          th:each="i : ${#numbers.sequence(1, totalPages)}"
+                          th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1}"
+                          th:classappend="${currentPage == i ? 'active' : ''}">
+                        <a class="page-link" th:href="${fullUrl + '&pageNo=' + i}" th:text="${i}"></a>
                       </li>
-                      <li
-                        class="dt-paging-button page-item"
-                        th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
-                      >
-                        <a
-                          class="page-link next"
-                          aria-controls="example"
-                          aria-disabled="true"
-                          aria-label="Next"
-                          data-dt-idx="next"
-                          tabindex="-1"
-                          th:href="${fullUrl + '&pageNo=' + (currentPage + 1)}"
-                          >›</a
-                        >
+
+                      <!-- Next button -->
+                      <li class="dt-paging-button page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+                        <a class="page-link next"
+                           aria-controls="example"
+                           th:attr="aria-disabled=${currentPage == totalPages}"
+                           aria-label="Next"
+                           data-dt-idx="next"
+                           tabindex="-1"
+                           th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + (currentPage + 1) : '#'}"
+                        >›</a>
                       </li>
-                      <li
-                        class="dt-paging-button page-item"
-                        th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
-                      >
-                        <a
-                          class="page-link last"
-                          aria-controls="example"
-                          aria-disabled="true"
-                          aria-label="Last"
-                          data-dt-idx="last"
-                          tabindex="-1"
-                          th:href="${fullUrl + '&pageNo=' + (totalPages)}"
-                          >»</a
-                        >
+
+                      <!-- Last button -->
+                      <li class="dt-paging-button page-item" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+                        <a class="page-link last"
+                           aria-controls="example"
+                           th:attr="aria-disabled=${currentPage == totalPages}"
+                           aria-label="Last"
+                           data-dt-idx="last"
+                           tabindex="-1"
+                           th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + totalPages : '#'}"
+                        >»</a>
                       </li>
                     </ul>
+
                   </div>
                 </th:block>
               </div>

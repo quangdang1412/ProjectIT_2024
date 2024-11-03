@@ -283,50 +283,69 @@
                         <div class="fruite-img">
                           <a th:href="@{/detail/{id}(id=${product.productID})}">
                             <img
-                              th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
-                              th:alt="${product.image?.imageCode}"
-                              class="img-fluid w-100 rounded-top"
-                              style="height: 240px"
+                                    th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
+                                    th:alt="${product.Image?.ImageCode}"
+                                    class="img-fluid w-100 rounded-top"
+                                    style="height: 240px"
                             />
                           </a>
                         </div>
                         <div
-                          th:text="${product.category?.categoryName}"
-                          class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                          style="top: 10px; left: 10px"
-                        ></div>
-                        <div
-                          class="p-4 border border-secondary border-top-0 rounded-bottom"
+                                class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                style="top: 10px; left: 10px"
+                                th:text="${product.Category?.categoryName}"
                         >
+                          Fruits
+                        </div>
+                        <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                           <a th:href="@{/detail/{id}(id=${product.productID})}">
                             <h4
-                              style="
-                                min-height: 115px;
-                                display: -webkit-box;
-                                -webkit-line-clamp: 4;
-                                -webkit-box-orient: vertical;
-                                overflow: hidden;
-                              "
-                              th:text="${product.productName}"
+                                    th:text="${product.ProductName}"
+                                    style="
+                              display: -webkit-box;
+                              -webkit-line-clamp: 4;
+                              -webkit-box-orient: vertical;
+                              overflow: hidden;
+                              min-height: 115px;
+                            "
                             >
-                              Grapes
+                              Product Name
                             </h4>
                           </a>
-                          <div
-                            class="d-flex justify-content-between flex-lg-wrap"
-                          >
+                          <br />
+                          <div class="d-flex justify-content-start flex-lg-wrap">
                             <p
-                              class="text-dark fs-5 fw-bold mb-0"
-                              th:text="${#numbers.formatDecimal(product.unitPrice,1,'COMMA',0,'POINT')} + 'đ'"
-                            ></p>
-                            <a
-                              href="#"
-                              class="btn border border-secondary rounded-pill px-3 text-primary"
-                              ><i
-                                class="fa fa-shopping-bag me-2 text-primary"
-                              ></i>
-                              Giỏ hàng</a
+                                    th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
+                                    th:style="${product.Discount} != null ? 'height: 46px':'height: 46px'"
+                                    th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
                             >
+                              Price
+                            </p>
+                          </div>
+                          <p
+                                  class="text-danger fs-5 fw-bold d-flex justify-content-start"
+                                  th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
+                          >
+                            Price
+                          </p>
+                          <p
+                                  th:if="${product.Discount} == null"
+                                  style="
+                            visibility: hidden;
+                            margin-bottom: 0px;
+                            height: 30px;
+                          ">
+                            &nbsp
+                          </p>
+                          <br />
+                          <div class="d-flex justify-content-end">
+                            <a
+                                    th:attr="onclick=|addToCart('${product.productID}')|"
+                                    class="btn border border-secondary rounded-pill px-3 text-primary"
+                            >
+                              <i class="fa fa-shopping-bag me-2 text-primary"></i>
+                              Giỏ hàng
+                            </a>
                           </div>
                         </div>
                       </div>
@@ -385,10 +404,6 @@
                   </div>
                   <div class="col-6">
                     <a
-                      class="h5"
-                      th:text="${#numbers.formatDecimal(bestSellingProduct.unitPrice,1,'COMMA',0,'POINT')} + 'đ'"
-                    ></a>
-                    <a
                       th:href="@{/detail/{id}(id=${bestSellingProduct.productID})}"
                     >
                       <h4
@@ -403,12 +418,41 @@
                         "
                       ></h4>
                     </a>
-                    <a
-                      href="#"
-                      class="btn border border-secondary rounded-pill px-3 text-primary"
-                      ><i class="fa fa-shopping-bag me-2 text-primary"></i> Add
-                      to cart</a
+                    <br />
+                    <div class="d-flex justify-content-start flex-lg-wrap">
+                      <p
+                              th:class="${bestSellingProduct.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
+                              th:style="${bestSellingProduct.Discount} != null ? 'height: 46px':'height: 46px'"
+                              th:text="${#numbers.formatDecimal(bestSellingProduct.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
+                      >
+                        Price
+                      </p>
+                    </div>
+                    <p
+                            class="text-danger fs-5 fw-bold d-flex justify-content-start"
+                            th:text="${bestSellingProduct.Discount} != null ? ${#numbers.formatDecimal(bestSellingProduct.UnitPrice * (100 - bestSellingProduct.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
                     >
+                      Price
+                    </p>
+                    <p
+                            th:if="${bestSellingProduct.Discount} == null"
+                            style="
+                            visibility: hidden;
+                            margin-bottom: 0px;
+                            height: 30px;
+                          ">
+                      &nbsp
+                    </p>
+                    <br />
+                    <div class="d-flex justify-content-end">
+                      <a
+                              th:attr="onclick=|addToCart('${bestSellingProduct.productID}')|"
+                              class="btn border border-secondary rounded-pill px-3 text-primary"
+                      >
+                        <i class="fa fa-shopping-bag me-2 text-primary"></i>
+                        Add to cart
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -446,6 +490,7 @@
       <script th:src="@{/assets/callAPI/home.js}"></script>
       <script th:src="@{/assets/callAPI/logout.js}"></script>
       <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
+      <script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script th:src="@{/assets/js/categoryFilter.js}"></script>
     </div>

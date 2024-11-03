@@ -95,7 +95,7 @@ function chartArea(listTime, dataRe,top5,dataTop5) {
     data: {
       labels: listTime,
       datasets: [{
-        label: "Earnings",
+        label: "Doanh thu",
         lineTension: 0.3,
         backgroundColor: "rgba(78,115,223,0.13)",
         borderColor: "rgba(78, 115, 223, 1)",

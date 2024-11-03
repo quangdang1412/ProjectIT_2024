@@ -295,9 +295,7 @@
                         </a>
                         <p
                           class="mb-0 mt-4"
-                          th:text="${cart.ProductCart.Discount} != null
-                                             ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100, 1, 'COMMA', 0, 'POINT')} + ' VND x '  + ${cart.Quantity}
-                                             : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND x ' + ${cart.Quantity}"
+                          th:text="${#numbers.formatDecimal(cart.ProductCart.UnitPrice, 1, 'COMMA', 0, 'POINT')} + ' VND x ' + ${cart.Quantity}"
                         >
                           ">
                         </p>
@@ -305,21 +303,20 @@
                       <td>
                         <p
                           class="mb-0 mt-4"
-                          th:text="${cart.ProductCart.Discount} != null
-                                             ? '-'+${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (cart.ProductCart.Discount.Percentage) / 100*cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
-                                             : '0 VND'"
+                          th:text="${cart.ProductCart.Discount != null
+                                             ? '-'+ #numbers.formatDecimal(cart.ProductCart.UnitPrice * (cart.ProductCart.Discount.Percentage) / 100*cart.Quantity, 1, 'COMMA', 0, 'POINT') + ' VND'
+                                             : '0 VND'}"
                         ></p>
                       </td>
                       <td colspan="3">
                         <p
                           class="mb-0 mt-4"
-                          th:text="${cart.ProductCart.Discount} != null
-                           ? ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100 * cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'
-                           : ${#numbers.formatDecimal(cart.ProductCart.UnitPrice * cart.Quantity, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+                          th:text="${cart.ProductCart.Discount != null
+                           ? #numbers.formatDecimal(cart.ProductCart.UnitPrice * (100 - cart.ProductCart.Discount.Percentage) / 100 * cart.Quantity, 1, 'COMMA', 0, 'POINT') + ' VND'
+                           : #numbers.formatDecimal(cart.ProductCart.UnitPrice * cart.Quantity, 1, 'COMMA', 0, 'POINT') + ' VND'}"
                         ></p>
                       </td>
                     </tr>
-
                     <tr class="border-bottom-0">
                       <td colspan="3">
                         <h5 class="mb-0 text-dark py-3 font-size-14">
@@ -424,11 +421,11 @@
         document.getElementById("couponPercentageText").textContent = `Giảm: ${per === null ? 0 : per}%`;
         // Lấy tổng tiền từ HTML và loại bỏ dấu phẩy, VND
         const totalAmountElement = document.getElementById("totalAmount");
-        const totalAmount = parseFloat(
+        const totalAmount = parseInt(
                 totalAmountElement.textContent.replace(/[^0-9.-]+/g, "")
         );
         const shippingCostElement = document.getElementById("shippingCost");
-        const shippingCost = parseFloat(
+        const shippingCost = parseInt(
                 shippingCostElement.textContent.replace(/[^0-9.-]+/g, "")
         );
         // Tính tổng tiền với phí vận chuyển
@@ -475,11 +472,11 @@
         }
         // Lấy tổng tiền từ HTML và loại bỏ dấu phẩy, VND
         const totalAmountElement = document.getElementById("totalAmount");
-        const totalAmount = parseFloat(
+        const totalAmount = parseInt(
           totalAmountElement.textContent.replace(/[^0-9.-]+/g, "")
         );
         const totalCouponElement = document.getElementById("totalCoupon");
-        const totalCouponAmount = parseFloat(
+        const totalCouponAmount = parseInt(
                 totalCouponElement.textContent.replace(/[^0-9.-]+/g, "")
         );
         // Tính tổng tiền với phí vận chuyển

@@ -44,7 +44,7 @@ public class OrderAPI {
             log.error("errorMessage={}",e.getMessage(),e.getCause());
             if(e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "không thể đặt hàng");
         }
     }
     @PutMapping("/update")

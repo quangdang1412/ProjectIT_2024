@@ -118,7 +118,7 @@ public class ProductDAOImpl implements IProductDAO {
     @Override
     public Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy) {
         Session currentSession = entityManager.unwrap(Session.class);
-        StringBuilder sqlQuery = new StringBuilder("SELECT p FROM ProductModel p WHERE 1=1");
+        StringBuilder sqlQuery = new StringBuilder("SELECT p FROM ProductModel p WHERE 1=1 and p.active=true");
         if (StringUtils.hasLength(categoryID) && StringUtils.hasLength(brandID)) {
             sqlQuery.append(" AND lower(p.category.categoryID) like lower(:categoryID)");
             sqlQuery.append(" AND lower(p.brand.brandID) like lower(:brandID)");
