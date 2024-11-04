@@ -46,3 +46,30 @@ function sendOtherData(check,action) {
     console.log(other + method + endpoint + url)
     sendRequest(method,'other',endpoint, other, url);
 }
+function deleteCoupon(id){
+    const $link = $(`a[onclick*='${id}']`);
+    const currentStatus = $link.text().trim();
+    let str
+    if (currentStatus === "Active")
+        str ="kích hoạt"
+    else
+        str ="vô hiệu hóa"
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+        },
+    });
+    swalWithBootstrapButtons.fire({
+        title: `Bạn có muốn ${str} không?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            sendRequest("DELETE",'other',`delete/${id}`, id, 'delete');
+        }
+    });
+}

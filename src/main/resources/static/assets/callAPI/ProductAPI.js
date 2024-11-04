@@ -15,10 +15,20 @@ function addToCart(productId) {
       success: function (response) {
         console.log("Server response:", response); // Debugging log
         if (response.includes("Đã cập nhật sản phẩm vào giỏ hàng")) {
-          Swal.fire({
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
             icon: "success",
-            title: "Thông báo.",
-            text: response,
+            title: response
           });
           // Cập nhật số lượng sản phẩm trong giỏ hàng trên giao diện
           let countElement = document.getElementById("countProductInCart");
@@ -47,10 +57,20 @@ function deleteProinCart(productId) {
       console.log("Server response:", response); // Debugging log
       // Assume the response is a string that indicates success or error
       if (response.includes("Đã xóa sản phẩm khỏi giỏ hàng")) {
-        Swal.fire({
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
           icon: "success",
-          title: "Thông báo.",
-          text: response,
+          title: response
         });
         $(`tr:has(a[onclick*='${productId}'])`).remove();
         let countElement = document.getElementById("countProductInCart");
@@ -77,5 +97,30 @@ function sendProductData(check) {
   sendRequest(method, "product", endpoint2, data, "/admin/Product");
 }
 function deleteProduct(id) {
-  sendRequest("DELETE", "product", `delete/${id}`, id, "delete");
+  const $link = $(`a[onclick*='${id}']`);
+  const currentStatus = $link.text().trim();
+  let str
+  if (currentStatus === "Active")
+    str ="kích hoạt"
+  else
+    str ="vô hiệu hóa"
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success",
+      cancelButton: "btn btn-danger"
+    },
+  });
+  swalWithBootstrapButtons.fire({
+    title: `Bạn có muốn ${str} sản phẩm không?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes",
+    cancelButtonText: "No",
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sendRequest("DELETE", "product", `delete/${id}`, id, "delete");
+    }
+  });
+
 }

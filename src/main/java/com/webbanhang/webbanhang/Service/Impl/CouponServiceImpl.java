@@ -22,7 +22,8 @@ public class CouponServiceImpl implements ICouponService {
     }
 
     @Override
-    public String delete(CouponModel a) {
+    public String delete(String id) {
+        CouponModel a = couponRepository.findById(id).get();
         a.setActive(!a.isActive());
         couponRepository.save(a);
         return a.getCouponID();

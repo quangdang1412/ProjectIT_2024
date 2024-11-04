@@ -130,4 +130,19 @@ public class OtherAPI {
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseData<String> deleteCoupon(@PathVariable String id)
+    {
+        try{
+
+            String couponID = couponService.delete(id) ;
+            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",couponID);
+        }
+        catch (Exception e){
+            log.error("errorMessage={}",e.getMessage(),e.getCause());
+            if(e instanceof CustomException)
+                return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
+        }
+    }
 }

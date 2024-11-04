@@ -9,8 +9,8 @@ FROM openjdk:21
 
 ARG FILE_JAR=target/*.jar
 
-ADD ${FILE_JAR} api-service.jar
+ADD ${FILE_JAR} TapHoaIT.jar
 
-ENTRYPOINT ["java","-jar","api-service.jar"]
+ENTRYPOINT ["java","-jar","TapHoaIT.jar"]
 
 EXPOSE 80

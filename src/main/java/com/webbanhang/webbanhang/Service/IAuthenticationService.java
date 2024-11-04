@@ -14,6 +14,6 @@ public interface IAuthenticationService {
     AuthenticationResponse login(AuthenticationRequest request,String typeLogin);
     AuthenticationResponse refreshToken(RefreshRequest request);
     boolean logout(String token);
-    String forgotPassword(String email) throws MessagingException, UnsupportedEncodingException;
+    String forgotPassword(String email,String randomString) throws MessagingException, UnsupportedEncodingException;
 }
     

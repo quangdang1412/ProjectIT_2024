@@ -138,10 +138,10 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     }
 
     @Override
-    public String forgotPassword(String email) throws MessagingException, UnsupportedEncodingException {
+    public String forgotPassword(String email,String randomString) throws MessagingException, UnsupportedEncodingException {
         try{
             if (userService.existsByEmail(email)) {
-                String confirmLink = "http://localhost:8080/reset-password?email="+email;
+                String confirmLink = "http://localhost:8080/reset-password?email=" + email + "&token=" + randomString;
                 mailService.sendResetPasswordMail(confirmLink,email);
                 return "Success";
             }
