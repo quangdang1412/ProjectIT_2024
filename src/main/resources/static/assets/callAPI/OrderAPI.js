@@ -28,7 +28,7 @@ function sendOrderData(check) {
       },
     });
   } else {
-    sendRequest(method, "order", endpoint, order, url);
+      sendRequest(method, "order", endpoint, order, url);
   }
 }
 
@@ -40,5 +40,22 @@ function updateOrderData() {
   sendRequest(method, "order", endpoint, order, url);
 }
 function deleteOrder(id) {
-  sendRequest("DELETE", "order", `delete/${id}`, id, "delete");
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success",
+      cancelButton: "btn btn-danger"
+    },
+  });
+  swalWithBootstrapButtons.fire({
+    title: "Bạn có muốn xóa đơn hàng không?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "No, cancel!",
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sendRequest("DELETE", "order", `delete/${id}`, id, "delete");
+    }
+  });
 }

@@ -3,7 +3,6 @@ package com.webbanhang.webbanhang.Service.Impl;
 import com.google.api.client.util.ArrayMap;
 import com.webbanhang.webbanhang.DTO.request.Order.OrderRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.DashboardResponse;
-import com.webbanhang.webbanhang.DTO.response.ResponseError;
 import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.*;
@@ -13,12 +12,9 @@ import com.webbanhang.webbanhang.Repository.IOrderRepository;
 import com.webbanhang.webbanhang.Repository.IProductRepository;
 import com.webbanhang.webbanhang.Repository.IUserCouponRepository;
 import com.webbanhang.webbanhang.Service.IOrderService;
-import com.webbanhang.webbanhang.Service.IProductService;
 import com.webbanhang.webbanhang.Service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -138,8 +134,6 @@ public class OrderServiceImpl implements IOrderService {
             order.setAddress(allParams.get("address"));
             orderRepository.save(order);
             if(checkChangeStatus == 1)
-                mailService.sendUpdateOrderMail(order,checkChangeStatus);
-            else
                 mailService.sendUpdateOrderMail(order,checkChangeStatus);
             if(order.getStatus().equals("Hoàn thành") && order.getPaymentModel().getStatus().equals("Đã thanh toán"))
                 applyCouponBasedOnTotalPrice(order,order.getTotalPrice());

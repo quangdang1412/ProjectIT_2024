@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ICouponService {
     String save(CouponModel a);
-    String delete(CouponModel a);
+    String delete(String a);
     List<CouponModel> getAllCoupon();
     CouponModel findCouponByID(String id);
 

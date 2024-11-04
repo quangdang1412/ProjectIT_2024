@@ -1,11 +1,17 @@
 services:
-  api-service:
-    container_name: TapHoaIT
-    build:
-      context: ./
-      dockerfile: Dockerfile
+  mysqldb:
+    image: mysql:8.0.25
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: taphoait
+      MYSQL_DATABASE: taphoait
+      MYSQL_USER: taphoait
+      MYSQL_PASSWORD: taphoait
     ports:
-      - '8080:80'
+      - '3307:3306'
+    volumes:
+      - ./src/main/resources/database:/docker-entrypoint-initdb.d/
+
 networks:
-  backend:
-    driver: bridge
+    backend:
+      driver: bridge

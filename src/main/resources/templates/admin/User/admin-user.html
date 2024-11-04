@@ -110,7 +110,7 @@
                   </td>
                   <td>
                     <a
-                            th:attr="onclick=|if(confirm('Are you sure you want to change status this user?')) deleteUser('${user.UserID}')|"
+                            th:attr="onclick=|deleteUser('${user.UserID}')|"
                             class="btn btn-warning"
                             th:text="${user.Active} ? 'Inactive' : 'Active&nbsp&nbsp&nbsp'"
                     ></a

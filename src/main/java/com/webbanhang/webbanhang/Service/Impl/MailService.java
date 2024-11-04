@@ -58,7 +58,7 @@ public class MailService {
         Context context = new Context();
         Map<String,Object> properties = new HashMap<>();
         properties.put("orderID",orderModel.getOrderID());
-        properties.put("phoneNumber",orderModel.getUserOrder().getPhone());
+        properties.put("phoneNumber",orderModel.getPhone());
         properties.put("carts",orderModel.getOrderDetails());
         properties.put("address",orderModel.getAddress());
         if (checkChangeStatus == 1) {
@@ -76,7 +76,7 @@ public class MailService {
         helper.setTo(orderModel.getUserOrder().getEmail());
         helper.setSubject("Thông tin đơn hàng TapHoaIT");
         try {
-            String html = templateEngine.process("ConfirmForm", context);
+            String html = templateEngine.process("ConfirmMail", context);
             helper.setText(html, true);
             javaMailSender.send(message);
             log.info("Sent successfully .....");
