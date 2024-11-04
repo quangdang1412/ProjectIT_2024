@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 
 @RequestMapping("/api/auth")
@@ -100,10 +102,13 @@ public class AuthenticationController {
         }
     }
     @PostMapping("/forgot_password")
-    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request,HttpSession session) throws MessagingException, UnsupportedEncodingException {
         String email = request.get("email");
-        String response = authenticationService.forgotPassword(email);
+        String uuid = UUID.randomUUID().toString();  // Tạo UUID ngẫu nhiên
+        String randomString = uuid.substring(0, 6);
+        String response = authenticationService.forgotPassword(email,randomString);
         if ("Success".equals(response)) {
+            session.setAttribute("resetPasswordToken",randomString);
             return ResponseEntity.ok("Password reset link sent successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email not found.");
@@ -111,8 +116,10 @@ public class AuthenticationController {
     }
 
     @PutMapping("/resetPassword")
-    public ResponseData<String> resetPassword(@RequestBody  Map<String, String> allParams) {
+    public ResponseData<String> resetPassword(@RequestBody  Map<String, String> allParams,HttpSession session) {
         try{
+            if(!session.getAttribute("resetPasswordToken").equals(allParams.get("key")))
+                return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Thất bại");
             String email = allParams.get("email");
             String newPassword = allParams.get("newPassword");
             String confirmPassword = allParams.get("confirmPassword");
@@ -124,12 +131,12 @@ public class AuthenticationController {
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Mật khẩu mới và mật khẩu xác nhận không khớp.");
             }
             user.setPassword(passwordEncoder.encode(newPassword));
-
             String userId = userService.changePassword(user.getUserID(),user.getPassword());
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
+            session.setAttribute("resetPasswordToken",null);
+            return new ResponseData<>(HttpStatus.CREATED.value(),"Reset thành công",userId);
         }
         catch (Exception e){
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Reset failed");
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Reset thất bại");
         }
     }
 

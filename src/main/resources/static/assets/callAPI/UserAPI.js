@@ -5,6 +5,7 @@ function sendUserData(check) {
   sendRequest(method,'user',endpoint2, user, '/admin/User');
 }
 function changeUserPassword(email) {
+  const url = new URL(window.location.href);
   if(email === 'null'){
     let data ={
       oldPassword: getValue('oldpassword'),
@@ -15,6 +16,7 @@ function changeUserPassword(email) {
   }
   else{
     let data ={
+      key:url.searchParams.get("token"),
       email: email,
       newPassword: getValue('newpassword'),
       confirmPassword: getValue('confirmpassword'),
