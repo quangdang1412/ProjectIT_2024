@@ -42,4 +42,7 @@ public class CheckLogin {
     public boolean checkRoleAdmin(HttpSession session) {
         return session.getAttribute("UserLoginRole") == null || !session.getAttribute("UserLoginRole").equals("ADMIN");
     }
+    public boolean checkRoleSeller(HttpSession session) {
+        return session.getAttribute("UserLoginRole") == null || !session.getAttribute("UserLoginRole").equals("SELLER");
+    }
 }

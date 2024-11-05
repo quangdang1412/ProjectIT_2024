@@ -76,7 +76,7 @@ public class ProductServiceImpl implements IProductService {
                 String fileName = imageService.upload(file);
                 if(fileName.contains("Something went wrong"))
                     throw new CustomException("Failed");
-                if(imageService.findOneImage(fileName)==null)
+                if(!imageService.isPresent(fileName))
                 {
                     imageService.addImage(fileName);
                 }

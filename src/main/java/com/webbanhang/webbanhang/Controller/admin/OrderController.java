@@ -24,7 +24,7 @@ public class OrderController {
     @GetMapping("/Order")
     public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session)
     {
-        if(checkLogin.checkRoleAdmin(session)) {
+        if(checkLogin.checkRoleAdmin(session) && checkLogin.checkRoleSeller(session)) {
             return "redirect:/404";
         }
         String type = allParams.get("type");

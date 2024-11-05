@@ -4,6 +4,7 @@ import com.webbanhang.webbanhang.DTO.request.User.AuthenticationRequest;
 import com.webbanhang.webbanhang.DTO.request.User.RefreshRequest;
 import com.webbanhang.webbanhang.DTO.response.ResponseData;
 import com.webbanhang.webbanhang.DTO.response.ResponseError;
+import com.webbanhang.webbanhang.Exception.EmailAlreadyExistsException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.AuthenticationResponse;
 import com.webbanhang.webbanhang.Model.RegisterRequest;
@@ -45,6 +46,8 @@ public class AuthenticationController {
                     .body(response);
         }
         catch (Exception e){
+            if(e instanceof EmailAlreadyExistsException)
+                return ResponseEntity.status(409).body(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -118,7 +121,7 @@ public class AuthenticationController {
     @PutMapping("/resetPassword")
     public ResponseData<String> resetPassword(@RequestBody  Map<String, String> allParams,HttpSession session) {
         try{
-            if(!session.getAttribute("resetPasswordToken").equals(allParams.get("key")))
+            if(!session.getAttribute("resetPasswordToken").equals(allParams.get("resetPasswordKey")))
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Thất bại");
             String email = allParams.get("email");
             String newPassword = allParams.get("newPassword");
@@ -133,10 +136,10 @@ public class AuthenticationController {
             user.setPassword(passwordEncoder.encode(newPassword));
             String userId = userService.changePassword(user.getUserID(),user.getPassword());
             session.setAttribute("resetPasswordToken",null);
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Reset thành công",userId);
+            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
         }
         catch (Exception e){
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Reset thất bại");
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Fail");
         }
     }
 
