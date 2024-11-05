@@ -53,7 +53,6 @@ public class OrderServiceImpl implements IOrderService {
                     .name(a.getName())
                     .address(a.getAddress())
                     .phone(a.getPhone())
-                    .status("Chờ xác nhận")
                     .build();
             PaymentModel payment = new PaymentModel();
             LocalDate today = LocalDate.now();
@@ -76,11 +75,13 @@ public class OrderServiceImpl implements IOrderService {
             {
                 payment.setMethod("Online Banking");
                 payment.setStatus("Chưa thanh toán");
+                order.setStatus("Chờ thanh toán");
             }
             else
             {
                 payment.setMethod("Thanh toán khi nhận hàng");
                 payment.setStatus("Chưa thanh toán");
+                order.setStatus("Chờ xác nhận");
             }
             order.setPaymentModel(payment);
             List<OrderDetailModel> orderDetailModels = new ArrayList<>();

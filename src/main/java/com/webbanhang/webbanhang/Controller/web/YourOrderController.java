@@ -40,13 +40,13 @@ public class YourOrderController {
         return "redirect:/login";
     }
     @GetMapping("/yourOrder/updateorder")
-    public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session)
+    public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session, String status,@RequestParam(required = false) String cancel)
     {
         //checkLogin.checkLogin(session,model,userService);
         UserModel a = (UserModel)session.getAttribute("UserLogin");
 
         String action = allParams.get("action");
-        String id =allParams.get("id");
+        String id =allParams.get("orderID");
         OrderModel orderModel = orderService.getOrderByID(id);
         if(a == null || !orderModel.getUserOrder().getUserID().equals(a.getUserID()))
             return "redirect:/login";
@@ -55,6 +55,8 @@ public class YourOrderController {
         }
         switch (action) {
             case "edit":
+                model.addAttribute("status", status);
+                model.addAttribute("cancel", cancel);
                 return updateOrderForm(model,id);
             default:
                 return "redirect:/yourOrder";
@@ -71,7 +73,7 @@ public class YourOrderController {
         }
         switch (action) {
             default:
-                return checkActionGet(model,allParams,session);
+                return checkActionGet(model,allParams,session,"","");
 
         }
     }
