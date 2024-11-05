@@ -112,8 +112,9 @@
                 </td>
                 <td>
                   <a
-                          class="btn btn-danger"
-                          th:attr="onclick=|if(confirm('Are you sure you want to delete this order?')) deleteOrder('${order.OrderID}')|"
+                          th:="${session.authorities != 3}"
+                          class="btn btn-danger no-change"
+                          th:attr="onclick=|deleteOrder('${order.OrderID}')|"
                   >Delete</a
                   >
                 </td>
