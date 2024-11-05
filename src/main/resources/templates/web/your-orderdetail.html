@@ -51,6 +51,8 @@
   </head>
 
   <body>
+    <div id="status" style="display: none" th:text="${status}"></div>
+    <div id="cancel" style="display: none" th:text="${cancel}"></div>
     <!-- Spinner Start -->
     <div
       class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center"
@@ -337,6 +339,7 @@
                 <button
                     class="btn btn-success mt-2 me-2"
                     type="button"
+                    th:attr="onclick=|updateYourOrderData()|"
                     th:if="${Status == 'Chờ thanh toán'}" 
                 >Thanh Toán
                 </button>
@@ -412,6 +415,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script th:src="@{/assets/callAPI/SendAPI.js}"></script>
     <script th:src="@{/assets/callAPI/OrderAPI.js}"></script>
+    <script th:src="@{/assets/callAPI/checkpaid.js}"></script>
+    <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
 
     <!-- Template Javascript -->
     <script th:src="@{/assets/js/main.js}"></script>
