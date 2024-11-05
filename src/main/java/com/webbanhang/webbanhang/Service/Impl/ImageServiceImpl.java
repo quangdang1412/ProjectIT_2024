@@ -39,7 +39,7 @@ public class ImageServiceImpl implements IImageService {
 
     @Override
     public ImageModel findOneImage(String id) {
-        return imageRepository.findById(id).get();
+        return imageRepository.findByImageCode(id);
     }
 
     @Override
@@ -47,6 +47,12 @@ public class ImageServiceImpl implements IImageService {
         ImageModel imageModel = new ImageModel();
         imageModel.setImageCode(code);
         imageRepository.save(imageModel);
+        System.out.println("hmm");
+    }
+
+    @Override
+    public boolean isPresent(String id) {
+        return imageRepository.findByImageCode(id) != null;
     }
 
 

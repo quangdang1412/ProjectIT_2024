@@ -16,7 +16,7 @@ function changeUserPassword(email) {
   }
   else{
     let data ={
-      key:url.searchParams.get("token"),
+      resetPasswordKey:url.searchParams.get("resetPasswordKey"),
       email: email,
       newPassword: getValue('newpassword'),
       confirmPassword: getValue('confirmpassword'),
@@ -25,7 +25,30 @@ function changeUserPassword(email) {
       xhr.open("PUT", `http://localhost:8080/api/auth/resetPassword`, true);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.onreadystatechange = function () {
-        notify(xhr,"/",data)
+        let response = JSON.parse(xhr.responseText);
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            if (response.message === "Success") {
+              Swal.fire({
+                icon: "success",
+                title: "Thông báo.",
+                text: "Reset thành công",
+              })
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Thông báo.",
+                text: "Reset thất bại",
+              });
+            }
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Thông báo.",
+              text: response.message,
+            });
+          }
+        }
       };
       xhr.send(JSON.stringify(data));
     }
