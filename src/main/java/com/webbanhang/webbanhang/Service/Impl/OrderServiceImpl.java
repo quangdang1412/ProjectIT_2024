@@ -186,9 +186,9 @@ public class OrderServiceImpl implements IOrderService {
             PaymentModel payment = order.getPaymentModel();
             if (payment == null) {
                 payment = new PaymentModel();
-                order.setPaymentModel(payment);// Set lại payment cho order
+                order.setPaymentModel(payment);
             }
-    
+            order.setStatus("Chờ xác nhận");
             payment.setStatus("Đã thanh toán");
     
             orderRepository.save(order);
