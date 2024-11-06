@@ -35,7 +35,7 @@ public class UserAPI {
     {
         try{
             log.info("Request add user: {}",userDTO.getUserName());
-            String userId = userService.saveUser(userDTO);
+            String userId = userService.saveUser(userDTO,1);
             return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
         }
         catch (Exception e){
@@ -59,7 +59,7 @@ public class UserAPI {
                     .email(signUpRequestDTO.getEmail())
                     .gender("")
                     .build();
-            String userId = userService.saveUser(userDTO);
+            String userId = userService.saveUser(userDTO,1);
             return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
         }
         catch (Exception e){
@@ -74,7 +74,7 @@ public class UserAPI {
     {
         try{
             log.info("Request update user: {}",userDTO.getUserName());
-            String userId = userService.saveUser(userDTO);
+            String userId = userService.saveUser(userDTO,2);
             return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
         }
         catch (Exception e){
@@ -100,7 +100,7 @@ public class UserAPI {
                     .gender(updateUserRequestDTO.getGender())
                     .address(updateUserRequestDTO.getAddress())
                     .build();
-            String userId = userService.saveUser(userDTO);
+            String userId = userService.saveUser(userDTO,2);
             return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
         }
         catch (Exception e){

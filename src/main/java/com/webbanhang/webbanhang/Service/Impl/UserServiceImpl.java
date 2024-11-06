@@ -91,7 +91,7 @@ public class UserServiceImpl implements IUserService {
         }
     }
     @Override
-    public String saveUser(UserRequestDTO request) {
+    public String saveUser(UserRequestDTO request,int check) {
         RoleModel role = roleRepository.findById(request.getType()).orElseThrow(() -> new ResourceNotFoundException("Role not found"));
         try{
             UserModel userModel= UserModel.builder()
@@ -102,8 +102,13 @@ public class UserServiceImpl implements IUserService {
                     .phone(request.getPhone())
                     .address(request.getAddress())
                     .gender(String.valueOf(request.getGender()))
-                    .password(passwordEncoder.encode(request.getPassword()))
                     .build();
+            if(check ==1){
+                userModel.setPassword(passwordEncoder.encode(request.getPassword()));
+            }
+            else{
+                userModel.setPassword(userRepository.getUserByEmail(request.getEmail()).getPassword());
+            }
             userRepository.save(userModel);
             return userModel.getUserID();
         }catch (Exception e){

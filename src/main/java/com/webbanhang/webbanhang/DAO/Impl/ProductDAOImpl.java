@@ -125,6 +125,9 @@ public class ProductDAOImpl implements IProductDAO {
         } else if (StringUtils.hasLength(categoryID) && !StringUtils.hasLength(brandID)) {
             sqlQuery.append(" AND lower(p.category.categoryID) like lower(:categoryID)");
         }
+        else if (!StringUtils.hasLength(categoryID) && StringUtils.hasLength(brandID)) {
+            sqlQuery.append(" AND lower(p.brand.brandID) like lower(:brandID)");
+        }
 
         if (StringUtils.hasLength(sortBy)) {
             //asc|desc
@@ -137,6 +140,8 @@ public class ProductDAOImpl implements IProductDAO {
             selectQuery.setParameter("brandID", String.format(LIKE_FORMAT, brandID));
         } else if (StringUtils.hasLength(categoryID) && !StringUtils.hasLength(brandID)) {
             selectQuery.setParameter("categoryID", String.format(LIKE_FORMAT,categoryID));
+        } else if (!StringUtils.hasLength(categoryID) && StringUtils.hasLength(brandID)) {
+            selectQuery.setParameter("brandID", String.format(LIKE_FORMAT,brandID));
         }
         Pageable pageable = PageRequest.of(a-1,9);
         selectQuery.setFirstResult((a - 1) * 9);

@@ -18,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
@@ -68,8 +70,6 @@ public class OrderServiceImpl implements IOrderService {
                 order.setDeliveryTime(Date.valueOf(fastDay));
                 order.setTransportFee(100000.0);
             }
-
-            order.setOrderDate(Date.valueOf(today));
             payment.setOrderPayment(order);
             if(!a.getPaymentMethod().equals("InPlace"))
             {
@@ -128,7 +128,6 @@ public class OrderServiceImpl implements IOrderService {
             int checkChangeStatus = 0;
             if(!order.getStatus().equals(allParams.get("status"))){
                 order.setSellerOrder(userService.findUserByID(allParams.get("sellerID")));
-                order.setShipperOrder(userService.findUserByID(allParams.get("shipperID")));
                 order.setStatus((allParams.get("status")));
                 checkChangeStatus = 1;
             }
@@ -169,13 +168,28 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public List<OrderModel> getOrderByStatus(String status) {
+        if(status.equals("Chờ thanh toán")){
+            List<OrderModel> listOrder = orderRepository.getOrderByStatus(status);
+            for( OrderModel a : listOrder){
+                expiredOrder(a);
+            }
+        }
         return orderRepository.getOrderByStatus(status);
     }
-
+    @Override
+    public void expiredOrder(OrderModel a) {
+        LocalDateTime today = LocalDateTime.now();
+        Duration duration = Duration.between(a.getCreated_at(), today);
+        if (duration.toHours() > 1) {
+            deleteOrder(a.getOrderID());
+        }
+        orderRepository.save(a);
+    }
     @Override
     public OrderModel getOrderByID(String id) {
         return orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
+
     @Override
     public boolean updateStatus(String orderId) {
         Optional<OrderModel> optionalOrder = orderRepository.findById(orderId);
@@ -197,6 +211,8 @@ public class OrderServiceImpl implements IOrderService {
     
         return false;
     }
+
+
     @Override
     public DashboardResponse dataChart(LocalDate startDate,LocalDate endDate){
         // chart Area

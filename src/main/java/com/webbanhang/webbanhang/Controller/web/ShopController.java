@@ -1,14 +1,11 @@
 package com.webbanhang.webbanhang.Controller.web;
 
-import java.util.List;
-
-import com.webbanhang.webbanhang.Model.CartModel;
-import com.webbanhang.webbanhang.Model.UserModel;
+import com.webbanhang.webbanhang.Model.*;
+import com.webbanhang.webbanhang.Service.IBrandService;
 import com.webbanhang.webbanhang.Service.ICartService;
-import com.webbanhang.webbanhang.Service.IUserService;
-import com.webbanhang.webbanhang.Util.CheckLogin;
+import com.webbanhang.webbanhang.Service.ICategoryService;
+import com.webbanhang.webbanhang.Service.IProductService;
 import com.webbanhang.webbanhang.Util.LoadData;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,19 +14,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import com.webbanhang.webbanhang.Model.CategoryModel;
-import com.webbanhang.webbanhang.Model.ProductModel;
-import com.webbanhang.webbanhang.Service.ICategoryService;
-import com.webbanhang.webbanhang.Service.IProductService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.util.StringUtils;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class ShopController {
     private final ICategoryService  categoryService;
+    private final IBrandService brandService;
     private final IProductService productService;
     private final ICartService cartService;
     private final LoadData loadData;
@@ -40,7 +35,13 @@ public class ShopController {
             List<ProductModel> products = productService.findCategory(category.getCategoryID());
             category.setProducts(products);
         }
+        List<BrandModel> brands = brandService.getAllBrand();
+        for (BrandModel brand : brands) {
+            List<ProductModel> products = productService.findBrand(brand.getBrandID());
+            brand.setProducts(products);
+        }
         model.addAttribute("categories", categories);
+        model.addAttribute("brands", brands);
 
     }
 

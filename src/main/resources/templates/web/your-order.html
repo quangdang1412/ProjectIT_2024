@@ -101,18 +101,18 @@
                   <td
                     th:text="${#numbers.formatDecimal(order.TotalPrice + order.TransportFee, 1, 'COMMA', 0, 'POINT')} + ' VND'"
                   ></td>
-                  <td th:text="${order.Status}"></td>
+                  <td id="status-${order.OrderID}" th:text="${order.Status}"></td>
                   <td>
                     <a
                       th:href="@{/yourOrder/updateorder(action='edit', orderID=${order.OrderID})}"
                       class="btn btn-info"
-                      th:text="${order.Status == 'Chờ xác nhận' ? 'Update' : 'Infor'}"
+                      th:text="${order.Status == 'Chờ xác nhận' or order.Status == 'Chờ thanh toán'  ? 'Update' : 'Info'}"
                     ></a>
                   </td>
                   <td>
                     <a
                       class="btn btn-danger no-change"
-                      th:if="${order.Status == 'Chờ xác nhận'}"
+                      th:if="${order.Status == 'Chờ xác nhận' or order.Status == 'Chờ thanh toán'}"
                       th:attr="onclick=|deleteOrder('${order.OrderID}')|"
                       >Delete</a
                     >

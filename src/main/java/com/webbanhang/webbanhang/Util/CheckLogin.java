@@ -36,7 +36,7 @@ public class CheckLogin {
             UserModel userModel = (UserModel) session.getAttribute("UserLogin");
             UserModel newUser = userService.findUserByID(userModel.getUserID());
             session.setAttribute("UserLogin", newUser);
-            session.setAttribute("countProductInCart", newUser.getUserCart() != null ? newUser.getUserCart().size() : 0);
+            session.setAttribute("countProductInCart", !newUser.getUserCart().isEmpty() ? newUser.getUserCart().size() : 0);
         }
     }
     public boolean checkRoleAdmin(HttpSession session) {

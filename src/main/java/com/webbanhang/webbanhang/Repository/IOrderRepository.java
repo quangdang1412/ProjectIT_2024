@@ -15,7 +15,7 @@ public interface IOrderRepository extends JpaRepository<OrderModel,String> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM OrderModel o WHERE o.orderID = ?1")
+    @Query("UPDATE OrderModel o SET o.status='Đã hủy đơn' WHERE o.orderID = ?1")
     void deleteOrder(String a);
 
     @Transactional

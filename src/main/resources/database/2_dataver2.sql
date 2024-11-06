@@ -1,3 +1,4 @@
+USE taphoait;
 -- MySQL dump 10.13  Distrib 8.0.25, for Win64 (x86_64)
 --
 -- Host: localhost    Database: taphoait
@@ -18,7 +19,7 @@
 --
 -- Dumping data for table `brand_tb`
 --
-USE taphoait;
+
 LOCK TABLES `brand_tb` WRITE;
 /*!40000 ALTER TABLE `brand_tb` DISABLE KEYS */;
 INSERT INTO `brand_tb` VALUES ('B001','Brand A'),('B002','Brand B'),('B003','Brand C');
@@ -101,7 +102,18 @@ UNLOCK TABLES;
 
 LOCK TABLES `shop_order_tb` WRITE;
 /*!40000 ALTER TABLE `shop_order_tb` DISABLE KEYS */;
-INSERT INTO `shop_order_tb` VALUES ('O001','U002','U002','U003','2024-06-05',200,20,'2024-06-10','Nguyen Van A','123321231213','đường 23, phường 3, thành phố Biên Hòa, tỉnh Đồng Nai','Đã xác nhận'),('O002','U004','U002','U003','2024-06-06',300,30,'2024-06-12','John Doe','0987654321','456 Oak St, Townsville','Đã xác nhận'),('O003','U002','U002','U003','2024-06-07',250,25,'2024-06-13','Nguyen Thi B','1112223333','123 Elm St, Cityville','Chờ xác nhận'),('O004','U003','U002','U003','2024-06-08',350,35,'2024-06-14','Tran Van C','2223334444','789 Pine St, Villagetown','Đã xác nhận'),('O005','U004','U002','U003','2024-06-09',400,40,'2024-06-15','Le Thi D','3334445555','101 Maple St, Hamlet','Hoàn thành'),('O006','U002','U002','U003','2024-06-10',450,45,'2024-06-16','Pham Van E','4445556666','567 Cedar St, Metropolis','Hoàn thành'),('O007','U005','U002','U003','2024-07-01',500,50,'2024-07-07','Nguyen Van F','5556667777','234 Cedar St, Smalltown','Chờ xác nhận'),('O008','U006','U002','U003','2024-07-02',600,60,'2024-07-08','Hoang Thi G','6667778888','345 Spruce St, Bigcity','Hoàn thành'),('O009','U007','U002','U003','2024-07-03',700,70,'2024-07-09','Nguyen Van H','7778889999','456 Willow St, Largetown','Đang giao'),('O010','U008','U002','U003','2024-07-04',800,80,'2024-07-10','Tran Thi I','8889990000','567 Maple St, Uptown','Hoàn thành');
+INSERT INTO `shop_order_tb`
+VALUES
+    ('O001', 'U002', 'U002', '2024-06-05', 200, 20, '2024-06-10', 'Nguyen Van A', '123321231213', 'đường 23, phường 3, thành phố Biên Hòa, tỉnh Đồng Nai', 'Đã xác nhận', '2024-06-05 10:30:00'),
+    ('O002', 'U004', 'U002', '2024-06-06', 300, 30, '2024-06-12', 'John Doe', '0987654321', '456 Oak St, Townsville', 'Đã xác nhận', '2024-06-06 11:00:00'),
+    ('O003', 'U002', 'U002', '2024-06-07', 250, 25, '2024-06-13', 'Nguyen Thi B', '1112223333', '123 Elm St, Cityville', 'Chờ xác nhận', '2024-06-07 12:15:00'),
+    ('O004', 'U003', 'U002', '2024-06-08', 350, 35, '2024-06-14', 'Tran Van C', '2223334444', '789 Pine St, Villagetown', 'Đã xác nhận', '2024-06-08 13:45:00'),
+    ('O005', 'U004', 'U002', '2024-06-09', 400, 40, '2024-06-15', 'Le Thi D', '3334445555', '101 Maple St, Hamlet', 'Hoàn thành', '2024-06-09 14:30:00'),
+    ('O006', 'U002', 'U002', '2024-06-10', 450, 45, '2024-06-16', 'Pham Van E', '4445556666', '567 Cedar St, Metropolis', 'Hoàn thành', '2024-06-10 15:20:00'),
+    ('O007', 'U005', 'U002', '2024-07-01', 500, 50, '2024-07-07', 'Nguyen Van F', '5556667777', '234 Cedar St, Smalltown', 'Chờ xác nhận', '2024-07-01 16:10:00'),
+    ('O008', 'U006', 'U002', '2024-07-02', 600, 60, '2024-07-08', 'Hoang Thi G', '6667778888', '345 Spruce St, Bigcity', 'Hoàn thành', '2024-07-02 17:00:00'),
+    ('O009', 'U007', 'U002', '2024-07-03', 700, 70, '2024-07-09', 'Nguyen Van H', '7778889999', '456 Willow St, Largetown', 'Đang giao', '2024-07-03 18:45:00'),
+    ('O010', 'U008', 'U002', '2024-07-04', 800, 80, '2024-07-10', 'Tran Thi I', '8889990000', '567 Maple St, Uptown', 'Hoàn thành', '2024-07-04 19:30:00');
 /*!40000 ALTER TABLE `shop_order_tb` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,20 +154,20 @@ UNLOCK TABLES;
 LOCK TABLES `user_tb` WRITE;
 /*!40000 ALTER TABLE `user_tb` DISABLE KEYS */;
 INSERT INTO `user_tb` VALUES ('U001','Alice Smith','123 Main St','1234567890','Nữ','alice@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
-('U002','Bob Johnson','456 Oak St','0987654321','Nam','bob@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',3,1),
-('U003','Charlie Brown','789 Pine St','5556667777','Nam','charlie@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',4,1),
-('U004','Diana Prince','101 Maple St','4445556666','Nữ','diana@example.com','$2a$10$trT7OMIGOaJcIhcmjL9rR.NyO0ROnWHdoj5.osLIFhO3si1SzEj/.',1,1),
-('U005','Eve Adams','234 Cedar St','1112223333','Nam','eve@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
-('U006','Frank Black','345 Spruce St','2223334444','Nữ','frank@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',3,1),
-('U007','Grace Clark','456 Willow St','3334445555','Nam','grace@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',4,1),
-('U008','Hank Davis','567 Maple St','4445456666','Nữ','hank@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',1,1),
-('U10','Nguyễn Quang',NULL,NULL,NULL,'ndquangtestsend@gmail.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
-('U11','Thanh Phong Lê',NULL,NULL,NULL,'phongga0903@gmail.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
-('U12','Le Thanh Phong',NULL,NULL,NULL,'22110198@student.hcmute.edu.vn','$2a$10$336lllYRiAh7xwxUqiVvFu1ydlYk6aKuVcIskc9cTIo8sLlLc0n0C',2,1),
-('U13','Nguyễn Hoài Bảo',NULL,'231412412',NULL,'22110108@student.hcmute.edu.vn','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
-('U14','31.Lê Thanh Phong - 12C1',NULL,NULL,NULL,'occholacothatkk@gmail.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
-('U15','haro',NULL,'1233457567',NULL,'22110134@student.hcmute.edu.vn','$2a$10$zXevvaa.ySduRQIy4NgiZuIhguhLBX32OTn.GDUERCEAJZX3Srbxe',2,1),
-('U9','phongga088',NULL,'0815474739',NULL,'phongga088@gmail.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1);
+                             ('U002','Bob Johnson','456 Oak St','0987654321','Nam','bob@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',3,1),
+                             ('U003','Charlie Brown','789 Pine St','5556667777','Nam','charlie@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',4,1),
+                             ('U004','Diana Prince','101 Maple St','4445556666','Nữ','diana@example.com','$2a$10$trT7OMIGOaJcIhcmjL9rR.NyO0ROnWHdoj5.osLIFhO3si1SzEj/.',1,1),
+                             ('U005','Eve Adams','234 Cedar St','1112223333','Nam','eve@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
+                             ('U006','Frank Black','345 Spruce St','2223334444','Nữ','frank@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',3,1),
+                             ('U007','Grace Clark','456 Willow St','3334445555','Nam','grace@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',4,1),
+                             ('U008','Hank Davis','567 Maple St','4445456666','Nữ','hank@example.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',1,1),
+                             ('U10','Nguyễn Quang',NULL,NULL,NULL,'ndquangtestsend@gmail.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
+                             ('U11','Thanh Phong Lê',NULL,NULL,NULL,'phongga0903@gmail.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
+                             ('U12','Le Thanh Phong',NULL,NULL,NULL,'22110198@student.hcmute.edu.vn','$2a$10$336lllYRiAh7xwxUqiVvFu1ydlYk6aKuVcIskc9cTIo8sLlLc0n0C',2,1),
+                             ('U13','Nguyễn Hoài Bảo',NULL,'231412412',NULL,'22110108@student.hcmute.edu.vn','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
+                             ('U14','31.Lê Thanh Phong - 12C1',NULL,NULL,NULL,'occholacothatkk@gmail.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1),
+                             ('U15','haro',NULL,'1233457567',NULL,'22110134@student.hcmute.edu.vn','$2a$10$zXevvaa.ySduRQIy4NgiZuIhguhLBX32OTn.GDUERCEAJZX3Srbxe',2,1),
+                             ('U9','phongga088',NULL,'0815474739',NULL,'phongga088@gmail.com','$2a$10$w1RrbKx6jJ1VklqQt516YunGacRnZ4/7B3hlDbrD4OLm5Tc0RfVUe',2,1);
 /*!40000 ALTER TABLE `user_tb` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -169,3 +181,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2024-10-28  9:40:39
+

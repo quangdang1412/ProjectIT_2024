@@ -115,6 +115,11 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    public List<ProductModel> findBrand(String id) {
+        return productRepository.findByBrand(id);
+    }
+
+    @Override
     public List<ProductModel> getProductOutOfStock() {
         return productRepository.getProductOutOfStock();
     }

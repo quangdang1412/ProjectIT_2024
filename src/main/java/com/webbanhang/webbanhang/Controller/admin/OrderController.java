@@ -24,22 +24,22 @@ public class OrderController {
     @GetMapping("/Order")
     public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session)
     {
-        if(checkLogin.checkRoleAdmin(session) && checkLogin.checkRoleSeller(session)) {
+        if(checkLogin.checkRoleAdmin(session) || checkLogin.checkRoleSeller(session)) {
+            String type = allParams.get("type");
+            String action = allParams.get("action");
+            String id =allParams.get("id");
+            if (action == null) {
+                action = "list";
+            }
+            switch (action) {
+                case "edit":
+                    return updateOrderForm(model,id);
+                default:
+                    return listOrder(model,type);
+            }
+        }
+        else
             return "redirect:/404";
-        }
-        String type = allParams.get("type");
-        String action = allParams.get("action");
-        String id =allParams.get("id");
-        if (action == null) {
-            action = "list";
-        }
-        switch (action) {
-            case "edit":
-                return updateOrderForm(model,id);
-            default:
-                return listUser(model,type);
-
-        }
     }
     @PostMapping("/Order")
     public String checkActionPost(Model model, HttpSession session, @RequestParam Map<String,String> allParams, @ModelAttribute("Order") OrderModel order)
@@ -54,13 +54,17 @@ public class OrderController {
 
         }
     }
-    public String listUser(Model model,String type ) {
+    public String listOrder(Model model,String type ) {
+
         if(type ==null)
         {
             model.addAttribute("listOrder", orderService.getOrderByStatus("Hoàn thành"));
         }
         else{
             switch (type) {
+                case "0":
+                    model.addAttribute("listOrder",orderService.getOrderByStatus("Chờ thanh toán"));
+                    break;
                 case "1":
                     model.addAttribute("listOrder",orderService.getOrderByStatus("Chờ xác nhận"));
                     break;
@@ -98,7 +102,6 @@ public class OrderController {
         model.addAttribute("DeliveryTime",a.getDeliveryTime());
         model.addAttribute("Status",a.getStatus());
         model.addAttribute("sellerName",a.getSellerOrder() != null ? a.getSellerOrder().getUsername() : null);
-        model.addAttribute("shipperName",a.getShipperOrder() != null ? a.getShipperOrder().getUsername() : null);
         model.addAttribute("Order",a);
         return "/admin/Order/AddOrder";
     }

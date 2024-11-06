@@ -14,6 +14,7 @@ public interface IProductService {
     String saveProduct(ProductRequestDTO productRequestDTO, MultipartFile file);
     String deleteProduct(String a);
     List<ProductModel> findCategory(String id);
+    List<ProductModel> findBrand(String id);
     List<ProductModel> getProductOutOfStock();
     Page<ProductModel> findCategoryForPage(String id,Integer a);
     Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy);
