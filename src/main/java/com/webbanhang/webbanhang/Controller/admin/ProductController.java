@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
+import java.util.UUID;
 
 
 @Controller
@@ -111,8 +112,7 @@ public class ProductController {
         model.addAttribute("listCategory", categoryService.getAllCategory());
         model.addAttribute("listDiscount", discountService.getAllDiscount());
         model.addAttribute("listSupplier", supplierService.getAllSupplier());
-        int x= productService.getAllProduct().size()+1;
-        String s="P"+x;
+        String s="P"+ UUID.randomUUID().toString().substring(0, 8);;
         model.addAttribute("ProductID",s);
         model.addAttribute("checkPro",null);
         model.addAttribute("Product",new ProductModel());

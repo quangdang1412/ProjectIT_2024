@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -47,8 +48,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         if (userService.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException("Email đã đăng kí tài khoản: " + request.getEmail());
         }
+        if (request.getPassword().length()<6) {
+            throw new EmailAlreadyExistsException("Mật khẩu phải dài hơn hoặc bằng 6 kí tự");
+        }
         UserModel newUser = new UserModel();
-        String userId = "U" + (userService.getAllUser().size() + 1);
+        String userId = "U" + UUID.randomUUID().toString().substring(0, 8);
         newUser.setUserName(request.getName());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setEmail(request.getEmail());

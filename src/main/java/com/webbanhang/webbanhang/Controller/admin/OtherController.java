@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = {"/admin"})
@@ -135,8 +136,7 @@ public class OtherController {
     public String addBrandForm(Model model)
     {
         model.addAttribute("checkBrand",null);
-        int x= brandService.getAllBrand().size()+1;
-        String s="B"+x;
+        String s="B"+ UUID.randomUUID().toString().substring(0, 8);;
         model.addAttribute("BrandID",s);
         model.addAttribute("title","Thông tin thương hiệu");
         model.addAttribute("example","Brand");
@@ -147,8 +147,7 @@ public class OtherController {
     public String addCategoryForm(Model model)
     {
         model.addAttribute("checkCategory",null);
-        int x= categoryService.getAllCategory().size()+1;
-        String s="C"+x;
+        String s="C"+UUID.randomUUID().toString().substring(0, 8);;
         model.addAttribute("CategoryID",s);
         model.addAttribute("title","Thông tin danh mục");
         model.addAttribute("example","Category");
@@ -159,8 +158,7 @@ public class OtherController {
     public String addDiscountForm(Model model)
     {
         model.addAttribute("checkDiscount",null);
-        int x= discountService.getAllDiscount().size()+1;
-        String s="D"+x;
+        String s="D"+UUID.randomUUID().toString().substring(0, 8);;
         model.addAttribute("DiscountID",s);
         model.addAttribute("title","Thông tin khuyến mãi");
         model.addAttribute("example","Discount");
@@ -171,8 +169,7 @@ public class OtherController {
     public String addCouponForm(Model model)
     {
         model.addAttribute("checkDiscount",null);
-        int x= couponService.getAllCoupon().size()+1;
-        String s="Cp"+x;
+        String s="CP"+UUID.randomUUID().toString().substring(0, 8);
         model.addAttribute("CouponID",s);
         model.addAttribute("title","Thông tin coupon");
         model.addAttribute("example","Coupon");

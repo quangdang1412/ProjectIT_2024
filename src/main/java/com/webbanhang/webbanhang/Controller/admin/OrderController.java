@@ -74,6 +74,9 @@ public class OrderController {
                 case "3":
                     model.addAttribute("listOrder",orderService.getOrderByStatus("Đang giao"));
                     break;
+                case "5":
+                    model.addAttribute("listOrder",orderService.getOrderByStatus("Đã hủy đơn"));
+                    break;
                 default:
                     model.addAttribute("listOrder", orderService.getOrderByStatus("Hoàn thành"));
                     break;

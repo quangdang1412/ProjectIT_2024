@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = {"/admin"})
@@ -55,8 +56,7 @@ public class UserController  {
     {
         model.addAttribute("listRole",roleService.getAllRole());
         model.addAttribute("checkUser",null);
-        int x= userService.getAllUser().size()+1;
-        String s="U"+x;
+        String s="U"+ UUID.randomUUID().toString().substring(0, 8);
         model.addAttribute("UserID",s);
         model.addAttribute("User",new UserModel());
         return "/admin/User/AddUser";
