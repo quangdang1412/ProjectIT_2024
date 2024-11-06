@@ -24,22 +24,22 @@ public class OrderController {
     @GetMapping("/Order")
     public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session)
     {
-        if(checkLogin.checkRoleAdmin(session) && checkLogin.checkRoleSeller(session)) {
+        if(checkLogin.checkRoleAdmin(session) || checkLogin.checkRoleSeller(session)) {
+            String type = allParams.get("type");
+            String action = allParams.get("action");
+            String id =allParams.get("id");
+            if (action == null) {
+                action = "list";
+            }
+            switch (action) {
+                case "edit":
+                    return updateOrderForm(model,id);
+                default:
+                    return listUser(model,type);
+            }
+        }
+        else
             return "redirect:/404";
-        }
-        String type = allParams.get("type");
-        String action = allParams.get("action");
-        String id =allParams.get("id");
-        if (action == null) {
-            action = "list";
-        }
-        switch (action) {
-            case "edit":
-                return updateOrderForm(model,id);
-            default:
-                return listUser(model,type);
-
-        }
     }
     @PostMapping("/Order")
     public String checkActionPost(Model model, HttpSession session, @RequestParam Map<String,String> allParams, @ModelAttribute("Order") OrderModel order)

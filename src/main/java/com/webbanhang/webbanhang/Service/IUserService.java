@@ -15,7 +15,7 @@ public interface IUserService {
     List<UserModel> findByRole(int r);
     String changePassword(String id, String pass);
     String deleteUser(String id);
-    String saveUser(UserRequestDTO request);
+    String saveUser(UserRequestDTO request,int a);
     UserModel updateUser(String id, UserModel user);
     UserModel createUser(UserModel user);
     boolean existsByEmail(String email);

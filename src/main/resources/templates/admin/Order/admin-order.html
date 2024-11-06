@@ -112,7 +112,7 @@
                 </td>
                 <td>
                   <a
-                          th:="${session.authorities != 3}"
+                          th:if="${session.authorities != 3}"
                           class="btn btn-danger no-change"
                           th:attr="onclick=|deleteOrder('${order.OrderID}')|"
                   >Delete</a

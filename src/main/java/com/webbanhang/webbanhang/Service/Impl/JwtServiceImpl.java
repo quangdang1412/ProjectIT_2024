@@ -5,7 +5,9 @@ import java.util.Date;
 
 import com.webbanhang.webbanhang.Model.Token;
 import com.webbanhang.webbanhang.Repository.ITokenRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtServiceImpl implements IJwtService {
     private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
     private final ITokenRepository tokenRepository;
@@ -65,10 +68,18 @@ public class JwtServiceImpl implements IJwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
     public boolean isValid(String token, UserModel user) {
-        final String email = extractUsername(token);
-        Optional<Token> tokenOptional = tokenRepository.findByEmail(email);
-        boolean checkToken = tokenOptional.get().getToken().equals(token);
-        return (email.equals(user.getEmail()) && !isTokenExpired(token) && checkToken);
+        try{
+            final String email = extractUsername(token);
+            Optional<Token> tokenOptional = tokenRepository.findByEmail(email);
+            boolean checkToken = tokenOptional.get().getToken().equals(token);
+            return (email.equals(user.getEmail()) && !isTokenExpired(token) && checkToken);
+        }
+        catch(Exception e){
+            if(e instanceof ExpiredJwtException){
+                log.error("Token Expired: "+e.getMessage());
+            }
+            return false;
+        }
     }
     public boolean isTokenExpired(String token) {
         return  extractExpiration(token).before(new Date());
