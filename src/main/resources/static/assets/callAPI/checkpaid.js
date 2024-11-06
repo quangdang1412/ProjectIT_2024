@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-  var status = document.getElementById("status").textContent; // Lấy trạng thái thanh toán
-  var cancel = document.getElementById("cancel").textContent; // Lấy trạng thái hủy
+  var status = document.getElementById("status").textContent;
+  var cancel = document.getElementById("cancel").textContent;
 
   // Khai báo biến cho thông báo
   let message = "";
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Kiểm tra xem orderId có tồn tại không
       if (orderId) {
-        const url = `http://localhost:8080/api/payments/updatePaymentStatus/${orderId}`;
+        const url = "/api/payments/updatePaymentStatus/${orderId}";
 
         fetch(url, {
           method: "PUT",

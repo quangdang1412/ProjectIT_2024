@@ -150,9 +150,6 @@ public class UserAPI {
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Change failed");
         }
     }
-    @GetMapping("/get")
-    public String getMethodName() {
-        return "gettest";
-    }
+   
     
 }

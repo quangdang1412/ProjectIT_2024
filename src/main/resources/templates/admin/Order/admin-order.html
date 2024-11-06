@@ -7,9 +7,9 @@
     <meta charset="utf-8" />
     <title>Tạp Hoá IT</title>
     <link
-            rel="shortcut icon"
-            type="image/png"
-            th:href="@{/assets/img/logoit3.png}"
+      rel="shortcut icon"
+      type="image/png"
+      th:href="@{/assets/img/logoit3.png}"
     />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="" name="keywords" />
@@ -81,48 +81,51 @@
               <h1>Đơn hàng</h1>
             </div>
           </div>
-          <div  class="table-responsive">
+          <div class="table-responsive">
             <table id="example" class="table table-striped" style="width: 100%">
               <thead>
-              <tr>
-                <th>Mã hóa đơn</th>
-                <th>Ngày mua</th>
-                <th>Ngày giao</th>
-                <th>Phí vận chuyển</th>
-                <th>Tổng tiền</th>
-                <th>Trạng thái</th>
-                <th></th>
-                <th></th>
-              </tr>
+                <tr>
+                  <th>Mã hóa đơn</th>
+                  <th>Ngày mua</th>
+                  <th>Ngày giao</th>
+                  <th>Phí vận chuyển</th>
+                  <th>Tổng tiền</th>
+                  <th>Trạng thái</th>
+                  <th></th>
+                  <th></th>
+                </tr>
               </thead>
               <tbody>
-              <tr th:each="order : ${listOrder}">
-                <td th:text="${order.OrderID}"></td>
-                <td th:text="${order.OrderDate}"></td>
-                <td th:text="${order.DeliveryTime}"></td>
-                <td th:text="${#numbers.formatDecimal(order.TransportFee, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
-                <td th:text="${#numbers.formatDecimal(order.TotalPrice, 1, 'COMMA', 0, 'POINT')} + ' VND'"></td>
-                <td th:text="${order.Status}"></td>
-                <td>
-                  <a
-                          th:href="@{/admin/Order(action='edit', id=${order.OrderID})}"
-                          class="btn btn-info"
-                  >Update</a
-                  >
-                </td>
-                <td>
-                  <a
-                          th:if="${session.authorities != 3}"
-                          class="btn btn-danger no-change"
-                          th:attr="onclick=|deleteOrder('${order.OrderID}')|"
-                  >Delete</a
-                  >
-                </td>
-              </tr>
+                <tr th:each="order : ${listOrder}">
+                  <td th:text="${order.OrderID}"></td>
+                  <td th:text="${order.OrderDate}"></td>
+                  <td th:text="${order.DeliveryTime}"></td>
+                  <td
+                    th:text="${#numbers.formatDecimal(order.TransportFee, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+                  ></td>
+                  <td
+                    th:text="${#numbers.formatDecimal(order.TotalPrice, 1, 'COMMA', 0, 'POINT')} + ' VND'"
+                  ></td>
+                  <td th:text="${order.Status}"></td>
+                  <td>
+                    <a
+                      th:href="@{/admin/Order(action='edit', id=${order.OrderID})}"
+                      class="btn btn-info"
+                      >Update</a
+                    >
+                  </td>
+                  <td>
+                    <a
+                      th:if="${session.authorities != 3}"
+                      class="btn btn-danger no-change"
+                      th:attr="onclick=|deleteOrder('${order.OrderID}')|"
+                      >Delete</a
+                    >
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
-
         </div>
       </div>
     </div>

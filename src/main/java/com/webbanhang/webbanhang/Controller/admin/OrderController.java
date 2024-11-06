@@ -84,7 +84,6 @@ public class OrderController {
         List<OrderDetailModel> listOrderDetail = a.getOrderDetails();
         model.addAttribute("listOrderDetail",listOrderDetail);
         model.addAttribute("listSeller",userService.findByRole(3));
-        model.addAttribute("listShipper",userService.findByRole(4));
         model.addAttribute("checkOrder","update");
         model.addAttribute("OrderID",a.getOrderID());
         model.addAttribute("UserID",a.getUserOrder());
