@@ -29,8 +29,8 @@ public class YourOrderController {
     @GetMapping("/yourOrder")
     public String yourOrder(Model model, @ModelAttribute("productId") String productId, HttpSession session) {
         if((UserModel)session.getAttribute("UserLogin") != null) {
-
             UserModel a = (UserModel)session.getAttribute("UserLogin");
+            orderService.getOrderByStatus("Chờ thanh toán");
             List<OrderModel> listOrder =  userService.findUserByID(a.getUserID()).getUserOrder();
             List<UserCouponModel> listCoupon= userService.findByUserCoupon_UserID(a.getUserID()).stream().filter(c->c.getCouponUser().isActive()).toList();
             model.addAttribute("listOrder",listOrder);
@@ -94,7 +94,6 @@ public class YourOrderController {
         model.addAttribute("paymentMethod",a.getPaymentModel().getMethod());
         model.addAttribute("DeliveryTime",a.getDeliveryTime());
         model.addAttribute("Status",a.getStatus());
-        model.addAttribute("shipperName",a.getShipperOrder() != null ? a.getShipperOrder().getUsername() : null);
         model.addAttribute("Order",a);
         return "/web/your-orderdetail";
     }

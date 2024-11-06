@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-
+import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -26,9 +27,6 @@ public class OrderModel {
     @ManyToOne()
     @JoinColumn(name = "sellerID")
     private UserModel sellerOrder;
-    @ManyToOne()
-    @JoinColumn(name = "shipperID")
-    private UserModel shipperOrder;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderDetailModel> orderDetails;
@@ -37,6 +35,7 @@ public class OrderModel {
     @JsonManagedReference
     private PaymentModel PaymentModel;
 
+    @CreationTimestamp
     @Column
     private Date orderDate;
     @Column
@@ -53,4 +52,9 @@ public class OrderModel {
     private String name;
     @Column
     private String address;
+
+    @CreationTimestamp
+    @Column
+    private LocalDateTime created_at;
+
 }

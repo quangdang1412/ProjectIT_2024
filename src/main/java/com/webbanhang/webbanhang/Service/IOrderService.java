@@ -16,6 +16,8 @@ public interface IOrderService {
     List<OrderModel> getOrderByStatus(String id);
     OrderModel getOrderByID(String id);
     boolean updateStatus(String id);
+
+    void expiredOrder(OrderModel id);
     DashboardResponse dataChart(LocalDate startDate, LocalDate endDate);
 
     Integer orderNeedToProcess();

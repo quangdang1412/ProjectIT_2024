@@ -105,23 +105,22 @@ function notify(xhr, url, data) {
         }).then(() => {
           if (url !== "delete" && data.paymentMethod !== "Transfer")
             window.location.href = url;
-        });
-        if (url === "delete") {
-          const $link = $(`a[onclick*='${data}']`);
-          const currentStatus = $link.text().trim();
-          // Đổi trạng thái giữa Active và Inactive
-          if ($link.hasClass("no-change")) {
-            // Delete the row instead of toggling status
-            $link.closest("tr").remove();
-          } else {
-            // Toggle status between Active and Inactive
-            if (currentStatus === "Active") {
-              $link.html("Inactive");
+          if (url === "delete") {
+            const $link = $(`a[onclick*='${data}']`);
+            const currentStatus = $link.text().trim();
+            // Đổi trạng thái giữa Active và Inactive
+            if ($link.hasClass("no-change")) {
+              window.location.href = location.href;
             } else {
-              $link.html("Active" + String.fromCharCode(160).repeat(3)); // Add 3 spaces
+              // Toggle status between Active and Inactive
+              if (currentStatus === "Active") {
+                $link.html("Inactive");
+              } else {
+                $link.html("Active" + String.fromCharCode(160).repeat(3)); // Add 3 spaces
+              }
             }
           }
-        }
+        });
       } else {
         Swal.fire({
           icon: "error",

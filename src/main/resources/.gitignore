@@ -1,4 +1,3 @@
 /serviceAccountKey.json
-/application.properties
 *.env
 /application-oauth2.yml

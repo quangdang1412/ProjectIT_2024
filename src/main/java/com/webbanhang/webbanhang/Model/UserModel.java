@@ -62,9 +62,6 @@ public class UserModel implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sellerOrder", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderModel> sellerOrder;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "shipperOrder", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<OrderModel> shipperOrder;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority(role.getRoleName()));

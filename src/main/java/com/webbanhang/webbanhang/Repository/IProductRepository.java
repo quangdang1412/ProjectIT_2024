@@ -14,6 +14,8 @@ public interface IProductRepository extends JpaRepository<ProductModel,String> {
     @Query("from ProductModel p where p.quantity<=6")
     List<ProductModel> getProductOutOfStock();
 
+    @Query("from ProductModel p where p.brand.brandID = :id")
+    List<ProductModel> findByBrand(String id);
     @Transactional
     @Modifying
     @Query("UPDATE ProductModel p SET p.discount = NULL WHERE p.productID = :id")

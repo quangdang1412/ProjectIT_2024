@@ -35,7 +35,7 @@ public class OrderController {
                 case "edit":
                     return updateOrderForm(model,id);
                 default:
-                    return listUser(model,type);
+                    return listOrder(model,type);
             }
         }
         else
@@ -54,13 +54,17 @@ public class OrderController {
 
         }
     }
-    public String listUser(Model model,String type ) {
+    public String listOrder(Model model,String type ) {
+
         if(type ==null)
         {
             model.addAttribute("listOrder", orderService.getOrderByStatus("Hoàn thành"));
         }
         else{
             switch (type) {
+                case "0":
+                    model.addAttribute("listOrder",orderService.getOrderByStatus("Chờ thanh toán"));
+                    break;
                 case "1":
                     model.addAttribute("listOrder",orderService.getOrderByStatus("Chờ xác nhận"));
                     break;
@@ -98,7 +102,6 @@ public class OrderController {
         model.addAttribute("DeliveryTime",a.getDeliveryTime());
         model.addAttribute("Status",a.getStatus());
         model.addAttribute("sellerName",a.getSellerOrder() != null ? a.getSellerOrder().getUsername() : null);
-        model.addAttribute("shipperName",a.getShipperOrder() != null ? a.getShipperOrder().getUsername() : null);
         model.addAttribute("Order",a);
         return "/admin/Order/AddOrder";
     }
