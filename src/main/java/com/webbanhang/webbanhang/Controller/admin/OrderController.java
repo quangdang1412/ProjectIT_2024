@@ -24,7 +24,8 @@ public class OrderController {
     @GetMapping("/Order")
     public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session)
     {
-        if(checkLogin.checkRoleAdmin(session) || checkLogin.checkRoleSeller(session)) {
+        
+        if(!checkLogin.checkRoleAdmin(session) || !checkLogin.checkRoleSeller(session)) {
             String type = allParams.get("type");
             String action = allParams.get("action");
             String id =allParams.get("id");
@@ -44,6 +45,7 @@ public class OrderController {
     @PostMapping("/Order")
     public String checkActionPost(Model model, HttpSession session, @RequestParam Map<String,String> allParams, @ModelAttribute("Order") OrderModel order)
     {
+
         String action = allParams.get("action");
         if (action == null) {
             action = "list";

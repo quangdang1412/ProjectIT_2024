@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <title>Tạp Hoá IT</title>
     <link
-            rel="shortcut icon"
-            type="image/png"
-            th:href="@{/assets/img/logoit3.png}"
+      rel="shortcut icon"
+      type="image/png"
+      th:href="@{/assets/img/logoit3.png}"
     />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="" name="keywords" />
@@ -191,7 +191,7 @@
               <button
                 class="btn btn-success mt-2 me-2"
                 type="button"
-               th:attr="onclick=|sendUserData('${checkUser == null ? 'insert' : 'update'}')|"
+                th:attr="onclick=|sendUserData('${checkUser == null ? 'insert' : 'update'}')|"
               >
                 Save
               </button>
@@ -268,6 +268,8 @@
     <script th:src="@{/assets/js/main.js}"></script>
     <script th:src="@{/assets/callAPI/SendAPI.js}"></script>
     <script th:src="@{/assets/callAPI/UserAPI.js}"></script>
+    <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
+
     <script></script>
   </body>
 </html>

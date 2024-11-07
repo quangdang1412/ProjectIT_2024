@@ -101,7 +101,10 @@
                   <td
                     th:text="${#numbers.formatDecimal(order.TotalPrice + order.TransportFee, 1, 'COMMA', 0, 'POINT')} + ' VND'"
                   ></td>
-                  <td id="status-${order.OrderID}" th:text="${order.Status}"></td>
+                  <td
+                    id="status-${order.OrderID}"
+                    th:text="${order.Status}"
+                  ></td>
                   <td>
                     <a
                       th:href="@{/yourOrder/updateorder(action='edit', orderID=${order.OrderID})}"
@@ -218,5 +221,6 @@
     <!-- Template Javascript -->
     <script th:src="@{/assets/js/main.js}"></script>
     <script th:src="@{/asset-admin/js/table.js}"></script>
+    <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
   </body>
 </html>

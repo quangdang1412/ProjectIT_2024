@@ -223,8 +223,7 @@
                     th:data-category-id="${category.categoryID}"
                   >
                     <span
-                      class="text-dark"
-                      style="width: 130px"
+                      class="text-dark category-name"
                       th:text="${category.categoryName}"
                     ></span>
                   </a>
@@ -283,68 +282,75 @@
                         <div class="fruite-img">
                           <a th:href="@{/detail/{id}(id=${product.productID})}">
                             <img
-                                    th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
-                                    th:alt="${product.Image?.ImageCode}"
-                                    class="img-fluid w-100 rounded-top"
-                                    style="height: 240px"
+                              th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
+                              th:alt="${product.Image?.ImageCode}"
+                              class="img-fluid w-100 rounded-top"
+                              style="height: 240px"
                             />
                           </a>
                         </div>
                         <div
-                                class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                style="top: 10px; left: 10px"
-                                th:text="${product.Category?.categoryName}"
+                          class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                          style="top: 10px; left: 10px"
+                          th:text="${product.Category?.categoryName}"
                         >
                           Fruits
                         </div>
-                        <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                        <div
+                          class="p-4 border border-secondary border-top-0 rounded-bottom"
+                        >
                           <a th:href="@{/detail/{id}(id=${product.productID})}">
                             <h4
-                                    class="text-start"
-                                    th:text="${product.ProductName}"
-                                    style="
-                              display: -webkit-box;
-                              -webkit-line-clamp: 4;
-                              -webkit-box-orient: vertical;
-                              overflow: hidden;
-                              min-height: 115px;
-                            "
+                              class="text-start"
+                              th:text="${product.ProductName}"
+                              style="
+                                display: -webkit-box;
+                                -webkit-line-clamp: 4;
+                                -webkit-box-orient: vertical;
+                                overflow: hidden;
+                                min-height: 115px;
+                              "
                             >
                               Product Name
                             </h4>
                           </a>
                           <br />
-                          <div class="d-flex justify-content-start flex-lg-wrap">
+                          <div
+                            class="d-flex justify-content-start flex-lg-wrap"
+                          >
                             <p
-                                    th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
-                                    th:style="${product.Discount} != null ? 'height: 46px':'height: 46px'"
-                                    th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
+                              th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
+                              th:style="${product.Discount} != null ? 'height: 46px':'height: 46px'"
+                              th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
                             >
                               Price
                             </p>
                           </div>
                           <p
-                                  class="text-danger fs-5 fw-bold d-flex justify-content-start"
-                                  th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
+                            class="text-danger fs-5 fw-bold d-flex justify-content-start"
+                            th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
                           >
                             Price
                           </p>
                           <p
-                                  th:if="${product.Discount} == null"
-                                  style="
-                            visibility: hidden;
-                            margin-bottom: 0px;
-                            height: 30px;
-                          ">
+                            th:if="${product.Discount} == null"
+                            style="
+                              visibility: hidden;
+                              margin-bottom: 0px;
+                              height: 30px;
+                            "
+                          >
                             &nbsp
                           </p>
                           <br />
                           <div class="d-flex justify-content-end">
                             <a
-                                    th:attr="onclick=|addToCart('${product.productID}')|"
-                                    class="btn border border-secondary rounded-pill px-3 text-primary"
+                              th:attr="onclick=|addToCart('${product.productID}')|"
+                              class="btn border border-secondary rounded-pill px-3 text-primary"
                             >
-                              <i class="fa fa-shopping-bag me-2 text-primary"></i>
+                              <i
+                                class="fa fa-shopping-bag me-2 text-primary"
+                              ></i>
                               Giỏ hàng
                             </a>
                           </div>
@@ -422,33 +428,34 @@
                     <br />
                     <div class="d-flex justify-content-start flex-lg-wrap">
                       <p
-                              th:class="${bestSellingProduct.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
-                              th:style="${bestSellingProduct.Discount} != null ? 'height: 46px':'height: 46px'"
-                              th:text="${#numbers.formatDecimal(bestSellingProduct.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
+                        th:class="${bestSellingProduct.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
+                        th:style="${bestSellingProduct.Discount} != null ? 'height: 46px':'height: 46px'"
+                        th:text="${#numbers.formatDecimal(bestSellingProduct.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
                       >
                         Price
                       </p>
                     </div>
                     <p
-                            class="text-danger fs-5 fw-bold d-flex justify-content-start"
-                            th:text="${bestSellingProduct.Discount} != null ? ${#numbers.formatDecimal(bestSellingProduct.UnitPrice * (100 - bestSellingProduct.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
+                      class="text-danger fs-5 fw-bold d-flex justify-content-start"
+                      th:text="${bestSellingProduct.Discount} != null ? ${#numbers.formatDecimal(bestSellingProduct.UnitPrice * (100 - bestSellingProduct.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
                     >
                       Price
                     </p>
                     <p
-                            th:if="${bestSellingProduct.Discount} == null"
-                            style="
-                            visibility: hidden;
-                            margin-bottom: 0px;
-                            height: 30px;
-                          ">
+                      th:if="${bestSellingProduct.Discount} == null"
+                      style="
+                        visibility: hidden;
+                        margin-bottom: 0px;
+                        height: 30px;
+                      "
+                    >
                       &nbsp
                     </p>
                     <br />
                     <div class="d-flex justify-content-end">
                       <a
-                              th:attr="onclick=|addToCart('${bestSellingProduct.productID}')|"
-                              class="btn border border-secondary rounded-pill px-3 text-primary"
+                        th:attr="onclick=|addToCart('${bestSellingProduct.productID}')|"
+                        class="btn border border-secondary rounded-pill px-3 text-primary"
                       >
                         <i class="fa fa-shopping-bag me-2 text-primary"></i>
                         Add to cart
