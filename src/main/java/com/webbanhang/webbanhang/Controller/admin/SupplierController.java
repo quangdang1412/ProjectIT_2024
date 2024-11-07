@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = {"/admin"})
@@ -50,8 +51,7 @@ public class SupplierController {
     public String addSupplierForm(Model model)
     {
         model.addAttribute("checkSupplier",null);
-        int x= suppilerService.getAllSupplier().size()+1;
-        String s="S"+x;
+        String s="S"+ UUID.randomUUID().toString().substring(0, 8);;
         model.addAttribute("SupplierID",s);
         model.addAttribute("Supplier",new SupplierModel());
         return "/admin/Supplier/AddSupplier";

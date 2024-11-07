@@ -94,7 +94,7 @@ public class MailService {
         context.setVariables(properties);
         helper.setFrom(emailFrom,"TapHoaIT");
         helper.setTo(email);
-        helper.setSubject("Reset mặt khẩu TapHoaIT");
+        helper.setSubject("Reset mật khẩu TapHoaIT");
         try {
             String html = templateEngine.process("ResetPasswordMail", context);
             helper.setText(html, true);

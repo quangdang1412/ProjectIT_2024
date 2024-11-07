@@ -3,7 +3,7 @@ USE TapHoaIT;
 
 CREATE TABLE role_user_tb (
                               type int PRIMARY KEY,
-                              roleName nvarchar(20) NOT NULL
+                              roleName nvarchar(20) NOT NULL UNIQUE
 );
 CREATE TABLE user_tb (
                          userID VARCHAR(100) PRIMARY KEY ,
@@ -20,11 +20,11 @@ CREATE TABLE user_tb (
 );
 CREATE TABLE brand_tb (
                           brandID VARCHAR(12) PRIMARY KEY,
-                          brandName nvarchar(50) NOT NULL
+                          brandName nvarchar(50) NOT NULL UNIQUE
 );
 CREATE TABLE category_tb (
                              categoryID VARCHAR(12) PRIMARY KEY,
-                             categoryName nvarchar(50) NOT NULL
+                             categoryName nvarchar(50) NOT NULL UNIQUE
 );
 CREATE TABLE image_tb (
                           imageID int AUTO_INCREMENT PRIMARY KEY,
@@ -44,14 +44,14 @@ CREATE TABLE coupon_tb (
 );
 CREATE TABLE supplier_tb (
                              supplierID VARCHAR(100) PRIMARY KEY,
-                             supplierName NVARCHAR(100),
+                             supplierName NVARCHAR(100) Not null Unique,
                              address NVARCHAR(100) NOT NULL ,
                              phone VARCHAR(12) NOT NULL Unique,
                              email VARCHAR(50) NOT NULL Unique
 );
 CREATE TABLE product_tb (
                             productID VARCHAR(100) PRIMARY KEY ,
-                            productName NVARCHAR(500) NOT NULL,
+                            productName NVARCHAR(500) NOT NULL UNIQUE,
                             brandID VARCHAR(12) NOT NULL,
                             categoryID VARCHAR(12) NOT NULL ,
                             discountID VARCHAR(12) ,
@@ -91,10 +91,10 @@ CREATE TABLE shop_order_tb (
                                orderDate date not null,
                                totalPrice int not null,
                                transportFee int not null,
-                               deliveryTime date ,
-                               name VARCHAR(100),
-                               phone VARCHAR(12),
-                               address NVARCHAR(500),
+                               deliveryTime date not null,
+                               name VARCHAR(100) not null,
+                               phone VARCHAR(12) not null,
+                               address NVARCHAR(500)not null,
                                status  NVARCHAR(100) not null,
                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
                                CONSTRAINT FK_UserOrder FOREIGN KEY (userID)
