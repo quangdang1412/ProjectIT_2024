@@ -260,9 +260,11 @@ kbd kbd {
 figure {
   margin: 0 0 1rem;
 }
+
 img,
 svg {
   vertical-align: middle;
+  max-width: 100%;
 }
 table {
   caption-side: bottom;

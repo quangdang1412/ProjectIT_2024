@@ -1,15 +1,24 @@
 /*** Spinner Start ***/
-.dropdown  .dropdown-menu .dropend .dropdown-menu{
+.dropdown .dropdown-menu .dropend .dropdown-menu {
   display: none;
 }
-.dropdown  .dropdown-menu .dropend:hover > .dropdown-menu{
+.dropdown .dropdown-menu .dropend:hover > .dropdown-menu {
   display: block;
-  margin-top: .125em;
+  margin-top: 0.125em;
 }
-.dropdown  .dropdown-menu .dropend:hover > .dropdown-menu{
+.dropdown .dropdown-menu .dropend:hover > .dropdown-menu {
   position: absolute;
-  top:0;
-  left:100%;
+  top: 0;
+  left: 100%;
+}
+.category-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1; /* Set the number of lines you want to show */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  width: 130px;
 }
 #spinner {
   opacity: 0;
@@ -17,8 +26,8 @@
   transition: opacity 0.8s ease-out, visibility 0s linear 0.5s;
   z-index: 99999;
 }
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }

@@ -330,26 +330,29 @@
                 </tbody>
               </table>
             </div>
-            <div class="d-flex col-md-12 col-lg-6 col-xl-7 justify-content-end" style="width: 100%;">
-                <button
-                    class="btn btn-success mt-2 me-2"
-                    type="button"
-                    th:attr="onclick=|updateYourOrderData()|"
-                    th:if="${Status == 'Chờ thanh toán'}" 
-                >Thanh Toán
-                </button>
-                <button
-                        class="btn btn-success mt-2 me-2"
-                        type="button"
-                        th:attr="onclick=|updateOrderData()|"
-                        th:if="${Status == 'Chờ xác nhận' or Status == 'Chờ thanh toán'}"
-                >
-                  Save
-                </button>
-                <a href="/yourOrder" class="btn btn-secondary mt-2">Huỷ</a>
+            <div
+              class="d-flex col-md-12 col-lg-6 col-xl-7 justify-content-end"
+              style="width: 100%"
+            >
+              <button
+                class="btn btn-success mt-2 me-2"
+                type="button"
+                th:attr="onclick=|updateYourOrderData()|"
+                th:if="${Status == 'Chờ thanh toán'}"
+              >
+                Thanh Toán
+              </button>
+              <button
+                class="btn btn-success mt-2 me-2"
+                type="button"
+                th:attr="onclick=|updateOrderData()|"
+                th:if="${Status == 'Chờ xác nhận' or Status == 'Chờ thanh toán'}"
+              >
+                Save
+              </button>
+              <a href="/yourOrder" class="btn btn-secondary mt-2">Huỷ</a>
             </div>
-            
-            </div>
+          </div>
         </form>
       </div>
     </div>
@@ -423,5 +426,6 @@
     <!-- Template Javascript -->
     <script th:src="@{/assets/js/main.js}"></script>
     <script th:src="@{/asset-admin/js/table.js}"></script>
+    <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
   </body>
 </html>

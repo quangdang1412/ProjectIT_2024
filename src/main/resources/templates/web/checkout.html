@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <title>Tạp Hoá IT</title>
     <link
-            rel="shortcut icon"
-            type="image/png"
-            th:href="@{/assets/img/logoit3.png}"
+      rel="shortcut icon"
+      type="image/png"
+      th:href="@{/assets/img/logoit3.png}"
     />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="" name="keywords" />
@@ -223,25 +223,29 @@
                 </div>
               </div>
               <h5>Coupon</h5>
-              <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+              <div
+                class="row g-4 text-center align-items-center justify-content-center border-bottom py-3"
+              >
                 <div class="col-12">
                   <select
-                          class="form-select"
-                          aria-label="Default select example"
-                          name="couponSelect"
-                          id="couponSelect"
-                          onchange="updateCouponPercentage()"
+                    class="form-select"
+                    aria-label="Default select example"
+                    name="couponSelect"
+                    id="couponSelect"
+                    onchange="updateCouponPercentage()"
                   >
                     <option></option>
                     <option
-                            th:each="coupon : ${listCoupon}"
-                            th:value="${coupon.couponUser.couponID}"
-                            th:text="${coupon.couponUser.couponID}"
-                            th:data-percentage="${coupon.couponUser.percentage}"
+                      th:each="coupon : ${listCoupon}"
+                      th:value="${coupon.couponUser.couponID}"
+                      th:text="${coupon.couponUser.couponID}"
+                      th:data-percentage="${coupon.couponUser.percentage}"
                     ></option>
                   </select>
-                  <br>
-                  <span id="couponPercentageText" class="float-start">Giảm: 0%</span>
+                  <br />
+                  <span id="couponPercentageText" class="float-start"
+                    >Giảm: 0%</span
+                  >
                 </div>
               </div>
             </div>
@@ -284,12 +288,14 @@
                         >
                           <h5
                             class="mb-0 mt-4 font-size-16 text-dark"
-                            style="max-width: 300px;
+                            style="
+                              max-width: 300px;
                               display: -webkit-box;
                               -webkit-line-clamp: 2;
                               -webkit-box-orient: vertical;
                               overflow: hidden;
-                              min-height: 90px;"
+                              min-height: 90px;
+                            "
                             th:text="${cart.ProductCart.ProductName}"
                           ></h5>
                         </a>
@@ -351,7 +357,7 @@
                         <h5 class="mb-0 text-dark py-3">Mã khuyến mãi:</h5>
                       </td>
                       <td colspan="3">
-                        <div class="py-3 ">
+                        <div class="py-3">
                           <p class="mb-0 text-dark" id="totalCoupon">0</p>
                         </div>
                       </td>
@@ -415,18 +421,20 @@
       function updateCouponPercentage() {
         const couponSelect = document.getElementById("couponSelect");
         const selected = couponSelect.selectedOptions[0];
-        const per =  selected.getAttribute("data-percentage")
+        const per = selected.getAttribute("data-percentage");
 
         // Cập nhật nội dung của `span` với phần trăm giảm giá
-        document.getElementById("couponPercentageText").textContent = `Giảm: ${per === null ? 0 : per}%`;
+        document.getElementById("couponPercentageText").textContent = `Giảm: ${
+          per === null ? 0 : per
+        }%`;
         // Lấy tổng tiền từ HTML và loại bỏ dấu phẩy, VND
         const totalAmountElement = document.getElementById("totalAmount");
         const totalAmount = parseInt(
-                totalAmountElement.textContent.replace(/[^0-9.-]+/g, "")
+          totalAmountElement.textContent.replace(/[^0-9.-]+/g, "")
         );
         const shippingCostElement = document.getElementById("shippingCost");
         const shippingCost = parseInt(
-                shippingCostElement.textContent.replace(/[^0-9.-]+/g, "")
+          shippingCostElement.textContent.replace(/[^0-9.-]+/g, "")
         );
         // Tính tổng tiền với phí vận chuyển
         const select = document.getElementById("couponSelect");
@@ -435,7 +443,10 @@
 
         // Cập nhật giá trị phần trăm vào phần tử totalCoupon
         const totalCouponText = document.getElementById("totalCoupon");
-        totalCouponText.textContent = percentage ? formatCurrency((percentage/100)*(totalAmount+shippingCost)) + " VND"  : '0'; // Nếu không có phần trăm, hiển thị 0
+        totalCouponText.textContent = percentage
+          ? formatCurrency((percentage / 100) * (totalAmount + shippingCost)) +
+            " VND"
+          : "0"; // Nếu không có phần trăm, hiển thị 0
         updateTotal(shippingCost);
       }
       function formatCurrency(amount) {
@@ -477,7 +488,7 @@
         );
         const totalCouponElement = document.getElementById("totalCoupon");
         const totalCouponAmount = parseInt(
-                totalCouponElement.textContent.replace(/[^0-9.-]+/g, "")
+          totalCouponElement.textContent.replace(/[^0-9.-]+/g, "")
         );
         // Tính tổng tiền với phí vận chuyển
         const totalBeforeDiscount = shippingCost + totalAmount;
@@ -498,5 +509,6 @@
       });
     </script>
     <script th:src="@{/assets/callAPI/checkpaid.js}"></script>
+    <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
   </body>
 </html>
