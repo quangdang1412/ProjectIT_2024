@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
@@ -21,36 +20,13 @@ import java.util.Map;
 import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
-@Component
+@Service
 public class MailService {
 
     private final JavaMailSender javaMailSender;
     @Value("${spring.mail.from}")
     private String emailFrom;
     private final SpringTemplateEngine templateEngine;
-
-    public String sendEmail(String recipients, String subject, String content, MultipartFile[] files) throws MessagingException {
-        log.info("Sending.....");
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message,true,"UTF-8");
-        helper.setFrom(emailFrom);
-        if (recipients.contains(",")) {
-            helper.setTo(InternetAddress.parse(recipients));
-        } else {
-            helper.setTo(recipients);
-        }
-        if (files != null) {
-            for (MultipartFile file : files) {
-                helper.addAttachment(Objects.requireNonNull(file.getOriginalFilename()),file);
-            }
-        }
-        helper.setSubject(subject);
-        helper.setText(content,true);
-        javaMailSender.send(message);
-        log.info("Email has been send successfully");
-        return "sent";
-    }
-
     public void sendUpdateOrderMail(OrderModel orderModel,int checkChangeStatus) throws MessagingException, UnsupportedEncodingException {
         log.info("Sending Confirm Link.....");
         MimeMessage message = javaMailSender.createMimeMessage();

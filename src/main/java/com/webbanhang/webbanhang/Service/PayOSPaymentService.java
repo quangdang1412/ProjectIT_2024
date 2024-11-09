@@ -1,45 +1,30 @@
 package com.webbanhang.webbanhang.Service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import com.webbanhang.webbanhang.Config.PayOSConfig;
-import com.webbanhang.webbanhang.DTO.request.Order.OrderRequestDTO;
-import com.webbanhang.webbanhang.Exception.CustomException;
-import com.webbanhang.webbanhang.Model.CartModel;
-import com.webbanhang.webbanhang.Model.OrderDetailModel;
-import com.webbanhang.webbanhang.Model.OrderModel;
-import com.webbanhang.webbanhang.Model.PaymentModel;
-import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Repository.IOrderRepository;
-
-import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import vn.payos.PayOS;
 import vn.payos.type.CheckoutResponseData;
-import vn.payos.type.ItemData;
 import vn.payos.type.PaymentData;
-import vn.payos.type.Webhook;
-import vn.payos.type.WebhookData;
-
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PayOSPaymentService {
 
-    private final PayOSConfig payOSConfig;
-    private final IUserService userService;
-    private final IOrderRepository orderRepository;
+    @Value("${payos.client-id}")
+    private String clientId;
 
+    @Value("${payos.api-key}")
+    private String apiKey;
 
+    @Value("${payos.checksum-key}")
+    private String checksumKey;
 
     public String createCheckout(Integer finalTotal, String orderId, String returnUrl,String cancelUrl) {
         try {
-            // Initialize PayOS using the configuration
-            PayOS payos = new PayOS(payOSConfig.getClientId(), payOSConfig.getApiKey(), payOSConfig.getChecksumKey());
+
+            PayOS payos = new PayOS(clientId,apiKey,checksumKey);
             
             Long orderCode = System.currentTimeMillis() / 1000;
 

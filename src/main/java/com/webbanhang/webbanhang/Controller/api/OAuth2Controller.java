@@ -28,9 +28,9 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class OAuth2Controller {
-    @Value("${GOOGLE_CLIENT_ID}")
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String id;
-    @Value("${GOOGLE_CLIENT_SECRET}")
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String secret;
     private final IUserService userService;
     private final CheckLogin checkLogin;

@@ -28,7 +28,7 @@
         <div class="navbar-nav mx-auto">
           <a href="/static" class="nav-item nav-link fs-5 fw-bold">Trang chủ</a>
           <div class="nav-item dropdown">
-            <a class="nav-link fs-5 fw-bold" href="/shop">Sản phẩm</a>
+            <a class="nav-link fs-5 fw-bold dropdown-toggle" href="/shop" data-bs-toggle="dropdown">Sản phẩm</a>
             <div class="dropdown-menu bg-secondary m-0 rounded-0">
               <div
                 class="nav-item dropend"
@@ -43,7 +43,7 @@
 
                 <div class="dropdown-menu">
                   <a
-                    class="dropdown-item"
+                    class="dropdown-item fw-bold"
                     th:each="brand : ${category.brandSet}"
                     th:href="@{/shop(category=${category.categoryID}, brand=${brand.brandID})}"
                     th:text="${brand.brandName}"

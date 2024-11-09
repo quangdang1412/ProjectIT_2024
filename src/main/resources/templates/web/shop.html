@@ -130,7 +130,7 @@
                             <a
                               th:href="@{/shop(category=${category.categoryID})}"
                             >
-                              <span th:text="${category.categoryName}"></span>
+                              <span class="fw-bold" th:text="${category.categoryName}"></span>
                             </a>
                             <span
                               th:text="'(' + ${category.products.size()} + ')'"
@@ -149,7 +149,7 @@
                             class="d-flex justify-content-between fruite-name"
                           >
                             <a th:href="@{/shop(brand=${brand.brandID})}">
-                              <span th:text="${brand.brandName}"></span>
+                              <span class="fw-bold" th:text="${brand.brandName}"></span>
                             </a>
                             <span
                               th:text="'(' + ${brand.products.size()} + ')'"
@@ -296,7 +296,7 @@
                 <br />
                 <th:block th:with="fullUrl='?' + ${queryString}">
                   <div
-                    class="dt-paging paging_full_numbers d-flex justify-content-end"
+                    class="dt-paging paging_full_numbers d-flex justify-content-center"
                   >
                     <ul class="pagination">
                       <!-- First button -->

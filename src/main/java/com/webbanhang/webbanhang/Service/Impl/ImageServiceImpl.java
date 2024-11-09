@@ -10,6 +10,7 @@ import com.webbanhang.webbanhang.Model.ImageModel;
 import com.webbanhang.webbanhang.Repository.IImageRepository;
 import com.webbanhang.webbanhang.Service.IImageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ImageServiceImpl implements IImageService {
 
     private final IImageRepository imageRepository;

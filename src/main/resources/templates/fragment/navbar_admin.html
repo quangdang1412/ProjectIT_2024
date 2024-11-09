@@ -79,7 +79,7 @@
                                     <span>Đơn hàng</span>
                                 </a>
                                 <a href="/admin/Order" class="dropdown-item">Quản lí </a>
-                                <a href="/logout" class="dropdown-item">Đăng xuất</a>
+                                <a id="logoutLink" href="#" onclick="logout()" class="dropdown-item">Đăng xuất</a>
                             </div>
 
                             <div th:if="${session.isLoggedIn!=1}">
