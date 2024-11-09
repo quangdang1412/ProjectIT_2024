@@ -92,7 +92,7 @@
                 >
                   <label for="fruits">Sắp xếp:</label>
                   <th:block
-                    th:with="url = ${queryString != null and queryString.contains('category') ? (queryString.contains('&sortBy=') ? queryString.substring(0, queryString.indexOf('&sortBy=')) : queryString): null}"
+                    th:with="url = ${queryString != null and (queryString.contains('category') or queryString.contains('brand')) ? (queryString.contains('&sortBy=') ? queryString.substring(0, queryString.indexOf('&sortBy=')) : queryString): null}"
                   >
                     <select
                       id="fruits"
@@ -193,18 +193,14 @@
                           class="d-flex mb-2"
                           style="display: block !important"
                         >
-                          <p
-                            class="text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3"
-                            th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
-                          >
-                            2.99 $
-                          </p>
-                          <p
-                            class="text-danger fs-5 fw-bold d-flex justify-content-start"
-                            th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
-                          >
-                            4.11 $
-                          </p>
+                          <h5
+                                  th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
+                                  th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'">
+                          </h5>
+                          <h5
+                                  class="text-danger fs-5 fw-bold"
+                                  th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''">
+                          </h5>
                         </div>
                       </div>
                     </div>
@@ -380,9 +376,11 @@
                           >»</a
                         >
                       </li>
+
                     </ul>
                   </div>
                 </th:block>
+                <p class="d-flex justify-content-center" th:text="'Tổng số trang: '+${totalPages}"></p>
               </div>
             </div>
           </div>

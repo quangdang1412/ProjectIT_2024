@@ -1,5 +1,5 @@
 
-USE TapHoaIT;
+USE taphoait;
 
 CREATE TABLE role_user_tb (
                               type int PRIMARY KEY,
