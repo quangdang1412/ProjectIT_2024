@@ -13,4 +13,4 @@ ADD ${FILE_JAR} TapHoaIT.jar
 
 ENTRYPOINT ["java","-jar","TapHoaIT.jar"]
 
-EXPOSE 80
+EXPOSE 8080

@@ -12,6 +12,3 @@ services:
     volumes:
       - ./src/main/resources/database:/docker-entrypoint-initdb.d/
 
-networks:
-    backend:
-      driver: bridge
