@@ -3,13 +3,13 @@ package com.webbanhang.webbanhang.Service.Impl;
 import com.webbanhang.webbanhang.DAO.IProductDAO;
 import com.webbanhang.webbanhang.DTO.request.Product.ProductRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.PageResponse;
+import com.webbanhang.webbanhang.DTO.response.ProductDTO;
 import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.ImageModel;
 import com.webbanhang.webbanhang.Model.ProductModel;
 import com.webbanhang.webbanhang.Repository.IProductRepository;
 import com.webbanhang.webbanhang.Service.*;
-import com.webbanhang.webbanhang.Util.LoadData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -172,4 +172,38 @@ public class ProductServiceImpl implements IProductService {
                 .items(list)
                 .build();
     }
+    public Page<ProductDTO> searchProducts(int pageNo, int pageSize, String searchQuery,String categoryId) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+
+        Page<ProductModel> productModels;
+
+        if (categoryId != null) {
+            productModels= productRepository.findByCategory_categoryID(categoryId, pageable);
+        }
+        else{
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                productModels = productRepository.findByProductNameContainingIgnoreCase(searchQuery, pageable);
+            } else {
+                productModels = productRepository.findAll(pageable);
+            }
+        }
+
+        return productModels.map(this::convertToDTO);
+    }
+    private ProductDTO convertToDTO(ProductModel productModel) {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductID(productModel.getProductID());
+        productDTO.setProductName(productModel.getProductName());
+        productDTO.setBrand(productModel.getBrand());
+        productDTO.setCategory(productModel.getCategory());
+        productDTO.setDiscount(productModel.getDiscount());
+        productDTO.setImage(productModel.getImage());
+        productDTO.setDescription(productModel.getDescription());
+        productDTO.setUnitPrice(productModel.getUnitPrice());
+        productDTO.setQuantity(productModel.getQuantity());
+        productDTO.setActive(productModel.isActive());
+        productDTO.setUnitCost(productModel.getUnitCost());
+        return productDTO;
+    }
+   
 }

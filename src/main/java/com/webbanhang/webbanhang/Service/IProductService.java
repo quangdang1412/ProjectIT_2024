@@ -2,6 +2,7 @@ package com.webbanhang.webbanhang.Service;
 
 import com.webbanhang.webbanhang.DTO.request.Product.ProductRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.PageResponse;
+import com.webbanhang.webbanhang.DTO.response.ProductDTO;
 import com.webbanhang.webbanhang.Model.ProductModel;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,4 +20,6 @@ public interface IProductService {
     Page<ProductModel> findCategoryForPage(String id,Integer a);
     Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy);
     PageResponse<?> getAllProductWithSortBy(int pageNo, int pageSize, String sortBy);
+    Page<ProductDTO> searchProducts(int pageNo, int pageSize, String searchQuery,String categoryId);
+
 }

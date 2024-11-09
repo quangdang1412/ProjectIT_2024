@@ -1,47 +1,112 @@
-// Lấy tất cả các liên kết danh mục
 const categoryLinks = document.querySelectorAll(".category-link");
 
-// Lắng nghe sự kiện click trên các liên kết danh mục
 categoryLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
 
-    // Lấy ID của danh mục được chọn
     const categoryId = event.currentTarget.dataset.categoryId;
     if (categoryId) {
-      console.log(categoryId);
-      // Hiển thị các sản phẩm tương ứng với danh mục
+      if (categoryId == "all") {
+        displayProductsByCategoryAll();
+      }
+      console.log("Selected category ID: ", categoryId);
       displayProductsByCategory(categoryId);
     } else {
-      console.log("categoryId not found");
       displayProductsByCategory(null);
     }
   });
 });
 
 function displayProductsByCategory(categoryId) {
-  // Ẩn tất cả các sản phẩm
-  const listItems = document.querySelectorAll(".list-item");
-  listItems.forEach((item) => {
-    item.style.display = "none";
-  });
+  fetch(`/search?categoryId=${categoryId}&page=0&size=10`)
+    .then((response) => response.json())
+    .then((data) => {
+      const products = data.content;
+      displayResults(products);
+    })
+    .catch((error) => {
+      console.error("Error fetching products: ", error);
+    });
+}
 
-  // Hiển thị các sản phẩm thuộc danh mục được chọn
-  if (categoryId === "all") {
-    listItems.forEach((item) => {
-      item.style.display = "block";
+function displayProductsByCategoryAll() {
+  fetch("/search")
+    .then((response) => response.json())
+    .then((data) => {
+      const products = data.content;
+      displayResults(products);
+    })
+    .catch((error) => {
+      console.error("Error fetching products: ", error);
     });
-  } else if (categoryId) {
-    const productsByCategory = document.querySelectorAll(
-      `.list-item[data-category-id="${categoryId}"]`
+}
+function formatPrice(price) {
+  const formattedPrice = price.toLocaleString("en-US");
+
+  return formattedPrice;
+}
+function displayResults(products) {
+  const productList = document.getElementById("productList");
+  productList.innerHTML = "";
+
+  const row = document.createElement("div");
+  row.classList.add("row");
+
+  for (let i = 0; i < 8; i++) {
+    const product = products[i];
+    const productItem = document.createElement("div");
+    productItem.classList.add("col-md-3");
+
+    // Định dạng giá tiền với dấu phân cách hàng nghìn
+    const formattedPrice = new Intl.NumberFormat("vi-VN").format(
+      product.unitPrice
     );
-    productsByCategory.forEach((product) => {
-      product.style.display = "block";
-    });
-  } else {
-    // Nếu categoryId là null, hiển thị toàn bộ danh sách
-    listItems.forEach((item) => {
-      item.style.display = "block";
-    });
+
+    productItem.innerHTML = `
+      <div class="rounded position-relative fruite-item">
+        <div class="fruite-img">
+          <a href="/detail/${product.productID}">
+            <img src="${product.image.imageCode}" alt="${
+      product.productName
+    }" class="img-fluid w-100 rounded-top" style="height: 240px">
+          </a>
+        </div>
+        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px">
+          ${product.category ? product.category.categoryName : "N/A"}
+        </div>
+        <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+          <a href="/detail/${product.productID}">
+            <h4 style="
+                display: -webkit-box;
+                -webkit-line-clamp: 4;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                min-height: 115px;
+              ">${product.productName}</h4>
+          </a>
+          <br>
+          <div class="d-flex justify-content-start flex-lg-wrap">
+            <p class="text-dark fs-5 fw-bold mb-0 pe-lg-3" style="height: 46px">
+            
+            ${formatPrice(product.unitPrice)}
+             VND</p>
+          </div>
+          <br>
+          <div class="d-flex justify-content-end">
+            <a class="btn border border-secondary rounded-pill px-3 text-primary" onclick="addToCart('${
+              product.productID
+            }')">
+              <i class="fa fa-shopping-bag me-2 text-primary"></i>
+              Giỏ hàng
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    row.appendChild(productItem);
   }
+
+  // Gắn row vào productList
+  productList.appendChild(row);
 }
