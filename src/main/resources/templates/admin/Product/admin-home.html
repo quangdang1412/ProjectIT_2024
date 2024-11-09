@@ -78,14 +78,14 @@
             </div>
           </div>
           <div class="table-responsive">
-            <table id="example" class="table table-striped" style="width: 100%">
+            <table id="example"  class="table" style="width: 100%">
               <thead>
                 <tr>
                   <th>Hình sản phẩm</th>
                   <th>Mã sản phẩm</th>
                   <th>Tên sản phẩm</th>
-                  <th>Mã thương hiệu</th>
-                  <th>Mã danh mục</th>
+                  <th>Thương hiệu</th>
+                  <th>Danh mục</th>
                   <th>Mã khuyến mãi</th>
                   <th>Giá bán</th>
                   <th>Số lượng</th>
@@ -103,8 +103,8 @@
                   </td>
                   <td th:text="${product.ProductID}"></td>
                   <td th:text="${product.ProductName}"></td>
-                  <td th:text="${product.Brand?.BrandID}"></td>
-                  <td th:text="${product.Category?.CategoryID}"></td>
+                  <td th:text="${product.Brand?.BrandName}"></td>
+                  <td th:text="${product.Category?.CategoryName}"></td>
                   <td
                     th:if="${product.Discount != null}"
                     th:text="${product.Discount?.DiscountID}"

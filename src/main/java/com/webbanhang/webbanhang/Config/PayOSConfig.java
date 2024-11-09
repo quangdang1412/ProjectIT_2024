@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Getter
 @Setter
-@Configuration
 public class PayOSConfig {
     @Value("${payos.client-id}")
     private String clientId;
