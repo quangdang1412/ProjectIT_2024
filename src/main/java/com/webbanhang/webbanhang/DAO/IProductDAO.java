@@ -13,7 +13,7 @@ public interface IProductDAO {
     boolean deleteProduct(ProductModel a);
     List<ProductModel> findCategory(String id);
     Page<ProductModel> findCategoryForPage(String id,Integer a);
-    Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy);
+    Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy, String searchQuery);
 
 
 }

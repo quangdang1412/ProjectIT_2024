@@ -78,11 +78,10 @@
                     placeholder="Tìm kiếm "
                     id="searchInput"
                     aria-describedby="search-icon-1"
-                    oninput="filterProducts()"
                   />
-                  <span id="search-icon-1" class="input-group-text p-3"
-                    ><i class="fa fa-search"></i
-                  ></span>
+                  <button id="searchButton" class="btn btn-primary">
+                    <i class="fa fa-search"></i>
+                  </button>
                 </div>
               </div>
               <div class="col-6"></div>
@@ -333,8 +332,9 @@
                       <li
                         class="dt-paging-button page-item"
                         th:each="i : ${#numbers.sequence(1, totalPages)}"
-                        th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1} or ${i == currentPage + 2} "
-                        th:classappend="${currentPage == i ? 'active' : ''}">
+                        th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1}"
+                        th:classappend="${currentPage == i ? 'active' : ''}"
+                      >
                         <a
                           class="page-link"
                           th:href="${fullUrl + '&pageNo=' + i}"
@@ -342,18 +342,16 @@
                         ></a>
                       </li>
 
-                      <!-- Next button -->
                       <li
-                              class="dt-paging-button page-item disabled"
-
+                              class="dt-paging-button page-item"
+                              th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
                       >
                         <a
-                                class="page-link next"
+                                class="page-link last disabled"
                                 aria-controls="example"
-                                aria-label="Next"
-                                data-dt-idx="next"
+                                aria-label="Last"
+                                data-dt-idx="last"
                                 tabindex="-1"
-
                         >...</a
                         >
                       </li>
@@ -373,22 +371,22 @@
                         ></a
                         >
                       </li>
+                      <!-- Next button -->
                       <li
-                        class="dt-paging-button page-item"
-                        th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
+                              class="dt-paging-button page-item"
+                              th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
                       >
                         <a
-                          class="page-link next"
-                          aria-controls="example"
-                          th:attr="aria-disabled=${currentPage == totalPages}"
-                          aria-label="Next"
-                          data-dt-idx="next"
-                          tabindex="-1"
-                          th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + (currentPage + 1) : '#'}"
-                          >›</a
+                                class="page-link next"
+                                aria-controls="example"
+                                th:attr="aria-disabled=${currentPage == totalPages}"
+                                aria-label="Next"
+                                data-dt-idx="next"
+                                tabindex="-1"
+                                th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + (currentPage + 1) : '#'}"
+                        >›</a
                         >
                       </li>
-
                       <!-- Last button -->
                       <li
                         class="dt-paging-button page-item"
@@ -405,7 +403,6 @@
                           >»</a
                         >
                       </li>
-
                     </ul>
                   </div>
                 </th:block>

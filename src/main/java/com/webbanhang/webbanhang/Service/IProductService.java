@@ -18,7 +18,7 @@ public interface IProductService {
     List<ProductModel> findBrand(String id);
     List<ProductModel> getProductOutOfStock();
     Page<ProductModel> findCategoryForPage(String id,Integer a);
-    Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy);
+    Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy, String searchQuery);
     PageResponse<?> getAllProductWithSortBy(int pageNo, int pageSize, String sortBy);
     Page<ProductDTO> searchProducts(int pageNo, int pageSize, String searchQuery,String categoryId);
 

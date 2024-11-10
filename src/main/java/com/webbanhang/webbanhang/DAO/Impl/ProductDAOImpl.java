@@ -116,7 +116,7 @@ public class ProductDAOImpl implements IProductDAO {
     }
 
     @Override
-    public Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy) {
+    public Page<ProductModel> getProductForPage(Integer a, String categoryID, String brandID, String sortBy, String searchQuery) {
         Session currentSession = entityManager.unwrap(Session.class);
         StringBuilder sqlQuery = new StringBuilder("SELECT p FROM ProductModel p WHERE 1=1 and p.active=true");
         if (StringUtils.hasLength(categoryID)) {
@@ -125,28 +125,32 @@ public class ProductDAOImpl implements IProductDAO {
         if (StringUtils.hasLength(brandID)) {
             sqlQuery.append(" AND lower(p.brand.brandID) like lower(:brandID)");
         }
-
+        if (StringUtils.hasLength(searchQuery)) {
+            sqlQuery.append(" AND lower(p.productName) like lower(:searchQuery)");
+        }
         if (StringUtils.hasLength(sortBy)) {
             //asc|desc
             sqlQuery.append(String.format(" ORDER BY p.unitPrice %s", sortBy.toUpperCase()));
         }
-
         jakarta.persistence.Query selectQuery = entityManager.createQuery(sqlQuery.toString());
-        if (StringUtils.hasLength(categoryID) && StringUtils.hasLength(brandID)) {
-            selectQuery.setParameter("categoryID", String.format(LIKE_FORMAT,categoryID));
+        if (StringUtils.hasLength(categoryID)) {
+            selectQuery.setParameter("categoryID", String.format(LIKE_FORMAT, categoryID));
+        }
+        if (StringUtils.hasLength(brandID)) {
             selectQuery.setParameter("brandID", String.format(LIKE_FORMAT, brandID));
-        } else if (StringUtils.hasLength(categoryID) && !StringUtils.hasLength(brandID)) {
-            selectQuery.setParameter("categoryID", String.format(LIKE_FORMAT,categoryID));
-        } else if (!StringUtils.hasLength(categoryID) && StringUtils.hasLength(brandID)) {
-            selectQuery.setParameter("brandID", String.format(LIKE_FORMAT,brandID));
+        }
+        if (StringUtils.hasLength(searchQuery)) {
+            selectQuery.setParameter("searchQuery", String.format(LIKE_FORMAT, searchQuery));
         }
         Pageable pageable = PageRequest.of(a-1,9);
         int total = selectQuery.getResultList().size();
         selectQuery.setFirstResult((a - 1) * 9);
         selectQuery.setMaxResults(9);
         List<?> products = selectQuery.getResultList();
+
         Page<ProductModel> page = (Page<ProductModel>) new PageImpl<>(products,pageable,total);
         return page;
     }
+
 
 }
