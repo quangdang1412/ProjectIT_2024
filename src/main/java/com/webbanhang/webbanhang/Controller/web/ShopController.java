@@ -1,5 +1,6 @@
 package com.webbanhang.webbanhang.Controller.web;
 
+import com.webbanhang.webbanhang.DTO.response.ProductDTO;
 import com.webbanhang.webbanhang.Model.*;
 import com.webbanhang.webbanhang.Service.IBrandService;
 import com.webbanhang.webbanhang.Service.ICartService;
@@ -45,9 +46,9 @@ public class ShopController {
 
     }
 
-    public void productPage(Model model,int pageNo,String categoryID,String brandID,String sortBy)
+    public void productPage(Model model,int pageNo,String categoryID,String brandID,String sortBy, String searchQuery)
     {
-        Page<?> products = productService.getProductForPage(pageNo,categoryID,brandID,sortBy);
+        Page<?> products = productService.getProductForPage(pageNo,categoryID,brandID,sortBy,searchQuery);
         model.addAttribute("totalPages",products.getTotalPages());
         model.addAttribute("currentPage",pageNo);
         model.addAttribute("products", products);
@@ -56,10 +57,18 @@ public class ShopController {
     
 
     @GetMapping("/shop")
-    public String shop(Model model, @RequestParam(name = "pageNo",defaultValue = "1") Integer pageNo, @RequestParam(name = "category",required = false) String categoryID, @RequestParam(name = "brand",required = false) String brandID, @RequestParam(name = "sortBy",required = false) String sortBy, HttpServletRequest servletRequest){
+    public String shop(Model model,
+    @RequestParam(name = "search", required = false) String searchQuery,
+    @RequestParam(name = "pageNo",defaultValue = "1") Integer pageNo, 
+    @RequestParam(name = "category",required = false) String categoryID,
+    @RequestParam(name = "brand",required = false) String brandID,
+    @RequestParam(name = "sortBy",required = false) String sortBy, 
+    HttpServletRequest servletRequest){
+        
         loadCategory(model);
-        productPage(model,pageNo,categoryID,brandID,sortBy);
         loadData.ProductDiscount(model);
+        productPage(model,pageNo,categoryID,brandID,sortBy,searchQuery);
+
         String queryString = servletRequest.getQueryString();
         if (!StringUtils.isEmpty(queryString) && queryString.contains("&pageNo=")) {
             int startIndex = queryString.indexOf("&pageNo=");
