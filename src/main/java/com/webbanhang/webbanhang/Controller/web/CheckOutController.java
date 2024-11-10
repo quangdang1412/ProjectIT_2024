@@ -25,7 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CheckOutController {
     private final IUserService userService;
-
+    private final CheckLogin login;
     public void loadProduct(Model model,HttpSession session) {
         UserModel user = (UserModel) session.getAttribute("UserLogin");
         UserModel a = userService.findUserByID(user.getUserID());
@@ -62,6 +62,7 @@ public class CheckOutController {
     @GetMapping("/checkout")
     public String checkout(Model model, HttpSession session,@RequestParam(required = false) String status,@RequestParam(required = false) String cancel) {
         if((UserModel)session.getAttribute("UserLogin") != null) {
+            login.refreshUser(session);
             loadProduct(model,session);
             model.addAttribute("status", status);
             model.addAttribute("cancel", cancel);

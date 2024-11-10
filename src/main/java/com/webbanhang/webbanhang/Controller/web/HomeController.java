@@ -2,6 +2,7 @@ package com.webbanhang.webbanhang.Controller.web;
 
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.IUserService;
+import com.webbanhang.webbanhang.Util.CheckLogin;
 import com.webbanhang.webbanhang.Util.LoadData;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +20,11 @@ import java.util.List;
 public class HomeController {
 
     private final IUserService userService;
-
+    private final CheckLogin login;
     private final LoadData loadData;
     @RequestMapping(value = {"/", "/index","/static"})
     public String home(Model model,HttpSession session) {
+        login.refreshUser(session);
         loadData.loadProduct(model);
         loadData.loadOrderDetail(model);
         loadData.loadCategory(model,session);
@@ -40,6 +42,7 @@ public class HomeController {
 
     @GetMapping("/shop-detail")
     public String shopDetail(Model model,HttpSession session){
+        login.refreshUser(session);
         return "/web/shop-detail";
     }
 
@@ -57,6 +60,7 @@ public class HomeController {
 
     @GetMapping("/inforuser")
     public String inforuser(Model model, HttpSession session){
+        login.refreshUser(session);
         UserModel a = (UserModel) session.getAttribute("UserLogin");
         UserModel b = userService.findUserByID(a.getUserID());
         model.addAttribute("User",b);

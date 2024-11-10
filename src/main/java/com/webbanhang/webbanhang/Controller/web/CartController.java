@@ -4,6 +4,7 @@ package com.webbanhang.webbanhang.Controller.web;
 import com.webbanhang.webbanhang.Model.CartModel;
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Service.IUserService;
+import com.webbanhang.webbanhang.Util.CheckLogin;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,7 @@ import java.util.List;
 public class CartController {
 
     private final IUserService userService;
-
+    private final CheckLogin login;
     public void loadProduct(Model model,HttpSession session) {
         UserModel d=(UserModel) session.getAttribute("UserLogin");
         UserModel a = userService.findUserByID(d.getUserID());
@@ -46,6 +47,7 @@ public class CartController {
     @GetMapping("/cart")
     public String shop(Model model, HttpSession session){
         if((UserModel)session.getAttribute("UserLogin") != null) {
+            login.refreshUser(session);
             loadProduct(model,session);
             return "/web/cart";
         }
