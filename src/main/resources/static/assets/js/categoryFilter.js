@@ -57,7 +57,6 @@ function displayResults(products) {
     const productItem = document.createElement("div");
     productItem.classList.add("col-md-3");
 
-    // Định dạng giá tiền với dấu phân cách hàng nghìn
     const formattedPrice = new Intl.NumberFormat("vi-VN").format(
       product.unitPrice
     );

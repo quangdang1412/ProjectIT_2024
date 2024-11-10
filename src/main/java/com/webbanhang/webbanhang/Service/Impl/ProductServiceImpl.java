@@ -130,8 +130,8 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Page<ProductModel> getProductForPage(Integer a, String categoryID, String brandID, String sortBy) {
-        return productDAO.getProductForPage(a,categoryID,brandID,sortBy);
+    public Page<ProductModel> getProductForPage(Integer a, String categoryID, String brandID, String sortBy, String searchQuery) {
+        return productDAO.getProductForPage(a,categoryID,brandID,sortBy,searchQuery);
     }
 
     @Override
