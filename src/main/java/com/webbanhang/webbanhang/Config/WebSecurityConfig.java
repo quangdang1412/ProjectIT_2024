@@ -37,6 +37,7 @@ public class WebSecurityConfig {
             "/register",
             "/shop",
             "/ImageProduct/**",
+            "/api/addtocart/**",
             "/detail/**",
             "/locations",
             "/login/**",

@@ -6,6 +6,7 @@ import com.webbanhang.webbanhang.Service.IBrandService;
 import com.webbanhang.webbanhang.Service.ICartService;
 import com.webbanhang.webbanhang.Service.ICategoryService;
 import com.webbanhang.webbanhang.Service.IProductService;
+import com.webbanhang.webbanhang.Util.CheckLogin;
 import com.webbanhang.webbanhang.Util.LoadData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +30,7 @@ public class ShopController {
     private final IProductService productService;
     private final ICartService cartService;
     private final LoadData loadData;
+    private final CheckLogin login;
     public void loadCategory(Model model) {
 
         List<CategoryModel> categories = categoryService.getAllCategory();
@@ -54,21 +56,20 @@ public class ShopController {
         model.addAttribute("products", products);
     }
 
-    
-
     @GetMapping("/shop")
+
     public String shop(Model model,
     @RequestParam(name = "search", required = false) String searchQuery,
     @RequestParam(name = "pageNo",defaultValue = "1") Integer pageNo, 
     @RequestParam(name = "category",required = false) String categoryID,
     @RequestParam(name = "brand",required = false) String brandID,
     @RequestParam(name = "sortBy",required = false) String sortBy, 
-    HttpServletRequest servletRequest){
-        
+    HttpServletRequest servletRequest,HttpSession session){
+
         loadCategory(model);
         loadData.ProductDiscount(model);
+        login.refreshUser(session);
         productPage(model,pageNo,categoryID,brandID,sortBy,searchQuery);
-
         String queryString = servletRequest.getQueryString();
         if (!StringUtils.isEmpty(queryString) && queryString.contains("&pageNo=")) {
             int startIndex = queryString.indexOf("&pageNo=");
