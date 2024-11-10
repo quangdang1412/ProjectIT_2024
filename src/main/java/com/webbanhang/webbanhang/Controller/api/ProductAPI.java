@@ -1,6 +1,7 @@
 package com.webbanhang.webbanhang.Controller.api;
 
 import com.webbanhang.webbanhang.DTO.request.Product.ProductRequestDTO;
+import com.webbanhang.webbanhang.DTO.response.ProductDTO;
 import com.webbanhang.webbanhang.DTO.response.ResponseData;
 import com.webbanhang.webbanhang.DTO.response.ResponseError;
 import com.webbanhang.webbanhang.Exception.CustomException;
@@ -19,9 +20,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -190,5 +194,22 @@ public class ProductAPI {
                 .discount(allParams.get("DiscountID").isEmpty() ? "empty" : allParams.get("DiscountID"))
                 .quantity(Integer.valueOf(allParams.get("Quantity")))
                 .build();
+    }
+    @GetMapping("/search")
+    public ResponseEntity<?> searchProducts(
+            @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(name = "search", required = false) String searchQuery,
+            @RequestParam(name = "categoryId", required = false) String categoryId) {
+
+        Page<ProductDTO> productPage = productService.searchProducts(pageNo, pageSize, searchQuery,categoryId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", productPage.getContent());
+        response.put("currentPage", productPage.getNumber() + 1);
+        response.put("totalPages", productPage.getTotalPages());
+        response.put("totalItems", productPage.getTotalElements());
+
+        return ResponseEntity.ok(response);
     }
 }
