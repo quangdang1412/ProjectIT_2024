@@ -55,8 +55,6 @@ public class ShopController {
         model.addAttribute("products", products);
     }
 
-    
-
     @GetMapping("/shop")
     public String shop(Model model, @RequestParam(name = "pageNo",defaultValue = "1") Integer pageNo, @RequestParam(name = "category",required = false) String categoryID, @RequestParam(name = "brand",required = false) String brandID, @RequestParam(name = "sortBy",required = false) String sortBy, HttpServletRequest servletRequest,HttpSession session){
         loadCategory(model);

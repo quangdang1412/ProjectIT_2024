@@ -119,13 +119,10 @@ public class ProductDAOImpl implements IProductDAO {
     public Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy) {
         Session currentSession = entityManager.unwrap(Session.class);
         StringBuilder sqlQuery = new StringBuilder("SELECT p FROM ProductModel p WHERE 1=1 and p.active=true");
-        if (StringUtils.hasLength(categoryID) && StringUtils.hasLength(brandID)) {
-            sqlQuery.append(" AND lower(p.category.categoryID) like lower(:categoryID)");
-            sqlQuery.append(" AND lower(p.brand.brandID) like lower(:brandID)");
-        } else if (StringUtils.hasLength(categoryID) && !StringUtils.hasLength(brandID)) {
+        if (StringUtils.hasLength(categoryID)) {
             sqlQuery.append(" AND lower(p.category.categoryID) like lower(:categoryID)");
         }
-        else if (!StringUtils.hasLength(categoryID) && StringUtils.hasLength(brandID)) {
+        if (StringUtils.hasLength(brandID)) {
             sqlQuery.append(" AND lower(p.brand.brandID) like lower(:brandID)");
         }
 
@@ -144,11 +141,10 @@ public class ProductDAOImpl implements IProductDAO {
             selectQuery.setParameter("brandID", String.format(LIKE_FORMAT,brandID));
         }
         Pageable pageable = PageRequest.of(a-1,9);
+        int total = selectQuery.getResultList().size();
         selectQuery.setFirstResult((a - 1) * 9);
         selectQuery.setMaxResults(9);
         List<?> products = selectQuery.getResultList();
-        Query<Long> countQuery = currentSession.createQuery("SELECT COUNT(p) FROM ProductModel p", Long.class);
-        Long total = countQuery.getSingleResult();
         Page<ProductModel> page = (Page<ProductModel>) new PageImpl<>(products,pageable,total);
         return page;
     }

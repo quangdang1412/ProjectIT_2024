@@ -43,6 +43,6 @@ public interface IOrderRepository extends JpaRepository<OrderModel,String> {
     Double revenuePerMonth(LocalDate startDate, LocalDate endDate);
 
     @Transactional
-    @Query("SELECT SUM(od.quantity * p.unitCost) as Q FROM OrderDetailModel od JOIN od.productOrder p JOIN od.order o WHERE  o.status = 'Hoàn thành'")
+    @Query("SELECT SUM(od.quantity * (p.unitPrice-p.unitCost)) as Q FROM OrderDetailModel od JOIN od.productOrder p JOIN od.order o WHERE  o.status = 'Hoàn thành'")
     Double profitTotal();
 }

@@ -333,9 +333,8 @@
                       <li
                         class="dt-paging-button page-item"
                         th:each="i : ${#numbers.sequence(1, totalPages)}"
-                        th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1}"
-                        th:classappend="${currentPage == i ? 'active' : ''}"
-                      >
+                        th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1} or ${i == currentPage + 2} "
+                        th:classappend="${currentPage == i ? 'active' : ''}">
                         <a
                           class="page-link"
                           th:href="${fullUrl + '&pageNo=' + i}"
@@ -344,6 +343,36 @@
                       </li>
 
                       <!-- Next button -->
+                      <li
+                              class="dt-paging-button page-item disabled"
+
+                      >
+                        <a
+                                class="page-link next"
+                                aria-controls="example"
+                                aria-label="Next"
+                                data-dt-idx="next"
+                                tabindex="-1"
+
+                        >...</a
+                        >
+                      </li>
+                      <li
+                              class="dt-paging-button page-item"
+                              th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
+                      >
+                        <a
+                                class="page-link last"
+                                aria-controls="example"
+                                th:attr="aria-disabled=${currentPage == totalPages}"
+                                aria-label="Last"
+                                data-dt-idx="last"
+                                tabindex="-1"
+                                th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + totalPages : '#'}"
+                                th:text="${totalPages}"
+                        ></a
+                        >
+                      </li>
                       <li
                         class="dt-paging-button page-item"
                         th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
@@ -380,7 +409,6 @@
                     </ul>
                   </div>
                 </th:block>
-                <p class="d-flex justify-content-center" th:text="'Tổng số trang: '+${totalPages}"></p>
               </div>
             </div>
           </div>
