@@ -21,23 +21,22 @@ import com.webbanhang.webbanhang.Service.IProductService;
 @Component
 public class LoadData {
     @Autowired
-    private ICategoryService  categoryService;
+    private ICategoryService categoryService;
 
     @Autowired
     private IProductService productService;
 
     @Autowired
     private IOrderDetailService orderDetailService;
-    
 
-    
+
     public void loadCategory(Model model, HttpSession session) {
         List<CategoryModel> categories = categoryService.getAllCategory();
         for (CategoryModel category : categories) {
             List<ProductModel> products = productService.findCategory(category.getCategoryID());
             category.setProducts(products);
             Set<BrandModel> brandSet = new HashSet<>();
-            for(ProductModel productModel : products)
+            for (ProductModel productModel : products)
                 brandSet.add(productModel.getBrand());
             category.setBrandSet(brandSet);
         }
@@ -45,11 +44,13 @@ public class LoadData {
         model.addAttribute("categories", categories);
 
     }
+
     public void loadProduct(Model model) {
 
         List<ProductModel> products = productService.getAllProduct();
         model.addAttribute("products", products);
     }
+
     public void loadOrderDetail(Model model) {
 
         List<Object[]> bestSellingProducts = orderDetailService.getBestSellingProducts();
@@ -72,22 +73,19 @@ public class LoadData {
         }
 
         model.addAttribute("bestSellingProducts", products);
-       
+
     }
 
-    public void ProductDiscount(Model mode){
+    public void ProductDiscount(Model mode) {
         List<ProductModel> products = productService.getAllProduct();
         List<ProductModel> productDiscount = new ArrayList<>();
         for (ProductModel product : products) {
-            if(product.getDiscount() != null){
+            if (product.getDiscount() != null) {
                 productDiscount.add(product);
             }
         }
-
-    
         List<ProductModel> top5DiscountedProducts = productDiscount.stream().limit(6).collect(Collectors.toList());
-    
-        mode.addAttribute("productDiscount",top5DiscountedProducts);
+        mode.addAttribute("productDiscount", top5DiscountedProducts);
     }
-    
+
 }

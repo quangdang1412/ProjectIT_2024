@@ -1,6 +1,7 @@
 package com.webbanhang.webbanhang.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.webbanhang.webbanhang.Model.PK.OrderDetailID;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@IdClass(OrderDetailID.class)
 @Table(name = "order_detail_tb")
 public class OrderDetailModel {
     @Id

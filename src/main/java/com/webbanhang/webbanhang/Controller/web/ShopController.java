@@ -25,12 +25,13 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class ShopController {
-    private final ICategoryService  categoryService;
+    private final ICategoryService categoryService;
     private final IBrandService brandService;
     private final IProductService productService;
     private final ICartService cartService;
     private final LoadData loadData;
     private final CheckLogin login;
+
     public void loadCategory(Model model) {
 
         List<CategoryModel> categories = categoryService.getAllCategory();
@@ -48,28 +49,27 @@ public class ShopController {
 
     }
 
-    public void productPage(Model model,int pageNo,String categoryID,String brandID,String sortBy, String searchQuery)
-    {
-        Page<?> products = productService.getProductForPage(pageNo,categoryID,brandID,sortBy,searchQuery);
-        model.addAttribute("totalPages",products.getTotalPages());
-        model.addAttribute("currentPage",pageNo);
+    public void productPage(Model model, int pageNo, String categoryID, String brandID, String sortBy, String searchQuery) {
+        Page<?> products = productService.getProductForPage(pageNo, categoryID, brandID, sortBy, searchQuery);
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", pageNo);
         model.addAttribute("products", products);
     }
 
     @GetMapping("/shop")
 
     public String shop(Model model,
-    @RequestParam(name = "search", required = false) String searchQuery,
-    @RequestParam(name = "pageNo",defaultValue = "1") Integer pageNo, 
-    @RequestParam(name = "category",required = false) String categoryID,
-    @RequestParam(name = "brand",required = false) String brandID,
-    @RequestParam(name = "sortBy",required = false) String sortBy, 
-    HttpServletRequest servletRequest,HttpSession session){
+                       @RequestParam(name = "search", required = false) String searchQuery,
+                       @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                       @RequestParam(name = "category", required = false) String categoryID,
+                       @RequestParam(name = "brand", required = false) String brandID,
+                       @RequestParam(name = "sortBy", required = false) String sortBy,
+                       HttpServletRequest servletRequest, HttpSession session) {
 
         loadCategory(model);
         loadData.ProductDiscount(model);
         login.refreshUser(session);
-        productPage(model,pageNo,categoryID,brandID,sortBy,searchQuery);
+        productPage(model, pageNo, categoryID, brandID, sortBy, searchQuery);
         String queryString = servletRequest.getQueryString();
         if (!StringUtils.isEmpty(queryString) && queryString.contains("&pageNo=")) {
             int startIndex = queryString.indexOf("&pageNo=");
@@ -78,24 +78,18 @@ public class ShopController {
             }
         }
         model.addAttribute("currentURL", servletRequest.getRequestURL());
-        model.addAttribute("queryString",queryString);
+        model.addAttribute("queryString", queryString);
         //checkLogin.checkLogin(session,model,userService);
         return "/web/shop";
     }
-    @GetMapping("/shop/category/{categoryId}")
-    public String shopByCategory(@PathVariable("categoryId") String categoryId, Model model,@RequestParam(name = "pageNo",defaultValue = "1") Integer pageNo,HttpSession session) {
-        loadCategory(model);
-        Page<ProductModel> products = productService.findCategoryForPage(categoryId,pageNo);
-        model.addAttribute("products", products);
-        //checkLogin.checkLogin(session,model,userService);
-        return "/web/shop";
-    }
+
+
     @GetMapping("/shop/addtocart/{productId}")
-    public String addToCart(@PathVariable("productId") String productId, Model model, HttpSession session,RedirectAttributes redirectAttributes) {
+    public String addToCart(@PathVariable("productId") String productId, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         //checkLogin.checkLogin(session,model,userService);
         UserModel user = (UserModel) session.getAttribute("UserLogin");
         ProductModel product = productService.getProductByID(productId);
-        CartModel cartItem = cartService.findCartItemByUserAndProduct(user.getUserID(), product);
+        CartModel cartItem = cartService.findCart(user, product);
 
         if (cartItem != null) {
             cartItem.setQuantity(cartItem.getQuantity() + 1);
@@ -113,5 +107,5 @@ public class ShopController {
         return "redirect:/shop";
     }
 
-    
+
 }

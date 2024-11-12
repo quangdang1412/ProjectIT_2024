@@ -11,15 +11,23 @@ import java.util.List;
 
 public interface IProductService {
     List<ProductModel> getAllProduct();
+
     ProductModel getProductByID(String id);
+
     String saveProduct(ProductRequestDTO productRequestDTO, MultipartFile file);
+
     String deleteProduct(String a);
+
     List<ProductModel> findCategory(String id);
+
     List<ProductModel> findBrand(String id);
+
     List<ProductModel> getProductOutOfStock();
-    Page<ProductModel> findCategoryForPage(String id,Integer a);
-    Page<ProductModel> getProductForPage(Integer a,String categoryID,String brandID,String sortBy, String searchQuery);
+
+    Page<ProductModel> getProductForPage(Integer a, String categoryID, String brandID, String sortBy, String searchQuery);
+
     PageResponse<?> getAllProductWithSortBy(int pageNo, int pageSize, String sortBy);
-    Page<ProductDTO> searchProducts(int pageNo, int pageSize, String searchQuery,String categoryId);
+
+    Page<ProductDTO> searchProducts(int pageNo, int pageSize, String searchQuery, String categoryId);
 
 }

@@ -37,124 +37,121 @@ public class ProductAPI {
     private final IUserService userService;
     private final ICartService cartService;
     private final CheckLogin login;
-    @PostMapping("/api/addtocart/{productId}/{quantity}")
-    public ResponseEntity<?> addToCart(@PathVariable("productId") String productId,@PathVariable("quantity") int quantity,HttpSession session) {
-       try{
-           //checkLogin.checkLogin(session,model,userService);
-           UserModel a = (UserModel) session.getAttribute("UserLogin");
-           UserModel user = userService.findUserByID(a.getUserID());
-           ProductModel product = productService.getProductByID(productId);
-           CartModel cartItem = cartService.findCartItemByUserAndProduct(user.getUserID(), product);
 
-           String successMessage = null;
-           String errorMessage = null;
-           if (cartItem != null) {
-               cartItem.setQuantity(cartItem.getQuantity() + quantity);
-               cartService.updateCart(cartItem);
-               successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
-               login.refreshUser(session);
-           }
-           else {
-               CartModel newCartItem = new CartModel(user, product, quantity);
-               boolean success = cartService.addCart(newCartItem);
-               if (success) {
-                   successMessage= "Đã cập nhật sản phẩm vào giỏ hàng";
-                   login.refreshUser(session);
-               } else {
-                   errorMessage ="Không thêm được sản phẩm vào giỏ hàng";
-               }
-           }
-           String responseMessage = successMessage != null ? successMessage : errorMessage;
-           login.refreshUser(session);
-           return ResponseEntity.ok(responseMessage);
-       }catch (Exception e){
-           log.error(e.getMessage());
-           return ResponseEntity.ok("Không thêm được sản phẩm vào giỏ hàng");
-       }
+    @PostMapping("/api/addtocart/{productId}/{quantity}")
+    public ResponseEntity<?> addToCart(@PathVariable("productId") String productId, @PathVariable("quantity") int quantity, HttpSession session) {
+        try {
+            //checkLogin.checkLogin(session,model,userService);
+            UserModel a = (UserModel) session.getAttribute("UserLogin");
+            UserModel user = userService.findUserByID(a.getUserID());
+            ProductModel product = productService.getProductByID(productId);
+            CartModel cartItem = cartService.findCart(user, product);
+
+            String successMessage = null;
+            String errorMessage = null;
+            if (cartItem != null) {
+                cartItem.setQuantity(cartItem.getQuantity() + quantity);
+                cartService.updateCart(cartItem);
+                successMessage = "Đã cập nhật sản phẩm vào giỏ hàng";
+                login.refreshUser(session);
+            } else {
+                CartModel newCartItem = new CartModel(user, product, quantity);
+                boolean success = cartService.addCart(newCartItem);
+                if (success) {
+                    successMessage = "Đã cập nhật sản phẩm vào giỏ hàng";
+                    login.refreshUser(session);
+                } else {
+                    errorMessage = "Không thêm được sản phẩm vào giỏ hàng";
+                }
+            }
+            String responseMessage = successMessage != null ? successMessage : errorMessage;
+            login.refreshUser(session);
+            return ResponseEntity.ok(responseMessage);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.ok("Không thêm được sản phẩm vào giỏ hàng");
+        }
     }
+
     @DeleteMapping("/api/deleteproduct/{productId}")
-    public ResponseEntity<?> deleteProInCart(@PathVariable("productId") String id,HttpSession session)
-    {
+    public ResponseEntity<?> deleteProInCart(@PathVariable("productId") String id, HttpSession session) {
         UserModel a = (UserModel) session.getAttribute("UserLogin");
         ProductModel b = productService.getProductByID(id);
-        CartModel c = cartService.findCart(a.getUserID(), b.getProductID());
+        CartModel c = cartService.findCart(a, b);
         boolean success = cartService.deleteCart(c);
         String successMessage = null;
         String errorMessage = null;
         if (success) {
-            successMessage= "Đã xóa sản phẩm khỏi giỏ hàng";
+            successMessage = "Đã xóa sản phẩm khỏi giỏ hàng";
             login.refreshUser(session);
         } else {
-            errorMessage ="Không thể xóa sản phẩm khỏi giỏ hàng";
+            errorMessage = "Không thể xóa sản phẩm khỏi giỏ hàng";
         }
         String responseMessage = successMessage != null ? successMessage : errorMessage;
         login.refreshUser(session);
         return ResponseEntity.ok(responseMessage);
     }
+
     @GetMapping("/api/product/getAllProduct")
-    public ResponseData<?> getAllProduct(@RequestParam(defaultValue = "1", required = false) @Min(value = 1, message = "pageNo must be greater than 1")  int pageNo,
-                                   @Valid @Min(value = 10,  message = "pageNo must be greater than 10") @RequestParam(defaultValue = "1", required = false) int pageSize,
-                                   @RequestParam(required = false) String sortBy)
-    {
+    public ResponseData<?> getAllProduct(@RequestParam(defaultValue = "1", required = false) @Min(value = 1, message = "pageNo must be greater than 1") int pageNo,
+                                         @Valid @Min(value = 10, message = "pageNo must be greater than 10") @RequestParam(defaultValue = "1", required = false) int pageSize,
+                                         @RequestParam(required = false) String sortBy) {
 
         try {
-            return new ResponseData<>(HttpStatus.OK.value(),"Get user successfully",productService.getAllProductWithSortBy(pageNo,pageSize,sortBy));
-        }
-        catch (ResourceNotFoundException e){
-            log.info("errorMessage={}",e.getMessage(),e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(),e.getMessage());
+            return new ResponseData<>(HttpStatus.OK.value(), "Get user successfully", productService.getAllProductWithSortBy(pageNo, pageSize, sortBy));
+        } catch (ResourceNotFoundException e) {
+            log.info("errorMessage={}", e.getMessage(), e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         }
 
     }
-    @PostMapping(value ="/api/product/add")
-    public ResponseData<?> addProduct(@RequestParam Map<String,String> allParams, @RequestParam(value = "ImageCode")  MultipartFile fileImage)
-    {
+
+    @PostMapping(value = "/api/product/add")
+    public ResponseData<?> addProduct(@RequestParam Map<String, String> allParams, @RequestParam(value = "ImageCode") MultipartFile fileImage) {
         try {
             log.info("Request add Product: {}", allParams.get("ProductName"));
             checkEmpty(allParams);
-            if(fileImage.isEmpty())
+            if (fileImage.isEmpty())
                 throw new CustomException("Image cannot be blank");
             ProductRequestDTO productRequestDTO = changeToDTO(allParams);
-            return new ResponseData<>(HttpStatus.OK.value(),"Success",productService.saveProduct(productRequestDTO,fileImage));
-        }
-        catch (Exception e ){
-            log.info("errorMessage={}",e.getMessage(),e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(),e.getMessage());
+            return new ResponseData<>(HttpStatus.OK.value(), "Success", productService.saveProduct(productRequestDTO, fileImage));
+        } catch (Exception e) {
+            log.info("errorMessage={}", e.getMessage(), e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         }
 
     }
-    @PutMapping(value ="/api/product/update")
-    public ResponseData<?> updateProduct(@RequestParam Map<String,String> allParams, @RequestParam(value = "ImageCode", required = false) MultipartFile fileImage)
-    {
+
+    @PutMapping(value = "/api/product/update")
+    public ResponseData<?> updateProduct(@RequestParam Map<String, String> allParams, @RequestParam(value = "ImageCode", required = false) MultipartFile fileImage) {
         try {
-            log.info("Request update Product: {}",allParams.get("ProductName"));
+            log.info("Request update Product: {}", allParams.get("ProductName"));
             checkEmpty(allParams);
             ProductRequestDTO productRequestDTO = changeToDTO(allParams);
-            return new ResponseData<>(HttpStatus.OK.value(),"Success",productService.saveProduct(productRequestDTO,fileImage));
-        }
-        catch (Exception e ){
-            log.info("errorMessage={}",e.getMessage(),e.getCause());
+            return new ResponseData<>(HttpStatus.OK.value(), "Success", productService.saveProduct(productRequestDTO, fileImage));
+        } catch (Exception e) {
+            log.info("errorMessage={}", e.getMessage(), e.getCause());
             String error = e.getMessage();
-            if(error.contains("bounds for length"))
+            if (error.contains("bounds for length"))
                 error = "Failed";
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(),error);
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), error);
         }
     }
-    @DeleteMapping(value ="/api/product/delete/{proID}")
-    public ResponseData<?> deleteProduct(@PathVariable String proID)
-    {
+
+    @DeleteMapping(value = "/api/product/delete/{proID}")
+    public ResponseData<?> deleteProduct(@PathVariable String proID) {
         try {
             log.info("Request add order: 1");
-            return new ResponseData<>(HttpStatus.OK.value(),"Success",productService.deleteProduct(proID));
+            return new ResponseData<>(HttpStatus.OK.value(), "Success", productService.deleteProduct(proID));
 
-        }
-        catch (Exception e ){
-            log.info("errorMessage={}",e.getMessage(),e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(),e.getMessage());
+        } catch (Exception e) {
+            log.info("errorMessage={}", e.getMessage(), e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         }
 
     }
-    void checkEmpty(Map<String,String> allParams){
+
+    void checkEmpty(Map<String, String> allParams) {
 
         if (allParams.get("ProductName").isEmpty()) {
             throw new CustomException("Product name cannot be blank");
@@ -181,7 +178,8 @@ public class ProductAPI {
             throw new CustomException("Unit price must be greater than unit cost and greater than zero");
         }
     }
-    ProductRequestDTO changeToDTO(Map<String,String> allParams){
+
+    ProductRequestDTO changeToDTO(Map<String, String> allParams) {
         return ProductRequestDTO.builder()
                 .productID(allParams.get("ProductID"))
                 .productName(allParams.get("ProductName"))
@@ -195,6 +193,7 @@ public class ProductAPI {
                 .quantity(Integer.valueOf(allParams.get("Quantity")))
                 .build();
     }
+
     @GetMapping("/search")
     public ResponseEntity<?> searchProducts(
             @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
@@ -202,7 +201,7 @@ public class ProductAPI {
             @RequestParam(name = "search", required = false) String searchQuery,
             @RequestParam(name = "categoryId", required = false) String categoryId) {
 
-        Page<ProductDTO> productPage = productService.searchProducts(pageNo, pageSize, searchQuery,categoryId);
+        Page<ProductDTO> productPage = productService.searchProducts(pageNo, pageSize, searchQuery, categoryId);
 
         Map<String, Object> response = new HashMap<>();
         response.put("content", productPage.getContent());
