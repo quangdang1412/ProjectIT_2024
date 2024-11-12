@@ -8,19 +8,22 @@ Welcome to our **Tạp Hóa IT** project, this is the first our's project about 
 
 This project is a  built using **Spring Boot**, a robust framework for Java-based web development. The application focuses on:
 
-- **Scalability:** Designed to handle increasing workloads.
-- **User-Friendliness:** Provides an intuitive and responsive user interface.
-- **Security:** Implements OAuth2 for secure authentication.
+- **User-Friendliness:** The website features an intuitive, responsive user interface that is optimized for various devices, ensuring a smooth browsing experience.
+- **Security:** The application implements OAuth2 for secure user authentication, along with JWT for access control to ensure that only authorized users can perform sensitive actions.
+- **Product Management and Order Processing:** Tạp Hóa IT offers easy management of products, categories, promotions, and customer orders. Admins and sellers can update inventory and process orders efficiently.
+- **Payment Integration:** The website integrates popular and secure payment methods such as PayOS, enabling customers to pay using various online options, including QR code scanning for seamless transactions.
 
 ---
 
 ## 🛠️ Features
 
 - **RESTful APIs:** Backend services for smooth client-server interaction.
-- **Database Integration:** CRUD operations with [MySQL/PostgreSQL/etc.] using Spring Data JPA.
-- **Dynamic Views:** Responsive and interactive pages powered by Thymeleaf.
-- **Secure Login:** OAuth2 integration for authentication.
-- **Scalable Architecture:** Configured for real-world deployment.
+- **Database Integration:** CRUD operations with [MySQL] using Spring Data JPA.
+- **User Authentication (OAuth2 & JWT):** Users can register and log in securely, including Google OAuth2 integration for easy login.
+- **Product Search & Filtering:** Advanced search and filter functionality allow customers to find products by categories, brands, and specifications.
+- **Product and Order Management:** Admins can manage the product catalog, including adding, updating, deleting products,can view, process, and update order statuses and Customers can place orders, manage their cart, and track their orders. 
+- **Payment Integration:** Supports secure payments via PayOS, offering methods like Cash on Delivery (COD) and QR code scanning for online payments.
+- **Dynamic Views with Thymeleaf & Bootstrap:** The website uses Thymeleaf for dynamic content rendering and Bootstrap for responsive, mobile-friendly designs.
 
 ---
 
@@ -63,20 +66,21 @@ This project is a  built using **Spring Boot**, a robust framework for Java-base
 
 3. **Add Required API Keys:**
   If you want to enable Firebase, email services, OAuth2, or PayOS for your application, make sure to add the following API keys to the application.properties file:
-  3.1 Firebase
+
+  Firebase
 
        app.firebase.file=your-file-key
        app.firebase.bucket=your-bucket
-  3.2 Email Service
+  Email Service
   
        spring.mail.from=your-email-from
        spring.mail.username=your-email-username
        spring.mail.password=your-email-key
-  3.3 OAuth2
+  OAuth2
 
        oauth2.client-id=your-client-id
        oauth2.client-secret=your-client-secret
-  3.4 PayOS
+  PayOS
   
        payos.client-id=your-client-id
        payos.api-key=your-payos-api-key
@@ -88,8 +92,9 @@ This project is a  built using **Spring Boot**, a robust framework for Java-base
 5. **Access the application:**
 
        Open your browser and navigate to http://localhost:8080.
+---
 
-📦 Folder Structure
+## 📦 Folder Structure
 src/
 ├── main/
 │   ├── java/
@@ -113,9 +118,10 @@ src/
 │       ├── application-oauth2.yml
 │       └── application-payOS.yml
 └── test/
-
-🤝 Contribution
+---
+## 🤝 Contribution
 This project was developed by:
 
 Thanh Phong: Responsible for backend logic, database integration, and admin frontend.
 Quang Đăng: Responsible for authorization, authentication, security logic, system integration, and customer frontend.
+---
