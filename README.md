@@ -54,8 +54,8 @@ This project is a  built using **Spring Boot**, a robust framework for Java-base
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/quangdang1412/ProjectIT_2024.git
+   cd ProjectIT_2024
 2. **Configure the Database:**
   To set up the database for the application, follow these steps:
   Open the application.properties file located in the src/main/resources directory.
@@ -94,35 +94,37 @@ This project is a  built using **Spring Boot**, a robust framework for Java-base
        Open your browser and navigate to http://localhost:8080.
 ---
 
-src/
-├── main/
-│   ├── java/
-│   │   └── com/webbanhang/webbanhang/
-│   │       ├── config/                # Cấu hình Spring Security
-│   │       ├── controller/            # Các controller xử lý request
-│   │       ├── dto/                   # Data Transfer Objects
-│   │       ├── exception/             # Custom Exception
-│   │       ├── mapper/                # Mapper từ Entity sang DTO
-│   │       ├── model/                 # Các Entity
-│   │       ├── repository/            # JPA Repository
-│   │       ├── service/               # Business Logic
-│   │       ├── util/                  # Các tiện ích (JWT, Helper)
-│   │       └── WebbanhangApplication.java
-│   └── resources/
-│       ├── database/                  # Cấu hình database
-│       ├── static/                    # CSS, JS, hình ảnh
-│       ├── templates/                 # Thymeleaf templates
-│       ├── application.yml            # Cấu hình chính
-│       ├── application-mail.yml       # Cấu hình email
-│       ├── application-oauth2.yml     # Cấu hình OAuth2
-│       └── application-payOS.yml      # Cấu hình PayOS
-└── test/
-    └── java/
-        └── com/webbanhang/webbanhang/ # Unit và Integration Tests
+## 📦 Folder Structure
+      ```
+      src/
+      ├── main/
+      │   ├── java/
+      │   │   └── com.webbanhang.webbanhang/
+      │   │       ├── Config/
+      │   │       ├── Controller/
+      │   │       ├── DAO/
+      │   │       ├── DTO/
+      │   │       ├── Exception/
+      │   │       ├── Mapper/
+      │   │       ├── Model/
+      │   │       ├── Repository/
+      │   │       ├── Service/
+      │   │       ├── Util/
+      │   │       └── WebbanhangApplication.java
+      │   └── resources/
+      │       ├── database/
+      │       ├── static/
+      │       ├── templates/
+      │       ├── application-mail.yml
+      │       ├── application-oauth2.yml
+      │       └── application-payOS.yml
+      └── test/
 
+---
 ## 🤝 Contribution
 This project was developed by:
 
 Thanh Phong: Responsible for backend logic, database integration, and admin frontend.
 Quang Đăng: Responsible for authorization, authentication, security logic, system integration, and customer frontend.
----
+
+
