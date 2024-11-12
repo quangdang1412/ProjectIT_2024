@@ -1,6 +1,5 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
-import com.webbanhang.webbanhang.DAO.IProductDAO;
 import com.webbanhang.webbanhang.DTO.request.Product.ProductRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.PageResponse;
 import com.webbanhang.webbanhang.DTO.response.ProductDTO;
@@ -30,7 +29,6 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductServiceImpl implements IProductService {
-    private final IProductDAO productDAO;
     private final IProductRepository productRepository;
     private final IBrandService brandService;
     private final ICategoryService categoryService;
@@ -40,10 +38,10 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public List<ProductModel> getAllProduct() {
-        for(ProductModel productModel : productRepository.findAll()){
-            if(productModel.getDiscount() != null && productModel.getDiscount().getEndDate().toLocalDate().isBefore(LocalDate.now())){
-                    productModel.setDiscount(null);
-                    productRepository.save(productModel);
+        for (ProductModel productModel : productRepository.findAll()) {
+            if (productModel.getDiscount() != null && productModel.getDiscount().getEndDate().toLocalDate().isBefore(LocalDate.now())) {
+                productModel.setDiscount(null);
+                productRepository.save(productModel);
             }
         }
         return productRepository.findAll();
@@ -51,14 +49,14 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ProductModel getProductByID(String id) {
-        return productRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Product not found"));
+        return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override
     public String saveProduct(ProductRequestDTO productRequestDTO, MultipartFile file) {
-        try{
+        try {
 
-            ProductModel productModel= ProductModel.builder()
+            ProductModel productModel = ProductModel.builder()
                     .productID(productRequestDTO.getProductID())
                     .productName(productRequestDTO.getProductName())
                     .brand(brandService.findBrandByID(productRequestDTO.getBrand()))
@@ -72,46 +70,46 @@ public class ProductServiceImpl implements IProductService {
                     .active(true)
                     .build();
             ImageModel imageProduct = null;
-            if(!file.isEmpty()){
+            if (!file.isEmpty()) {
                 String fileName = imageService.upload(file);
-                if(fileName.contains("Something went wrong"))
+                if (fileName.contains("Something went wrong"))
                     throw new CustomException("Failed");
-                if(!imageService.isPresent(fileName))
-                {
+                if (!imageService.isPresent(fileName)) {
                     imageService.addImage(fileName);
                 }
                 imageProduct = imageService.findOneImage(fileName);
                 productModel.setImage(imageProduct);
-            }else{
+            } else {
                 productModel.setImage(productRepository.findById(productRequestDTO.getProductID()).get().getImage());
             }
             productRepository.save(productModel);
             return productModel.getProductID();
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(error);
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
+
     @Override
     public String deleteProduct(String id) {
-        try{
+        try {
             ProductModel productModel = getProductByID(id);
             productModel.setActive(!productModel.isActive());
             productRepository.save(productModel);
             return productModel.getProductID();
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(error);
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
 
     @Override
     public List<ProductModel> findCategory(String id) {
-        return productDAO.findCategory(id);
+        return productRepository.findProductModelsByCategoryCategoryID(id);
     }
 
     @Override
@@ -125,35 +123,43 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Page<ProductModel> findCategoryForPage(String id,Integer a) {
-       return productDAO.findCategoryForPage(id,a);
-    }
+    public Page<ProductModel> getProductForPage(Integer pageNumber, String categoryID, String brandID, String sortBy, String searchQuery) {
+        Pageable pageable = null;
+        if (sortBy == null)
+            pageable = PageRequest.of(pageNumber - 1, 9);
 
-    @Override
-    public Page<ProductModel> getProductForPage(Integer a, String categoryID, String brandID, String sortBy, String searchQuery) {
-        return productDAO.getProductForPage(a,categoryID,brandID,sortBy,searchQuery);
+        else {
+            Sort.Direction direction = sortBy.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
+            pageable = PageRequest.of(pageNumber - 1, 9, Sort.by(direction, "unitPrice"));
+        }
+
+        return productRepository.getProductForPage(
+                categoryID != null ? "%" + categoryID + "%" : null,
+                brandID != null ? "%" + brandID + "%" : null,
+                searchQuery != null ? "%" + searchQuery + "%" : null,
+                pageable
+        );
     }
 
     @Override
     public PageResponse<?> getAllProductWithSortBy(int pageNo, int pageSize, String sortBy) {
-        if(pageNo>0)
+        if (pageNo > 0)
             pageNo--;
         String substring = sortBy.substring(1);
-        sortBy = String.valueOf(sortBy.charAt(0)).toUpperCase()+substring;
-        List<Sort.Order> sorts=new ArrayList<>();
-        if(StringUtils.hasLength(sortBy)){
+        sortBy = String.valueOf(sortBy.charAt(0)).toUpperCase() + substring;
+        List<Sort.Order> sorts = new ArrayList<>();
+        if (StringUtils.hasLength(sortBy)) {
             Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
             Matcher matcher = pattern.matcher(sortBy);
             if (matcher.find()) {
-                if(matcher.group(3).equalsIgnoreCase("asc")){
-                    sorts.add(new Sort.Order(Sort.Direction.ASC,matcher.group(1)));
-                }
-                else{
-                    sorts.add(new Sort.Order(Sort.Direction.DESC,matcher.group(1)));
+                if (matcher.group(3).equalsIgnoreCase("asc")) {
+                    sorts.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
+                } else {
+                    sorts.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
                 }
             }
         }
-        Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sorts));
         Page<ProductModel> productPage = productRepository.findAll(pageable);
         List<ProductModel> list = productPage.stream().map(product -> ProductModel.builder()
                         .productID(product.getProductID())
@@ -172,15 +178,15 @@ public class ProductServiceImpl implements IProductService {
                 .items(list)
                 .build();
     }
-    public Page<ProductDTO> searchProducts(int pageNo, int pageSize, String searchQuery,String categoryId) {
+
+    public Page<ProductDTO> searchProducts(int pageNo, int pageSize, String searchQuery, String categoryId) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
 
         Page<ProductModel> productModels;
 
         if (categoryId != null) {
-            productModels= productRepository.findByCategory_categoryID(categoryId, pageable);
-        }
-        else{
+            productModels = productRepository.findByCategory_categoryID(categoryId, pageable);
+        } else {
             if (searchQuery != null && !searchQuery.isEmpty()) {
                 productModels = productRepository.findByProductNameContainingIgnoreCase(searchQuery, pageable);
             } else {
@@ -190,6 +196,7 @@ public class ProductServiceImpl implements IProductService {
 
         return productModels.map(this::convertToDTO);
     }
+
     private ProductDTO convertToDTO(ProductModel productModel) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setProductID(productModel.getProductID());
@@ -205,5 +212,5 @@ public class ProductServiceImpl implements IProductService {
         productDTO.setUnitCost(productModel.getUnitCost());
         return productDTO;
     }
-   
+
 }

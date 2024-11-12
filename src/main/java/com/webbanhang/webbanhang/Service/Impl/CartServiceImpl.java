@@ -1,49 +1,64 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
-import com.webbanhang.webbanhang.DAO.ICartDAO;
 import com.webbanhang.webbanhang.Model.CartModel;
+import com.webbanhang.webbanhang.Model.PK.UserCartID;
 import com.webbanhang.webbanhang.Model.ProductModel;
+import com.webbanhang.webbanhang.Model.UserModel;
+import com.webbanhang.webbanhang.Repository.ICartRepository;
 import com.webbanhang.webbanhang.Service.ICartService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
+@RequiredArgsConstructor
 public class CartServiceImpl implements ICartService {
 
-    @Autowired
-    private ICartDAO cartDAO;
+    private final ICartRepository cartRepository;
+
     @Override
     public List<CartModel> getAllCart() {
-        return cartDAO.getAllCart();
+        return cartRepository.findAll();
     }
 
     @Override
     public List<ProductModel> getProductInCart(String id) {
-        return cartDAO.getProductInCart(id);
+        return cartRepository.getProductInCart(id);
     }
 
     @Override
-    public CartModel findCart(String Uid, String Pid) {
-        return cartDAO.findCart(Uid,Pid);
+    public CartModel findCart(UserModel Uid, ProductModel Pid) {
+        return cartRepository.findById(new UserCartID(Uid, Pid)).orElse(null);
     }
 
     @Override
     public boolean addCart(CartModel a) {
-        return cartDAO.addCart(a);
+        try {
+            cartRepository.save(a);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public boolean updateCart(CartModel a) {
-        return cartDAO.updateCart(a);
+        try {
+            cartRepository.save(a);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public boolean deleteCart(CartModel a) {
-        return cartDAO.deleteCart(a);
-    }
-    @Override
-    public CartModel findCartItemByUserAndProduct(String userId, ProductModel product) {
-        return cartDAO.findCartItemByUserAndProduct(userId, product);
+        try {
+            cartRepository.delete(a);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
