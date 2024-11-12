@@ -94,31 +94,32 @@ This project is a  built using **Spring Boot**, a robust framework for Java-base
        Open your browser and navigate to http://localhost:8080.
 ---
 
-## 📦 Folder Structure
 src/
 ├── main/
 │   ├── java/
-│   │   └── com.webbanhang.webbanhang/
-│   │       ├── Config/
-│   │       ├── Controller/
-│   │       ├── DAO/
-│   │       ├── DTO/
-│   │       ├── Exception/
-│   │       ├── Mapper/
-│   │       ├── Model/
-│   │       ├── Repository/
-│   │       ├── Service/
-│   │       ├── Util/
+│   │   └── com/webbanhang/webbanhang/
+│   │       ├── config/                # Cấu hình Spring Security
+│   │       ├── controller/            # Các controller xử lý request
+│   │       ├── dto/                   # Data Transfer Objects
+│   │       ├── exception/             # Custom Exception
+│   │       ├── mapper/                # Mapper từ Entity sang DTO
+│   │       ├── model/                 # Các Entity
+│   │       ├── repository/            # JPA Repository
+│   │       ├── service/               # Business Logic
+│   │       ├── util/                  # Các tiện ích (JWT, Helper)
 │   │       └── WebbanhangApplication.java
 │   └── resources/
-│       ├── database/
-│       ├── static/
-│       ├── templates/
-│       ├── application-mail.yml
-│       ├── application-oauth2.yml
-│       └── application-payOS.yml
+│       ├── database/                  # Cấu hình database
+│       ├── static/                    # CSS, JS, hình ảnh
+│       ├── templates/                 # Thymeleaf templates
+│       ├── application.yml            # Cấu hình chính
+│       ├── application-mail.yml       # Cấu hình email
+│       ├── application-oauth2.yml     # Cấu hình OAuth2
+│       └── application-payOS.yml      # Cấu hình PayOS
 └── test/
----
+    └── java/
+        └── com/webbanhang/webbanhang/ # Unit và Integration Tests
+
 ## 🤝 Contribution
 This project was developed by:
 
