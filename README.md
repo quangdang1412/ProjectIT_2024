@@ -95,7 +95,7 @@ This project is a  built using **Spring Boot**, a robust framework for Java-base
 ---
 
 ## 📦 Folder Structure
-      ```
+      
       src/
       ├── main/
       │   ├── java/
@@ -125,6 +125,8 @@ This project is a  built using **Spring Boot**, a robust framework for Java-base
 This project was developed by:
 
 Thanh Phong: Responsible for backend logic, database integration, and admin frontend.
-Quang Đăng: Responsible for authorization, authentication, security logic, system integration, and customer frontend.
+Đăng Quang : Responsible for authorization, authentication, security logic, system integration, and customer frontend.
+
+---
 
 
