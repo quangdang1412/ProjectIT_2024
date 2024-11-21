@@ -11,27 +11,51 @@ function sendOrderData(check) {
       : order.finalTotal;
   if (paymentMethod === "Transfer") {
     localStorage.setItem("orderId", order.orderID);
-    sendRequest(method, "order", endpoint, order, url);
-    if (order.name != "" && order.phone != "" && order.address != "") {
-      $.ajax({
-        url: "/api/payments/createcheckout",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-          finalTotal: finalTotal,
-          orderId: order.orderID,
-          returnUrl: "http://localhost:8080/checkout",
-          cancelUrl: "http://localhost:8080/checkout",
-        }),
-        success: function (response) {
-          console.log("Gọi API thành công:", response);
-          window.location.href = response;
-        },
-        error: function (xhr, status, error) {
-          console.error("Có lỗi xảy ra:", error);
-        },
-      });
-    }
+    $.ajax({
+      url: "/api/order/placeOrder",
+      type: "POST",
+      contentType: "application/json", // Đảm bảo định dạng là JSON
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      data: JSON.stringify(order), // Truyền dữ liệu order
+      success: function (response) {
+        if (response.status === 200) {
+          $.ajax({
+            url: "/api/payments/createcheckout",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+              finalTotal: finalTotal,
+              orderId: order.orderID,
+              returnUrl: "http://localhost:8080/checkout",
+              cancelUrl: "http://localhost:8080/checkout",
+            }),
+            success: function (response) {
+              console.log("Gọi API thành công:", response);
+              window.location.href = response.redirectUrl; // Giả sử trả về một URL để điều hướng
+            },
+            error: function (xhr, status, error) {
+              console.error("Có lỗi xảy ra trong payment API:", error);
+            },
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Thông báo.",
+            text: response.message || "Có lỗi xảy ra.",
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        let response = JSON.parse(xhr.responseText);
+        Swal.fire({
+          icon: "error",
+          title: "Thông báo.",
+          text: response.message,
+        });
+      },
+    });
   } else {
     sendRequest(method, "order", endpoint, order, url);
   }

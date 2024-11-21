@@ -84,7 +84,10 @@
             <tbody>
               <tr th:each="cart: ${carts}">
                 <th scope="row" class="align-middle">
-                  <div class="d-flex justify-content-center" style="height: 100%; max-width: 150px">
+                  <div
+                    class="d-flex justify-content-center"
+                    style="height: 100%; max-width: 150px"
+                  >
                     <img
                       th:src="${#strings.contains(cart.ProductCart.Image?.ImageCode, 'https') ? cart.ProductCart.Image.ImageCode : '/ImageProduct/' + cart.ProductCart.Image.ImageCode}"
                       th:alt="${cart.ProductCart.Image?.ImageCode}"
@@ -209,6 +212,8 @@
     <!-- Template Javascript -->
     <script th:src="@{/assets/js/main.js}"></script>
     <script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
+    <script th:src="@{/assets/callAPI/SendAPI.js}"></script>
+
     <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
   </body>
 </html>
