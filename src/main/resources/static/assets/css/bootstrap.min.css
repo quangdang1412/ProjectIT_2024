@@ -410,6 +410,42 @@ progress {
 [hidden] {
   display: none !important;
 }
+/* Tổng thể form */
+.coupon-input-container {
+  position: relative; /* Quan trọng để chứa nút "Áp dụng" */
+  width: 100%; /* Chiều rộng đầy đủ */
+}
+
+/* Input */
+.form-control {
+  width: 100%; /* Input chiếm toàn bộ chiều rộng */
+  padding-right: 80px; /* Chừa khoảng trống cho nút "Áp dụng" */
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Nút "Áp dụng" */
+.apply-btn {
+  position: absolute; /* Đặt nút đè lên input */
+  right: -2px; /* Canh phải */
+  top: 50%; /* Canh giữa chiều cao */
+  transform: translateY(-50%); /* Đảm bảo nút ở giữa */
+  padding: 7px 25px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #28a745; /* Màu xanh */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.apply-btn:hover {
+  background-color: #218838; /* Xanh đậm hơn khi hover */
+}
+
 .lead {
   font-size: 1.25rem;
   font-weight: 300;

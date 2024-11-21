@@ -7,17 +7,20 @@ import com.webbanhang.webbanhang.DTO.response.ResponseData;
 import com.webbanhang.webbanhang.DTO.response.ResponseError;
 import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Model.UserModel;
+import com.webbanhang.webbanhang.Service.ICouponService;
 import com.webbanhang.webbanhang.Service.IUserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
 
 
 @RestController
@@ -28,6 +31,7 @@ import java.util.Map;
 public class UserAPI {
 
     private final IUserService userService;
+    private final  ICouponService couponService;
     private  final PasswordEncoder passwordEncoder;
 
     @PostMapping("/add")
@@ -150,6 +154,10 @@ public class UserAPI {
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Change failed");
         }
     }
+   @GetMapping("/checkCoupon/{id}")
+   public ResponseEntity<?> checkCoupon(@PathVariable("id")  String id) {
+         return ResponseEntity.ok(couponService.findCouponByID(id));
+   }
    
     
 }
