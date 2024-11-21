@@ -12,24 +12,26 @@ function sendOrderData(check) {
   if (paymentMethod === "Transfer") {
     localStorage.setItem("orderId", order.orderID);
     sendRequest(method, "order", endpoint, order, url);
-    $.ajax({
-      url: "/api/payments/createcheckout",
-      type: "POST",
-      contentType: "application/json",
-      data: JSON.stringify({
-        finalTotal: finalTotal,
-        orderId: order.orderID,
-        returnUrl: "http://localhost:8080/checkout",
-        cancelUrl: "http://localhost:8080/checkout",
-      }),
-      success: function (response) {
-        console.log("Gọi API thành công:", response);
-        window.location.href = response;
-      },
-      error: function (xhr, status, error) {
-        console.error("Có lỗi xảy ra:", error);
-      },
-    });
+    if (order.name != "" && order.phone != "" && order.address != "") {
+      $.ajax({
+        url: "/api/payments/createcheckout",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+          finalTotal: finalTotal,
+          orderId: order.orderID,
+          returnUrl: "http://localhost:8080/checkout",
+          cancelUrl: "http://localhost:8080/checkout",
+        }),
+        success: function (response) {
+          console.log("Gọi API thành công:", response);
+          window.location.href = response;
+        },
+        error: function (xhr, status, error) {
+          console.error("Có lỗi xảy ra:", error);
+        },
+      });
+    }
   } else {
     sendRequest(method, "order", endpoint, order, url);
   }
