@@ -1,4 +1,5 @@
-document.querySelector(".apply-btn").addEventListener("click", () => {
+document.querySelector(".apply-btn").addEventListener("click", function (e) {
+  e.preventDefault();
   const couponValue = document.querySelector(".coupon-input").value;
   if (couponValue) {
     $.ajax({
