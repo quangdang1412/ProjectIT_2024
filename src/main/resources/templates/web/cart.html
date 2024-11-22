@@ -70,7 +70,7 @@
       <div class="container py-5">
         <h1 class="mb-4">Giỏ hàng</h1>
         <div class="table-responsive">
-          <table class="table">
+          <table class="table" id="myTable">
             <thead>
               <tr>
                 <th scope="col"><h5>Sản phẩm</h5></th>
@@ -133,7 +133,7 @@
                                              : '0 VND'"
                   ></p>
                 </td>
-                <td>
+                <td class="total">
                   <p
                     class="mb-0 mt-4"
                     th:text="${cart.ProductCart.Discount} != null
@@ -163,13 +163,14 @@
                   <h5 class="mb-0 me-4">Tổng tiền:</h5>
                   <p
                     class="mb-0"
+                    id="totalAmount"
                     th:text="${#numbers.formatDecimal(totalAmount, 1, 'COMMA', 0, 'POINT')}+'đ'"
                   ></p>
                 </div>
                 <div class="d-flex justify-content-between">
                   <h5 class="mb-0 me-4">Số sản phẩm:</h5>
                   <div class="">
-                    <p class="mb-0" th:text="${quantity}"></p>
+                    <p class="mb-0" id="quantityCart" th:text="${quantity}"></p>
                   </div>
                 </div>
               </div>
