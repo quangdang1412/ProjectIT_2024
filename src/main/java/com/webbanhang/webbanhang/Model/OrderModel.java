@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "OrderModel")
-@Table(name ="shop_order_tb")
+@Table(name = "shop_order_tb")
 public class OrderModel {
     @Id
     @Column

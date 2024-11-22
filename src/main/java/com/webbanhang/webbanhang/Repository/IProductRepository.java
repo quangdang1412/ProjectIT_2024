@@ -39,7 +39,7 @@ public interface IProductRepository extends JpaRepository<ProductModel, String> 
 
     Page<ProductModel> findByCategory_categoryID(String categoryId, Pageable pageable);
 
-    @Query("SELECT p FROM ProductModel p WHERE p.active = true AND (:categoryID IS NULL OR lower(p.category.categoryID) LIKE lower(:categoryID)) AND (:brandID IS NULL OR lower(p.brand.brandID) LIKE lower(:brandID)) AND (:searchQuery IS NULL OR lower(p.productName) LIKE lower(:searchQuery)) ORDER BY p.unitPrice")
+    @Query("SELECT p FROM ProductModel p WHERE p.active = true AND (:categoryID IS NULL OR lower(p.category.categoryID) LIKE lower(:categoryID)) AND (:brandID IS NULL OR lower(p.brand.brandID) LIKE lower(:brandID)) AND (:searchQuery IS NULL OR lower(p.productName) LIKE lower(:searchQuery))")
     Page<ProductModel> getProductForPage(
             @Param("categoryID") String categoryID,
             @Param("brandID") String brandID,

@@ -22,19 +22,18 @@ public class ShopDetailController {
     private final LoadData loadData;
 
     @GetMapping("/detail/{productId}")
-    public String detail(Model model, @ModelAttribute("productId") String productId,HttpSession session) {
+    public String detail(Model model, @ModelAttribute("productId") String productId, HttpSession session) {
         loadData.loadProduct(model);
         loadData.loadOrderDetail(model);
-        loadData.loadCategory(model,session);
+        loadData.loadCategory(model, session);
         ProductModel product = productService.getProductByID(productId);
         List<ProductModel> productDiscount = new ArrayList<>();
-        for(ProductModel x : productService.getAllProduct())
-        {
-            if(x.getDiscount()!= null)
+        for (ProductModel x : productService.getAllProduct()) {
+            if (x.getDiscount() != null)
                 productDiscount.add(x);
         }
         model.addAttribute("product", product);
-        model.addAttribute("productDiscount",productDiscount);
+        model.addAttribute("productDiscount", productDiscount);
         return "/web/shop-detail";
     }
 }

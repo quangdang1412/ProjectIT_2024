@@ -10,7 +10,7 @@ import lombok.*;
 @Entity
 @Table(name = "tokens_tb")
 public class Token {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

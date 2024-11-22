@@ -19,45 +19,42 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SupplierAPI {
     private final ISuppilerService supplierService;
+
     @PostMapping("/add")
-    public ResponseData<String> addUser(@Valid @RequestBody SupplierRequestDTO supplierDTO)
-    {
-        try{
-            log.info("Request add supplier: {}",supplierDTO.getSupplierName());
+    public ResponseData<String> addUser(@Valid @RequestBody SupplierRequestDTO supplierDTO) {
+        try {
+            log.info("Request add supplier: {}", supplierDTO.getSupplierName());
             String userId = supplierService.saveSupplier(supplierDTO);
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", userId);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
     }
+
     @PutMapping("/update")
-    public ResponseData<String>  updateUser(@Valid @RequestBody SupplierRequestDTO supplierDTO)
-    {
-        try{
-            log.info("Request update user: {}",supplierDTO.getSupplierName());
+    public ResponseData<String> updateUser(@Valid @RequestBody SupplierRequestDTO supplierDTO) {
+        try {
+            log.info("Request update user: {}", supplierDTO.getSupplierName());
             String userId = supplierService.saveSupplier(supplierDTO);
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", userId);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update failed");
         }
     }
+
     @DeleteMapping("/delete/{supplierID}")
-    public ResponseData<String>  deleteUser(@PathVariable("supplierID")  String id)
-    {
-        try{
+    public ResponseData<String> deleteUser(@PathVariable("supplierID") String id) {
+        try {
             String supplierId = supplierService.deleteSupplier(id);
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",supplierId);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", supplierId);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Delete failed");
         }
     }

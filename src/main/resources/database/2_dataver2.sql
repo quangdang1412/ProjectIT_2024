@@ -146,14 +146,9 @@ INSERT INTO `tokens_tb` VALUES (242,'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaWFuYUBleG
 /*!40000 ALTER TABLE `tokens_tb` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Dumping data for table `user_coupon_tb`
---
 
-LOCK TABLES `user_coupon_tb` WRITE;
-/*!40000 ALTER TABLE `user_coupon_tb` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_coupon_tb` ENABLE KEYS */;
-UNLOCK TABLES;
+
+
 
 --
 -- Dumping data for table `user_tb`

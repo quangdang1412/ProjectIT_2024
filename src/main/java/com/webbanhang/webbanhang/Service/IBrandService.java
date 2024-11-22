@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface IBrandService {
     List<BrandModel> getAllBrand();
+
     BrandModel findBrandByID(String id);
+
     String save(BrandRequestDTO a);
 
 }

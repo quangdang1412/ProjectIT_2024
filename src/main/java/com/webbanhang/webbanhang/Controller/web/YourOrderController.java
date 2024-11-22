@@ -24,31 +24,29 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class YourOrderController {
     private final IOrderService orderService;
-    private final  IUserService userService;
+    private final IUserService userService;
 
     @GetMapping("/yourOrder")
     public String yourOrder(Model model, @ModelAttribute("productId") String productId, HttpSession session) {
-        if((UserModel)session.getAttribute("UserLogin") != null) {
-            UserModel a = (UserModel)session.getAttribute("UserLogin");
+        if (session.getAttribute("UserLogin") != null) {
+            UserModel a = (UserModel) session.getAttribute("UserLogin");
             orderService.getOrderByStatus("Chờ thanh toán");
-            List<OrderModel> listOrder =  userService.findUserByID(a.getUserID()).getUserOrder();
-            List<UserCouponModel> listCoupon= userService.findByUserCoupon_UserID(a.getUserID()).stream().filter(c->c.getCouponUser().isActive()).toList();
-            model.addAttribute("listOrder",listOrder);
-            model.addAttribute("listCoupon",listCoupon.isEmpty() ? null : listCoupon);
+            List<OrderModel> listOrder = userService.findUserByID(a.getUserID()).getUserOrder();
+            model.addAttribute("listOrder", listOrder);
             return "/web/your-order";
         }
         return "redirect:/login";
     }
+
     @GetMapping("/yourOrder/updateorder")
-    public String checkActionGet(Model model,@RequestParam Map<String,String> allParams,HttpSession session, String status,@RequestParam(required = false) String cancel)
-    {
+    public String checkActionGet(Model model, @RequestParam Map<String, String> allParams, HttpSession session, String status, @RequestParam(required = false) String cancel) {
         //checkLogin.checkLogin(session,model,userService);
-        UserModel a = (UserModel)session.getAttribute("UserLogin");
+        UserModel a = (UserModel) session.getAttribute("UserLogin");
 
         String action = allParams.get("action");
-        String id =allParams.get("orderID");
+        String id = allParams.get("orderID");
         OrderModel orderModel = orderService.getOrderByID(id);
-        if(a == null || !orderModel.getUserOrder().getUserID().equals(a.getUserID()))
+        if (a == null || !orderModel.getUserOrder().getUserID().equals(a.getUserID()))
             return "redirect:/login";
         if (action == null) {
             action = "list";
@@ -57,15 +55,15 @@ public class YourOrderController {
             case "edit":
                 model.addAttribute("status", status);
                 model.addAttribute("cancel", cancel);
-                return updateOrderForm(model,id);
+                return updateOrderForm(model, id);
             default:
                 return "redirect:/yourOrder";
 
         }
     }
+
     @PostMapping("/yourOrder/updateorder")
-    public String checkActionPost(Model model, RedirectAttributes redirectAttributes, @RequestParam Map<String,String> allParams, @ModelAttribute("Order") OrderModel order,HttpSession session)
-    {
+    public String checkActionPost(Model model, RedirectAttributes redirectAttributes, @RequestParam Map<String, String> allParams, @ModelAttribute("Order") OrderModel order, HttpSession session) {
         //checkLogin.checkLogin(session,model,userService);
         String action = allParams.get("action");
         if (action == null) {
@@ -73,28 +71,28 @@ public class YourOrderController {
         }
         switch (action) {
             default:
-                return checkActionGet(model,allParams,session,"","");
+                return checkActionGet(model, allParams, session, "", "");
 
         }
     }
-    public String updateOrderForm(Model model,String id)
-    {
+
+    public String updateOrderForm(Model model, String id) {
         OrderModel a = orderService.getOrderByID(id);
         List<OrderDetailModel> listOrderDetail = a.getOrderDetails();
-        model.addAttribute("listOrderDetail",listOrderDetail);
-        model.addAttribute("checkOrder","update");
-        model.addAttribute("OrderID",a.getOrderID());
-        model.addAttribute("TransportFee",a.getTransportFee());
-        model.addAttribute("TotalPrice",a.getTotalPrice());
-        model.addAttribute("OrderDate",a.getOrderDate());
-        model.addAttribute("Phone",a.getPhone());
-        model.addAttribute("Address",a.getAddress());
-        model.addAttribute("Name",a.getName());
-        model.addAttribute("paymentStatus",a.getPaymentModel().getStatus());
-        model.addAttribute("paymentMethod",a.getPaymentModel().getMethod());
-        model.addAttribute("DeliveryTime",a.getDeliveryTime());
-        model.addAttribute("Status",a.getStatus());
-        model.addAttribute("Order",a);
+        model.addAttribute("listOrderDetail", listOrderDetail);
+        model.addAttribute("checkOrder", "update");
+        model.addAttribute("OrderID", a.getOrderID());
+        model.addAttribute("TransportFee", a.getTransportFee());
+        model.addAttribute("TotalPrice", a.getTotalPrice());
+        model.addAttribute("OrderDate", a.getOrderDate());
+        model.addAttribute("Phone", a.getPhone());
+        model.addAttribute("Address", a.getAddress());
+        model.addAttribute("Name", a.getName());
+        model.addAttribute("paymentStatus", a.getPaymentModel().getStatus());
+        model.addAttribute("paymentMethod", a.getPaymentModel().getMethod());
+        model.addAttribute("DeliveryTime", a.getDeliveryTime());
+        model.addAttribute("Status", a.getStatus());
+        model.addAttribute("Order", a);
         return "/web/your-orderdetail";
     }
 }

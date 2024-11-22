@@ -7,12 +7,14 @@ import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Repository.ICartRepository;
 import com.webbanhang.webbanhang.Service.ICartService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements ICartService {
 
     private final ICartRepository cartRepository;
@@ -59,6 +61,15 @@ public class CartServiceImpl implements ICartService {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    @Override
+    public void deleteByUserCartUserID(String a) {
+        try {
+            cartRepository.deleteByUserCartUserID(a);
+        } catch (Exception e) {
+            log.info(e.getMessage());
         }
     }
 }

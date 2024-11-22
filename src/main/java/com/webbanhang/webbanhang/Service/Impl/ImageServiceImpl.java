@@ -34,6 +34,7 @@ public class ImageServiceImpl implements IImageService {
     private String BUCKET_NAME;
     @Value("${app.firebase.file}")
     private String FIREBASE_PRIVATE_KEY;
+
     @Override
     public List<ImageModel> getAllImage() {
         return null;
@@ -65,7 +66,7 @@ public class ImageServiceImpl implements IImageService {
         }
         BlobId blobId = BlobId.of(BUCKET_NAME, fileName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("media").build();
-        try ( InputStream inputStream = ImageServiceImpl.class.getClassLoader().getResourceAsStream(FIREBASE_PRIVATE_KEY);) {
+        try (InputStream inputStream = ImageServiceImpl.class.getClassLoader().getResourceAsStream(FIREBASE_PRIVATE_KEY)) {
             if (inputStream == null) {
                 throw new RuntimeException("Firebase private key is not found. " +
                         "Please check 'app.firebase.file' in application.properties");
@@ -75,7 +76,7 @@ public class ImageServiceImpl implements IImageService {
             Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
             storage.create(blobInfo, Files.readAllBytes(file.toPath()));
         }
-        String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/"+BUCKET_NAME+"/o/%s?alt=media";
+        String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/" + BUCKET_NAME + "/o/%s?alt=media";
         return String.format(DOWNLOAD_URL, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
     }
 

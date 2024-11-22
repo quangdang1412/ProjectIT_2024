@@ -10,18 +10,28 @@ import java.util.Map;
 
 public interface IOrderService {
     List<OrderModel> getAllOrder();
-    String save(OrderRequestDTO a,String id);
-    String updateOrder(Map<String,String> allParams);
+
+    String save(OrderRequestDTO a, String id);
+
+    String updateOrder(Map<String, String> allParams);
+
     String deleteOrder(String id);
+
     List<OrderModel> getOrderByStatus(String id);
+
     OrderModel getOrderByID(String id);
+
     boolean updateStatus(String id);
 
     void expiredOrder(OrderModel id);
+
     DashboardResponse dataChart(LocalDate startDate, LocalDate endDate);
 
     Integer orderNeedToProcess();
+
     Double revenueTotal();
+
     Double revenuePerMonth();
+
     Double profitTotal();
 }

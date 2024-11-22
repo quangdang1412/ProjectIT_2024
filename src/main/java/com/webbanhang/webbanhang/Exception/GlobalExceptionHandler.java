@@ -15,8 +15,8 @@ import java.util.Date;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler({ MethodArgumentNotValidException.class, ConstraintViolationException.class,
-            IllegalArgumentException.class, PropertyReferenceException.class, })
+    @ExceptionHandler({MethodArgumentNotValidException.class, ConstraintViolationException.class,
+            IllegalArgumentException.class, PropertyReferenceException.class,})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerValidationException(Exception e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
         return errorResponse;
     }
 
-    @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
+    @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handlerInternalServerException(Exception e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();

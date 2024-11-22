@@ -20,21 +20,21 @@ import java.util.UUID;
 @Controller
 @RequestMapping(value = {"/admin"})
 @RequiredArgsConstructor
-public class UserController  {
+public class UserController {
 
     private final IUserRepository userRepository;
     private final IUserService userService;
     private final IRoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final CheckLogin checkLogin;
+
     @GetMapping("/User")
-    public String checkActionGet(Model model, @RequestParam Map<String,String> allParams, HttpSession session)
-    {
-        if(checkLogin.checkRoleAdmin(session)) {
+    public String checkActionGet(Model model, @RequestParam Map<String, String> allParams, HttpSession session) {
+        if (checkLogin.checkRoleAdmin(session)) {
             return "redirect:/404";
         }
         String action = allParams.get("action");
-        String id =allParams.get("id");
+        String id = allParams.get("id");
         if (action == null) {
             action = "list";
         }
@@ -42,39 +42,40 @@ public class UserController  {
             case "new":
                 return addUserForm(model);
             case "edit":
-                return updateUserForm(model,id);
+                return updateUserForm(model, id);
             default:
                 return listUser(model);
 
         }
     }
+
     public String listUser(Model model) {
         model.addAttribute("listUser", userRepository.findAll());
         return "/admin/User/admin-user";
     }
-    public String addUserForm(Model model)
-    {
-        model.addAttribute("listRole",roleService.getAllRole());
-        model.addAttribute("checkUser",null);
-        String s="U"+ UUID.randomUUID().toString().substring(0, 8);
-        model.addAttribute("UserID",s);
-        model.addAttribute("User",new UserModel());
+
+    public String addUserForm(Model model) {
+        model.addAttribute("listRole", roleService.getAllRole());
+        model.addAttribute("checkUser", null);
+        String s = "U" + UUID.randomUUID().toString().substring(0, 8);
+        model.addAttribute("UserID", s);
+        model.addAttribute("User", new UserModel());
         return "/admin/User/AddUser";
     }
-    public String updateUserForm(Model model,String id)
-    {
+
+    public String updateUserForm(Model model, String id) {
         UserModel a = userService.findUserByID(id);
-        model.addAttribute("listRole",roleService.getAllRole());
-        model.addAttribute("checkUser","update");
-        model.addAttribute("UserID",a.getUserID());
-        model.addAttribute("UserName",a.getUsername());
-        model.addAttribute("Phone",a.getPhone());
-        model.addAttribute("Email",a.getEmail());
-        model.addAttribute("Password",passwordEncoder.encode(a.getPassword()));
-        model.addAttribute("Address",a.getAddress());
-        model.addAttribute("Gender",a.getGender());
-        model.addAttribute("RoleName",a.getRole().getRoleName());
-        model.addAttribute("User",a);
+        model.addAttribute("listRole", roleService.getAllRole());
+        model.addAttribute("checkUser", "update");
+        model.addAttribute("UserID", a.getUserID());
+        model.addAttribute("UserName", a.getUsername());
+        model.addAttribute("Phone", a.getPhone());
+        model.addAttribute("Email", a.getEmail());
+        model.addAttribute("Password", passwordEncoder.encode(a.getPassword()));
+        model.addAttribute("Address", a.getAddress());
+        model.addAttribute("Gender", a.getGender());
+        model.addAttribute("RoleName", a.getRole().getRoleName());
+        model.addAttribute("User", a);
         return "/admin/User/AddUser";
     }
 }

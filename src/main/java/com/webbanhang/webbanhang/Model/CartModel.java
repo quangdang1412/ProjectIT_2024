@@ -2,7 +2,6 @@ package com.webbanhang.webbanhang.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.webbanhang.webbanhang.Model.PK.UserCartID;
-import com.webbanhang.webbanhang.Model.PK.UserCouponID;
 import jakarta.persistence.*;
 import lombok.*;
 

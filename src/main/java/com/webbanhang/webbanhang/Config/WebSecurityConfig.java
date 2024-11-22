@@ -24,7 +24,7 @@ public class WebSecurityConfig {
 
     private final AuthenticationFilter authenticationFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final String[] WHITE_LITS ={ "/",
+    private final String[] WHITE_LITS = {"/",
             "/static/**",
             "/template/**",
             "/signinoauth2",
@@ -52,11 +52,11 @@ public class WebSecurityConfig {
             "/api/payments/**",
             "/search",
             "api/user/checkCoupon/**"
-        };
-    private final String[] EMPLOYEE_LIST={
+    };
+    private final String[] EMPLOYEE_LIST = {
             "/api/order/update",
     };
-    private final String[] ADMIN_LIST={
+    private final String[] ADMIN_LIST = {
             "/api/order/update",
             "/api/order/delete/**",
             "/api/other/**",
@@ -69,34 +69,35 @@ public class WebSecurityConfig {
             "/api/user/delete/**",
             "/api/user/update"
     };
-    private final String []role_more = {"SELLER", "ADMIN"};
+    private final String[] role_more = {"SELLER", "ADMIN"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(requests -> requests
-                .requestMatchers( WHITE_LITS).permitAll()
-                .requestMatchers(EMPLOYEE_LIST).hasAnyAuthority(role_more)
-                .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .oauth2Login(Customizer.withDefaults())
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .formLogin(Customizer.withDefaults())// Sử dụng trang login mặc định của Spring Security
-            .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class) // Thêm JWT filter
-            .authenticationProvider(authenticationProvider) // Cấu hình provider
-            .exceptionHandling(exception -> exception
-                .authenticationEntryPoint((request, response, authException) ->
-                    response.sendError(403, "Access Denied")
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers(WHITE_LITS).permitAll()
+                        .requestMatchers(EMPLOYEE_LIST).hasAnyAuthority(role_more)
+                        .requestMatchers(ADMIN_LIST).hasAuthority("ADMIN")
+                        .anyRequest().authenticated()
                 )
-            );
-            http.exceptionHandling(exceptionHandling -> exceptionHandling
-                          .accessDeniedPage("/404")
-            );
+                .oauth2Login(Customizer.withDefaults())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(Customizer.withDefaults())// Sử dụng trang login mặc định của Spring Security
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class) // Thêm JWT filter
+                .authenticationProvider(authenticationProvider) // Cấu hình provider
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendError(403, "Access Denied")
+                        )
+                );
+        http.exceptionHandling(exceptionHandling -> exceptionHandling
+                .accessDeniedPage("/404")
+        );
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface IRoleService {
     List<RoleModel> getAllRole();
+
     RoleModel findRoleByID(Integer id);
 }

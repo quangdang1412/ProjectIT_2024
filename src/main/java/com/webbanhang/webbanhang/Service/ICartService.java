@@ -18,5 +18,6 @@ public interface ICartService {
     boolean updateCart(CartModel a);
 
     boolean deleteCart(CartModel a);
-    
+
+    void deleteByUserCartUserID(String a);
 }

@@ -19,11 +19,12 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class DashboardAPI {
     private final IOrderService orderService;
+
     @PostMapping("/chartArea")
-    public ResponseData<?> dashboard(@RequestBody DashboardDateDTO dashboardDateDTO){
+    public ResponseData<?> dashboard(@RequestBody DashboardDateDTO dashboardDateDTO) {
         LocalDate startDate = dashboardDateDTO.getStartDate();
         LocalDate endDate = dashboardDateDTO.getEndDate();
-        DashboardResponse dashboardResponse = orderService.dataChart(startDate,endDate);
-        return new ResponseData<>(HttpStatus.CREATED.value(),"Success",dashboardResponse);
+        DashboardResponse dashboardResponse = orderService.dataChart(startDate, endDate);
+        return new ResponseData<>(HttpStatus.CREATED.value(), "Success", dashboardResponse);
     }
 }

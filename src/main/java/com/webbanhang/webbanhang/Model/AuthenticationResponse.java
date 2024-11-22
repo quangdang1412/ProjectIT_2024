@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
-  private String token;
-  private UserRequestDTO userDto;
+    private String token;
+    private UserRequestDTO userDto;
 }

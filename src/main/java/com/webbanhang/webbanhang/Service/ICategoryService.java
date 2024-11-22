@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ICategoryService {
     List<CategoryModel> getAllCategory();
+
     CategoryModel findCategoryByID(String id);
+
     String save(CategoryRequestDTO a);
 }

@@ -26,14 +26,14 @@ import java.util.UUID;
 public class CheckOutController {
     private final IUserService userService;
     private final CheckLogin login;
-    public void loadProduct(Model model,HttpSession session) {
+
+    public void loadProduct(Model model, HttpSession session) {
         UserModel user = (UserModel) session.getAttribute("UserLogin");
         UserModel a = userService.findUserByID(user.getUserID());
         List<CartModel> carts = new ArrayList<>();
         double totalAmount = 0.0;
         int quantity = 0;
-        if(a.getUserCart()!= null)
-        {
+        if (a.getUserCart() != null) {
             carts = a.getUserCart();
             for (CartModel cart : carts) {
                 if (cart.getProductCart().getDiscount() != null) {
@@ -49,21 +49,21 @@ public class CheckOutController {
         LocalDate normalDay = today.plusDays(8);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String id = "O" + UUID.randomUUID().toString().substring(0, 8);
-        List<UserCouponModel> listCoupon= userService.findByUserCoupon_UserID(a.getUserID()).stream().filter(c->c.getCouponUser().isActive()).toList();
-        model.addAttribute("OrderID",id);
-        model.addAttribute("fastDate",fastDay.format(formatter));
-        model.addAttribute("normalDate",normalDay.format(formatter));
+
+        model.addAttribute("OrderID", id);
+        model.addAttribute("fastDate", fastDay.format(formatter));
+        model.addAttribute("normalDate", normalDay.format(formatter));
         model.addAttribute("carts", carts);
-        model.addAttribute("totalAmount",totalAmount);
-        model.addAttribute("quantity",quantity);
-        model.addAttribute("listCoupon",listCoupon.isEmpty() ? null : listCoupon);
+        model.addAttribute("totalAmount", totalAmount);
+        model.addAttribute("quantity", quantity);
 
     }
+
     @GetMapping("/checkout")
-    public String checkout(Model model, HttpSession session,@RequestParam(required = false) String status,@RequestParam(required = false) String cancel) {
-        if((UserModel)session.getAttribute("UserLogin") != null) {
+    public String checkout(Model model, HttpSession session, @RequestParam(required = false) String status, @RequestParam(required = false) String cancel) {
+        if (session.getAttribute("UserLogin") != null) {
             login.refreshUser(session);
-            loadProduct(model,session);
+            loadProduct(model, session);
             model.addAttribute("status", status);
             model.addAttribute("cancel", cancel);
             return "/web/checkout";

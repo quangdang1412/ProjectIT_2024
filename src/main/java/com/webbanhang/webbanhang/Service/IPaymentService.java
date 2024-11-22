@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface IPaymentService {
     List<PaymentModel> getAllPayment();
+
     boolean addPayment(PaymentModel a);
+
     boolean updatePayment(PaymentModel a);
 }

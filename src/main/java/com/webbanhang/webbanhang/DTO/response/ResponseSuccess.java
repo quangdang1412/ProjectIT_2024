@@ -7,14 +7,15 @@ import org.springframework.http.ResponseEntity;
 public class ResponseSuccess extends ResponseEntity<ResponseSuccess.Payload> {
     //PUT, Patch, DELETE
     public ResponseSuccess(HttpStatusCode status, String message) {
-        super(new Payload(status.value(),message),HttpStatus.OK);
-    }
-    //GET, POST
-    public ResponseSuccess(HttpStatusCode status, String message, Object data) {
-        super(new Payload(status.value(),message,data),HttpStatus.OK);
+        super(new Payload(status.value(), message), HttpStatus.OK);
     }
 
-    public static class Payload{
+    //GET, POST
+    public ResponseSuccess(HttpStatusCode status, String message, Object data) {
+        super(new Payload(status.value(), message, data), HttpStatus.OK);
+    }
+
+    public static class Payload {
         private final int status;
         private final String message;
         private Object data;

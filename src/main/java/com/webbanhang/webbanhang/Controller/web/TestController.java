@@ -25,31 +25,34 @@ public class TestController {
 
 
     @GetMapping("/user")
-    public List<UserModel> get()
-    {
+    public List<UserModel> get() {
         return userService.getAllUser();
     }
+
     @GetMapping("/oneproduct")
-    public ProductModel oneProduct(HttpServletRequest request,Model model)
-    {
-        String id=(String)request.getParameter("id");
+    public ProductModel oneProduct(HttpServletRequest request, Model model) {
+        String id = request.getParameter("id");
         return productService.getProductByID(id);
     }
+
     @GetMapping("/brand")
-    public BrandModel getBrand(HttpServletRequest request,Model model ){
-        String s=(String)request.getParameter("BrandID");
+    public BrandModel getBrand(HttpServletRequest request, Model model) {
+        String s = request.getParameter("BrandID");
         return brandService.findBrandByID(s);
     }
+
     @GetMapping("/brand1")
-    public List<BrandModel> getBrand1(HttpServletRequest request, Model model){
+    public List<BrandModel> getBrand1(HttpServletRequest request, Model model) {
 
         return brandService.getAllBrand();
     }
+
     @GetMapping(value = {"/home2"})
     public List<ProductModel> home1(Model model) {
         model.addAttribute("listProduct", productService.getAllProduct());
         return productService.getAllProduct();
     }
+
     @GetMapping(value = {"/user1"})
     public List<UserModel> user(Model model) {
         model.addAttribute("listProduct", userService.getAllUser());

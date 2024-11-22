@@ -20,5 +20,5 @@ public class LocationModel {
 
     @JsonProperty("communeName")
     private String CommuneName;
-    
+
 }

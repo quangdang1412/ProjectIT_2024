@@ -30,14 +30,13 @@ public class ProductController {
     private final ISuppilerService supplierService;
 
 
-    @GetMapping(value ={"/Product","/"})
-    public String checkActionGet(Model model, @RequestParam Map<String,String> allParams, HttpSession session)
-    {
-        if(session.getAttribute("UserLoginRole") == null ||!session.getAttribute("UserLoginRole").equals("ADMIN")) {
+    @GetMapping(value = {"/Product", "/"})
+    public String checkActionGet(Model model, @RequestParam Map<String, String> allParams, HttpSession session) {
+        if (session.getAttribute("UserLoginRole") == null || !session.getAttribute("UserLoginRole").equals("ADMIN")) {
             return "redirect:/404";
         }
         String action = allParams.get("action");
-        String id =allParams.get("id");
+        String id = allParams.get("id");
         if (action == null) {
             action = "list";
         }
@@ -45,53 +44,53 @@ public class ProductController {
             case "new":
                 return addProductForm(model);
             case "edit":
-                return updateProductForm(model,id);
+                return updateProductForm(model, id);
             default:
                 return listProduct(model);
 
         }
     }
+
     @PostMapping("/Product")
-    public String checkActionPost(Model model,HttpSession session,@RequestParam Map<String,String> allParams,@RequestParam("ImageCode") MultipartFile file,@ModelAttribute("Product") ProductModel user)
-    {
+    public String checkActionPost(Model model, HttpSession session, @RequestParam Map<String, String> allParams, @RequestParam("ImageCode") MultipartFile file, @ModelAttribute("Product") ProductModel user) {
         String action = allParams.get("action");
         if (action == null) {
             action = "list";
         }
         switch (action) {
             default:
-                return checkActionGet(model,allParams,session);
+                return checkActionGet(model, allParams, session);
 
         }
     }
+
     public String listProduct(Model model) {
 
         model.addAttribute("listProduct", productService.getAllProduct());
 
         return "/admin/Product/admin-home";
     }
-    public String updateProductForm(Model model,String id) {
+
+    public String updateProductForm(Model model, String id) {
         ProductModel oldProduct = productService.getProductByID(id);
-        model.addAttribute("Product",oldProduct);
+        model.addAttribute("Product", oldProduct);
         model.addAttribute("listProduct", productService.getAllProduct());
         model.addAttribute("listBrand", brandService.getAllBrand());
         model.addAttribute("listCategory", categoryService.getAllCategory());
         model.addAttribute("listDiscount", discountService.getAllDiscountActive());
         model.addAttribute("listSupplier", supplierService.getAllSupplier());
-        model.addAttribute("checkPro","update");
+        model.addAttribute("checkPro", "update");
 
         String discountID;
         String imageCode;
         if (oldProduct.getDiscount() != null) {
             discountID = oldProduct.getDiscount().getDiscountID();
-        }
-        else
-            discountID="";
+        } else
+            discountID = "";
         if (oldProduct.getImage() != null) {
             imageCode = oldProduct.getImage().getImageCode();
-        }
-        else
-            imageCode="";
+        } else
+            imageCode = "";
         model.addAttribute("ProductID", oldProduct.getProductID());
         model.addAttribute("ProductName", oldProduct.getProductName());
         model.addAttribute("BrandName", oldProduct.getBrand().getBrandName());
@@ -101,10 +100,11 @@ public class ProductController {
         model.addAttribute("Description", oldProduct.getDescription());
         model.addAttribute("UnitPrice", oldProduct.getUnitPrice());
         model.addAttribute("Quantity", oldProduct.getQuantity());
-        model.addAttribute("UnitCost",oldProduct.getUnitCost());
-        model.addAttribute("SupplierName",oldProduct.getSupplier().getSupplierName());
+        model.addAttribute("UnitCost", oldProduct.getUnitCost());
+        model.addAttribute("SupplierName", oldProduct.getSupplier().getSupplierName());
         return "/admin/Product/AddProduct";
     }
+
     public String addProductForm(Model model) {
 
         model.addAttribute("listProduct", productService.getAllProduct());
@@ -112,10 +112,10 @@ public class ProductController {
         model.addAttribute("listCategory", categoryService.getAllCategory());
         model.addAttribute("listDiscount", discountService.getAllDiscount());
         model.addAttribute("listSupplier", supplierService.getAllSupplier());
-        String s="P"+ UUID.randomUUID().toString().substring(0, 8);;
-        model.addAttribute("ProductID",s);
-        model.addAttribute("checkPro",null);
-        model.addAttribute("Product",new ProductModel());
+        String s = "P" + UUID.randomUUID().toString().substring(0, 8);
+        model.addAttribute("ProductID", s);
+        model.addAttribute("checkPro", null);
+        model.addAttribute("Product", new ProductModel());
         return "/admin/Product/AddProduct";
     }
 }

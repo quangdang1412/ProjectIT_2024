@@ -28,21 +28,22 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class OAuth2Controller {
+    private final IUserService userService;
+    private final CheckLogin checkLogin;
+    private final AuthenticationServiceImpl authenticationService;
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String id;
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String secret;
-    private final IUserService userService;
-    private final CheckLogin checkLogin;
-    private final AuthenticationServiceImpl authenticationService;
+
     @GetMapping("/login/oauth2/authorization/google")
-    public String home(@RequestParam Map<String,String> map, HttpServletRequest httpServletRequest) {
-        try{
+    public String home(@RequestParam Map<String, String> map, HttpServletRequest httpServletRequest) {
+        try {
             log.info(map.get("code"));
             String code = map.get("code");
             String accessToken = getAccessToken(code);
             UserModel userInfo = getUserInfo(accessToken);
-            UserModel userModel= null;
+            UserModel userModel = null;
             AuthenticationResponse response = null;
             if (userService.existsByEmail(userInfo.getEmail())) {
                 userModel = userService.findByEmail(userInfo.getEmail());
@@ -50,9 +51,8 @@ public class OAuth2Controller {
                         .email(userModel.getEmail())
                         .password(userModel.getPassword())
                         .build();
-                response = authenticationService.login(request,"oauth2");
-            }
-            else{
+                response = authenticationService.login(request, "oauth2");
+            } else {
                 RegisterRequest registerRequest = RegisterRequest.builder()
                         .email(userInfo.getEmail())
                         .name(userInfo.getUsername())
@@ -64,14 +64,14 @@ public class OAuth2Controller {
             HttpSession session = httpServletRequest.getSession();
             session.setAttribute("token", response.getToken());
             session.setAttribute("userdata", response.getUserDto());
-            checkLogin.checkLogin(session,response);
+            checkLogin.checkLogin(session, response);
             return "redirect:/";
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return "redirect:/login";
         }
 
     }
+
     public String getAccessToken(String authorizationCode) {
         String tokenUrl = "https://oauth2.googleapis.com/token";
         RestTemplate restTemplate = new RestTemplate();
@@ -99,6 +99,7 @@ public class OAuth2Controller {
             return null; // or handle this as needed
         }
     }
+
     public UserModel getUserInfo(String accessToken) {
         String userInfoUrl = "https://www.googleapis.com/oauth2/v3/userinfo";
         RestTemplate restTemplate = new RestTemplate();

@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/login/test1")
 @RequiredArgsConstructor
 public class UserLoginController {
-    private final UserServiceImpl userService ;
+    private final UserServiceImpl userService;
 
     @PostMapping
     public ResponseEntity<UserModel> createUser(@RequestBody UserModel user) {

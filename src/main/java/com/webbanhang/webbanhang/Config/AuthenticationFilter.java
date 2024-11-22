@@ -25,13 +25,14 @@ import java.io.IOException;
 public class AuthenticationFilter extends OncePerRequestFilter {
     private final JwtServiceImpl jwtService;
     private final IUserService userService;
+
     @Override
     protected void doFilterInternal(
-             HttpServletRequest request,
-             HttpServletResponse response,
-             FilterChain filterChain
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
     ) throws ServletException, IOException {
-        try{
+        try {
             final String authHeader = request.getHeader("Authorization");
             final String token;
             final String email;
@@ -42,9 +43,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             // xác thực user với jwt ở đây
             token = authHeader.substring(7);
             email = jwtService.extractUsername(token);
-            if(StringUtils.isNotEmpty(email) && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (StringUtils.isNotEmpty(email) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userService.userDetailService().loadUserByUsername(email);
-                if(jwtService.isValid(token, (UserModel) userDetails)){
+                if (jwtService.isValid(token, (UserModel) userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities()
                     );
@@ -55,8 +56,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 }
             }
             filterChain.doFilter(request, response);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error("Token không hợp lệ");
             filterChain.doFilter(request, response);
         }

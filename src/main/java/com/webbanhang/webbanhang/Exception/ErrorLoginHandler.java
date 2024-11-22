@@ -9,6 +9,7 @@ import com.webbanhang.webbanhang.DTO.response.ErrorResponse;
 @RestControllerAdvice
 public class ErrorLoginHandler {
     private ErrorResponse errorResponse;
+
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<ErrorResponse> handleInvalidPasswordException(InvalidPasswordException ex) {
         errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED.value());
