@@ -64,7 +64,9 @@ function getPlaceOrderData() {
     totalAmount: document.getElementById("totalAmount").textContent,
     shippingCost: document.getElementById("shippingCost").textContent,
     finalTotal: document.getElementById("totalElement").textContent,
-    couponID: document.getElementById("couponSelect") ? document.getElementById("couponSelect").value : ''
+    couponID: document.getElementById("couponSelect")
+      ? document.getElementById("couponSelect").value
+      : "",
   };
 }
 function getSupplierData() {
@@ -159,7 +161,7 @@ function sendRequest(method, endpoint1, endpoint2, data, url) {
       }
     }
   };
-  if(url==='/admin/Order' && endpoint2 ==='update'){
+  if (url === "/admin/Order" && endpoint2 === "update") {
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",
@@ -169,11 +171,11 @@ function sendRequest(method, endpoint1, endpoint2, data, url) {
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
         toast.onmouseleave = Swal.resumeTimer;
-      }
+      },
     });
     Toast.fire({
       icon: "info",
-      title: "Đang gửi mail cho khách hàng(Hơi chậm...)"
+      title: "Đang gửi mail cho khách hàng(Hơi chậm...)",
     });
   }
   if (endpoint1 !== "product" && endpoint2 !== "add") {
@@ -182,6 +184,7 @@ function sendRequest(method, endpoint1, endpoint2, data, url) {
     xhr.send(data);
   }
 }
+
 
 function getAccess(url) {
   fetch("/{url}", {
