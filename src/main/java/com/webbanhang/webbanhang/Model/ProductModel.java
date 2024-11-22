@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name ="product_tb")
+@Table(name = "product_tb")
 public class ProductModel {
     @Id
     @Column
@@ -48,7 +48,6 @@ public class ProductModel {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productCart", cascade = CascadeType.ALL)
     private List<CartModel> productCart;
-
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productOrder", cascade = CascadeType.ALL)

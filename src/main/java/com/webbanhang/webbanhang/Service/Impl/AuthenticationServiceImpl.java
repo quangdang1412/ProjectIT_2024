@@ -48,7 +48,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         if (userService.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException("Email đã đăng kí tài khoản: " + request.getEmail());
         }
-        if (request.getPassword().length()<6) {
+        if (request.getPassword().length() < 6) {
             throw new EmailAlreadyExistsException("Mật khẩu phải dài hơn hoặc bằng 6 kí tự");
         }
         UserModel newUser = new UserModel();
@@ -60,7 +60,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         newUser.setUserID(userId);
         RoleModel role = roleService.findRoleByID(2);
         newUser.setRole(role);
-        
+
 
         UserModel createdUser = userRepository.save(newUser);
         String jwtToken = jwtService.generateToken(createdUser);
@@ -84,7 +84,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         String refreshToken = refreshTokenRequest.getRefreshToken();
         final String email = jwtService.extractUsername(refreshToken);
         Token token = tokenService.tokenRepository().findByEmail(email).get();
-        
+
         if (token == null || token.isRevoked() || token.isExpired()) {
             throw new TokenException("Invalid or expired refresh token");
         }
@@ -99,8 +99,9 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .token(newAccessToken)
                 .build();
     }
+
     @Override
-    public AuthenticationResponse login(AuthenticationRequest request,String typeLogin) {
+    public AuthenticationResponse login(AuthenticationRequest request, String typeLogin) {
         if (typeLogin.equals("normal")) {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -109,7 +110,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                     )
             );
         }
-        UserModel user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new ResourceNotFoundException("Tài khoản hoặc mật khẩu không chính xác"));
+        UserModel user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ResourceNotFoundException("Tài khoản hoặc mật khẩu không chính xác"));
 //        if (request.getPassword().user.getPassword())) {
 //            throw new ResourceNotFoundException("Tài khoản hoặc mật khẩu không chính xác");
 //        }
@@ -142,17 +143,15 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     }
 
     @Override
-    public String forgotPassword(String email,String randomString) throws MessagingException, UnsupportedEncodingException {
-        try{
+    public String forgotPassword(String email, String randomString) throws MessagingException, UnsupportedEncodingException {
+        try {
             if (userService.existsByEmail(email)) {
                 String confirmLink = "http://localhost:8080/reset-password?email=" + email + "&resetPasswordKey=" + randomString;
-                mailService.sendResetPasswordMail(confirmLink,email);
+                mailService.sendResetPasswordMail(confirmLink, email);
                 return "Success";
-            }
-            else
+            } else
                 return "Failed";
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return "Failed";
         }
     }

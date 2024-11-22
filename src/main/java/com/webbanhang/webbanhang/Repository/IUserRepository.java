@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface IUserRepository extends JpaRepository<UserModel,String> {
+public interface IUserRepository extends JpaRepository<UserModel, String> {
     @Query(value = "select u from UserModel u where u.email = ?1")
     UserModel getUserByEmail(String email);
 
@@ -23,6 +23,7 @@ public interface IUserRepository extends JpaRepository<UserModel,String> {
     UserModel findByUserID(String userId);
 
     Optional<UserModel> findByEmail(String email);
+
     Optional<UserModel> findByUserName(String email);
 
 }

@@ -6,11 +6,10 @@ import com.webbanhang.webbanhang.DTO.response.DashboardResponse;
 import com.webbanhang.webbanhang.Exception.CustomException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.*;
-import com.webbanhang.webbanhang.Model.PK.UserCouponID;
 import com.webbanhang.webbanhang.Repository.ICouponRepository;
 import com.webbanhang.webbanhang.Repository.IOrderRepository;
 import com.webbanhang.webbanhang.Repository.IProductRepository;
-import com.webbanhang.webbanhang.Repository.IUserCouponRepository;
+import com.webbanhang.webbanhang.Service.ICartService;
 import com.webbanhang.webbanhang.Service.IOrderService;
 import com.webbanhang.webbanhang.Service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -34,19 +33,18 @@ public class OrderServiceImpl implements IOrderService {
 
     private final IUserService userService;
     private final IOrderRepository orderRepository;
-    private final ICouponRepository couponRepository;
-    private final IUserCouponRepository userCouponRepository;
+    private final ICartService cartService;
     private final IProductRepository productRepository;
     private final MailService mailService;
 
     @Override
     public List<OrderModel> getAllOrder() {
-        return (List<OrderModel>) orderRepository.findAll();
+        return orderRepository.findAll();
     }
 
     @Override
-    public String save(OrderRequestDTO a,String id) {
-        try{
+    public String save(OrderRequestDTO a, String id) {
+        try {
             UserModel userModel = userService.findUserByID(id);
             double totalPrice = 0;
             OrderModel order = OrderModel.builder()
@@ -60,37 +58,30 @@ public class OrderServiceImpl implements IOrderService {
             LocalDate today = LocalDate.now();
             LocalDate fastDay = today.plusDays(4);
             LocalDate normalDay = today.plusDays(8);
-            if(a.getShippingOption().equals("50000"))
-            {
+            if (a.getShippingOption().equals("50000")) {
                 order.setDeliveryTime(Date.valueOf(normalDay));
                 order.setTransportFee(50000.0);
-            }
-            else
-            {
+            } else {
                 order.setDeliveryTime(Date.valueOf(fastDay));
                 order.setTransportFee(100000.0);
             }
             payment.setOrderPayment(order);
-            if(!a.getPaymentMethod().equals("InPlace"))
-            {
+            if (!a.getPaymentMethod().equals("InPlace")) {
                 payment.setMethod("Online Banking");
                 payment.setStatus("Chưa thanh toán");
                 order.setStatus("Chờ thanh toán");
-            }
-            else
-            {
+            } else {
                 payment.setMethod("Thanh toán khi nhận hàng");
                 payment.setStatus("Chưa thanh toán");
                 order.setStatus("Chờ xác nhận");
             }
             order.setPaymentModel(payment);
             List<OrderDetailModel> orderDetailModels = new ArrayList<>();
-            if(!userModel.getUserCart().isEmpty())
-            {
+            if (!userModel.getUserCart().isEmpty()) {
                 for (CartModel cart : userModel.getUserCart()) {
                     ProductModel productModel = productRepository.findById(cart.getProductCart().getProductID()).get();
-                    if(productModel.getQuantity() < cart.getQuantity())
-                        throw new CustomException("Sản phẩm "+productModel.getProductName()+" không đủ số lượng");
+                    if (productModel.getQuantity() < cart.getQuantity())
+                        throw new CustomException("Sản phẩm " + productModel.getProductName() + " không đủ số lượng");
                     if (cart.getProductCart().getDiscount() != null) {
                         totalPrice += cart.getProductCart().getUnitPrice() * (100 - cart.getProductCart().getDiscount().getPercentage()) / 100 * cart.getQuantity();
                     } else {
@@ -98,59 +89,53 @@ public class OrderServiceImpl implements IOrderService {
                     }
                     productModel.setQuantity(productModel.getQuantity() - cart.getQuantity());
                     productRepository.save(productModel);
-                    orderDetailModels.add(new OrderDetailModel(order,cart.getProductCart(), cart.getQuantity()));
+                    orderDetailModels.add(new OrderDetailModel(order, cart.getProductCart(), cart.getQuantity()));
                 }
-            }
-            else{
+            } else {
                 throw new CustomException("Vui lòng thêm sản phẩm vào giỏ hàng");
             }
             order.setOrderDetails(orderDetailModels);
             order.setTotalPrice(totalPrice);
             orderRepository.save(order);
-            if(!a.getCouponID().isEmpty()){
-                deleteUserCoupon(order.getUserOrder(),a.getCouponID());
-            }
             return order.getOrderID();
-        }catch (Exception e){
-            if(e instanceof CustomException)
+        } catch (Exception e) {
+            if (e instanceof CustomException)
                 throw new CustomException(e.getMessage());
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(error);
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
 
     @Override
-    public String updateOrder(Map<String,String> allParams) {
-        try{
+    public String updateOrder(Map<String, String> allParams) {
+        try {
             OrderModel order = getOrderByID(allParams.get("orderID"));
             int checkChangeStatus = 0;
-            if(!order.getStatus().equals(allParams.get("status"))){
+            if (!order.getStatus().equals(allParams.get("status"))) {
                 order.setSellerOrder(userService.findUserByID(allParams.get("sellerID")));
                 order.setStatus((allParams.get("status")));
                 checkChangeStatus = 1;
             }
             order.setAddress(allParams.get("address"));
             orderRepository.save(order);
-            if(checkChangeStatus == 1)
-                mailService.sendUpdateOrderMail(order,checkChangeStatus);
-            if(order.getStatus().equals("Hoàn thành") && order.getPaymentModel().getStatus().equals("Đã thanh toán"))
-                applyCouponBasedOnTotalPrice(order,order.getTotalPrice());
+            if (checkChangeStatus == 1)
+                mailService.sendUpdateOrderMail(order, checkChangeStatus);
             return order.getOrderID();
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(error);
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
 
     }
 
     @Override
     public String deleteOrder(String a) {
-        try{
-            OrderModel orderModel =getOrderByID(a);
+        try {
+            OrderModel orderModel = getOrderByID(a);
             for (OrderDetailModel od : orderModel.getOrderDetails()) {
                 ProductModel productModel = productRepository.findById(od.getProductOrder().getProductID()).get();
                 productModel.setQuantity(productModel.getQuantity() + od.getQuantity());
@@ -158,24 +143,25 @@ public class OrderServiceImpl implements IOrderService {
             }
             orderRepository.deleteOrder(a);
             return a;
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(e.getMessage());
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
 
     @Override
     public List<OrderModel> getOrderByStatus(String status) {
-        if(status.equals("Chờ thanh toán")){
+        if (status.equals("Chờ thanh toán")) {
             List<OrderModel> listOrder = orderRepository.getOrderByStatus(status);
-            for( OrderModel a : listOrder){
+            for (OrderModel a : listOrder) {
                 expiredOrder(a);
             }
         }
         return orderRepository.getOrderByStatus(status);
     }
+
     @Override
     public void expiredOrder(OrderModel a) {
         LocalDateTime today = LocalDateTime.now();
@@ -185,6 +171,7 @@ public class OrderServiceImpl implements IOrderService {
         }
         orderRepository.save(a);
     }
+
     @Override
     public OrderModel getOrderByID(String id) {
         return orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
@@ -193,10 +180,10 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public boolean updateStatus(String orderId) {
         Optional<OrderModel> optionalOrder = orderRepository.findById(orderId);
-        
+
         if (optionalOrder.isPresent()) {
             OrderModel order = optionalOrder.get();
-    
+
             PaymentModel payment = order.getPaymentModel();
             if (payment == null) {
                 payment = new PaymentModel();
@@ -204,17 +191,17 @@ public class OrderServiceImpl implements IOrderService {
             }
             order.setStatus("Chờ xác nhận");
             payment.setStatus("Đã thanh toán");
-    
+
             orderRepository.save(order);
             return true;
         }
-    
+
         return false;
     }
 
 
     @Override
-    public DashboardResponse dataChart(LocalDate startDate,LocalDate endDate){
+    public DashboardResponse dataChart(LocalDate startDate, LocalDate endDate) {
         // chart Area
         List<OrderModel> listOrder = orderRepository.revenue(startDate, endDate);
         Map<String, Double> totalRevenueByDate = new ArrayMap<>();
@@ -230,7 +217,7 @@ public class OrderServiceImpl implements IOrderService {
             } else if (numberDays <= 92) {
                 int week = orderDate.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
                 orderDateStr = "Week " + week + ", " + orderDate.getYear();
-            } else if (numberDays <= 365*2) {
+            } else if (numberDays <= 365 * 2) {
                 orderDateStr = orderDate.format(DateTimeFormatter.ofPattern("MM-yyyy"));
             } else {
                 orderDateStr = orderDate.format(DateTimeFormatter.ofPattern("yyyy"));
@@ -246,7 +233,7 @@ public class OrderServiceImpl implements IOrderService {
         List<String> top5 = new ArrayList<>();
         List<String> dataTop5 = new ArrayList<>();
         List<Object[]> listProduct = orderRepository.topSeller(startDate, endDate);
-        for(int i=0;i<Math.min(5, listProduct.size());i++){
+        for (int i = 0; i < Math.min(5, listProduct.size()); i++) {
             Object[] productInfo = listProduct.get(i);
             if (productInfo != null && productInfo.length > 0) {
                 top5.add(String.valueOf(productInfo[0]));
@@ -274,8 +261,8 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public Double revenuePerMonth() {
         LocalDate endDate = LocalDate.now();
-        LocalDate startDate = LocalDate.of(endDate.getYear(),endDate.getMonth(),1);
-        return orderRepository.revenuePerMonth(startDate,endDate);
+        LocalDate startDate = LocalDate.of(endDate.getYear(), endDate.getMonth(), 1);
+        return orderRepository.revenuePerMonth(startDate, endDate);
     }
 
     @Override
@@ -283,54 +270,4 @@ public class OrderServiceImpl implements IOrderService {
         return orderRepository.profitTotal();
     }
 
-    public void applyCouponBasedOnTotalPrice(OrderModel order,Double totalPrice) {
-        UserModel user = order.getUserOrder();
-
-        if (totalPrice > 100000 && totalPrice < 300000) {
-            applyOrUpdateUserCoupon(user, "Cp1");
-        } else if (totalPrice >= 300000 && totalPrice < 500000) {
-            applyOrUpdateUserCoupon(user, "Cp2");
-        } else if (totalPrice >= 500000 && totalPrice < 1000000) {
-            applyOrUpdateUserCoupon(user, "Cp3");
-        } else if (totalPrice >= 1000000) {
-            applyOrUpdateUserCoupon(user, "Cp4");
-        }
-    }
-    private void applyOrUpdateUserCoupon(UserModel user, String couponCode) {
-        CouponModel coupon = couponRepository.findById(couponCode).orElseThrow(() ->
-                new NoSuchElementException("Coupon not found with code: " + couponCode)
-        );
-
-        UserCouponID userCouponID = new UserCouponID(user,coupon);
-        Optional<UserCouponModel> userCouponModel = userCouponRepository.findById(userCouponID);
-
-        if (userCouponModel.isPresent() && userCouponModel.get().getCouponUser().isActive()) {
-            UserCouponModel existingCoupon = userCouponModel.get();
-            existingCoupon.setQuantity(existingCoupon.getQuantity() + 1);
-            userCouponRepository.save(existingCoupon);
-        } else{
-            if(coupon.isActive()){
-                UserCouponModel newUserCoupon = UserCouponModel.builder()
-                        .userCoupon(user)
-                        .couponUser(coupon)
-                        .quantity(1)
-                        .build();
-                userCouponRepository.save(newUserCoupon);
-            }
-        }
-    }
-    private void deleteUserCoupon(UserModel user, String couponCode){
-        CouponModel coupon = couponRepository.findById(couponCode).orElseThrow(() ->
-                new NoSuchElementException("Coupon not found with code: " + couponCode)
-        );
-        UserCouponID userCouponID = new UserCouponID(user,coupon);
-        Optional<UserCouponModel> userCouponModel = userCouponRepository.findById(userCouponID);
-        if (userCouponModel.isPresent()) {
-            UserCouponModel existingCoupon = userCouponModel.get();
-            existingCoupon.setQuantity(existingCoupon.getQuantity()-1);
-            if(existingCoupon.getQuantity() == 0)
-                userCouponRepository.delete(existingCoupon);
-            userCouponRepository.save(existingCoupon);
-        }
-    }
 }

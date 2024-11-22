@@ -20,14 +20,14 @@ public class CartController {
 
     private final IUserService userService;
     private final CheckLogin login;
-    public void loadProduct(Model model,HttpSession session) {
-        UserModel d=(UserModel) session.getAttribute("UserLogin");
+
+    public void loadProduct(Model model, HttpSession session) {
+        UserModel d = (UserModel) session.getAttribute("UserLogin");
         UserModel a = userService.findUserByID(d.getUserID());
         List<CartModel> carts = new ArrayList<>();
         double totalAmount = 0.0;
         int quantity = 0;
-        if(a.getUserCart()!= null)
-        {
+        if (a.getUserCart() != null) {
             carts = a.getUserCart();
             for (CartModel cart : carts) {
                 if (cart.getProductCart().getDiscount() != null) {
@@ -39,19 +39,19 @@ public class CartController {
             }
         }
         model.addAttribute("carts", carts);
-        model.addAttribute("totalAmount",totalAmount);
-        model.addAttribute("quantity",quantity);
+        model.addAttribute("totalAmount", totalAmount);
+        model.addAttribute("quantity", quantity);
 
     }
 
     @GetMapping("/cart")
-    public String shop(Model model, HttpSession session){
-        if((UserModel)session.getAttribute("UserLogin") != null) {
+    public String shop(Model model, HttpSession session) {
+        if (session.getAttribute("UserLogin") != null) {
             login.refreshUser(session);
-            loadProduct(model,session);
+            loadProduct(model, session);
             return "/web/cart";
         }
         return "redirect:/login";
     }
-    
+
 }

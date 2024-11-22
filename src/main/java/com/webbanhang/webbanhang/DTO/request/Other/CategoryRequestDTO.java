@@ -14,10 +14,10 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 public class CategoryRequestDTO implements Serializable {
-        @NotBlank(message = "CategoryID must be not blank")
-        @NotNull
-        private String categoryID;
-        @NotBlank(message = "CategoryName must be not blank")
-        @NotNull
-        private String categoryName;
+    @NotBlank(message = "CategoryID must be not blank")
+    @NotNull
+    private String categoryID;
+    @NotBlank(message = "CategoryName must be not blank")
+    @NotNull
+    private String categoryName;
 }

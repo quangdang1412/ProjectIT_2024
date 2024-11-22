@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -51,7 +52,7 @@ public class UserModel implements UserDetails {
     private RoleModel role;
 
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "userCart", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userCart", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CartModel> userCart;
 
@@ -62,15 +63,17 @@ public class UserModel implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sellerOrder", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderModel> sellerOrder;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(role.getRoleName()));
+        return List.of(new SimpleGrantedAuthority(role.getRoleName()));
     }
 
     @Override
     public String getUsername() {
         return this.userName;
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -90,5 +93,5 @@ public class UserModel implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    
+
 }

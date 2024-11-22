@@ -8,8 +8,12 @@ import java.util.List;
 
 public interface IImageService {
     List<ImageModel> getAllImage();
+
     ImageModel findOneImage(String id);
+
     void addImage(String code);
+
     boolean isPresent(String id);
+
     String upload(MultipartFile multipartFile);
 }

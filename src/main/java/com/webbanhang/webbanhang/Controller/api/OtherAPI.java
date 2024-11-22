@@ -29,118 +29,111 @@ public class OtherAPI {
     private final IBrandService brandService;
     private final IDiscountService discountService;
     private final ICouponService couponService;
+
     @PostMapping("/addCategory")
-    public ResponseData<String> addCategory(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO)
-    {
-        try{
-            log.info("Request add order: {}",categoryRequestDTO.getCategoryID());
-            String categoryID = categoryService.save(categoryRequestDTO) ;
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",categoryID);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+    public ResponseData<String> addCategory(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
+        try {
+            log.info("Request add order: {}", categoryRequestDTO.getCategoryID());
+            String categoryID = categoryService.save(categoryRequestDTO);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", categoryID);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
     }
+
     @PutMapping("/updateCategory")
-    public ResponseData<String> updateCategory(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO)
-    {
-        try{
-            log.info("Request update category: {}",categoryRequestDTO.getCategoryID());
-            String categoryID = categoryService.save(categoryRequestDTO) ;
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",categoryID);
+    public ResponseData<String> updateCategory(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
+        try {
+            log.info("Request update category: {}", categoryRequestDTO.getCategoryID());
+            String categoryID = categoryService.save(categoryRequestDTO);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", categoryID);
 
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
     }
+
     @PostMapping("/addBrand")
-    public ResponseData<String> addBrand( @Valid @RequestBody BrandRequestDTO brandRequestDTO)
-    {
-        try{
+    public ResponseData<String> addBrand(@Valid @RequestBody BrandRequestDTO brandRequestDTO) {
+        try {
 
-            log.info("Request add brand: {}",brandRequestDTO.getBrandID());
-            String brandID = brandService.save(brandRequestDTO) ;
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",brandID);
+            log.info("Request add brand: {}", brandRequestDTO.getBrandID());
+            String brandID = brandService.save(brandRequestDTO);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", brandID);
 
 
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
     }
+
     @PutMapping("/updateBrand")
-    public ResponseData<String> updateBrand(@Valid @RequestBody BrandRequestDTO brandRequestDTO)
-    {
-        try{
-             log.info("Request update brand: {}",brandRequestDTO.getBrandID());
-             String brandID = brandService.save(brandRequestDTO) ;
-             return new ResponseData<>(HttpStatus.CREATED.value(),"Success",brandID);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+    public ResponseData<String> updateBrand(@Valid @RequestBody BrandRequestDTO brandRequestDTO) {
+        try {
+            log.info("Request update brand: {}", brandRequestDTO.getBrandID());
+            String brandID = brandService.save(brandRequestDTO);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", brandID);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
     }
+
     @PostMapping("/addDiscount")
-    public ResponseData<String> addDiscount(@Valid @RequestBody DiscountRequestDTO discountRequestDTO)
-    {
-        try{
+    public ResponseData<String> addDiscount(@Valid @RequestBody DiscountRequestDTO discountRequestDTO) {
+        try {
 
-            log.info("Request add discount: {}",discountRequestDTO);
-            String discountID = discountService.save(discountRequestDTO) ;
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",discountID);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+            log.info("Request add discount: {}", discountRequestDTO);
+            String discountID = discountService.save(discountRequestDTO);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", discountID);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
     }
-    @PostMapping("/addCoupon")
-    public ResponseData<String> addCoupon(@Valid @RequestBody CouponRequestDTO couponRequestDTO)
-    {
-        try{
 
-            log.info("Request add discount: {}",couponRequestDTO);
+    @PostMapping("/addCoupon")
+    public ResponseData<String> addCoupon(@Valid @RequestBody CouponRequestDTO couponRequestDTO) {
+        try {
+
+            log.info("Request add discount: {}", couponRequestDTO);
             CouponModel a = CouponModel.builder()
                     .active(true)
                     .percentage(couponRequestDTO.getPercentage())
                     .couponID(couponRequestDTO.getCouponID())
                     .build();
-            String couponID = couponService.save(a) ;
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",couponID);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+            String couponID = couponService.save(a);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", couponID);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
     }
-    @DeleteMapping("/delete/{id}")
-    public ResponseData<String> deleteCoupon(@PathVariable String id)
-    {
-        try{
 
-            String couponID = couponService.delete(id) ;
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",couponID);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+    @DeleteMapping("/delete/{id}")
+    public ResponseData<String> deleteCoupon(@PathVariable String id) {
+        try {
+
+            String couponID = couponService.delete(id);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", couponID);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }

@@ -14,7 +14,8 @@ import java.util.List;
 @Slf4j
 @Service
 public class CouponServiceImpl implements ICouponService {
-    private  final ICouponRepository couponRepository;
+    private final ICouponRepository couponRepository;
+
     @Override
     public String save(CouponModel a) {
         couponRepository.save(a);

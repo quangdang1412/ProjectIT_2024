@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IRoleRepository extends JpaRepository<RoleModel,Integer> {
+public interface IRoleRepository extends JpaRepository<RoleModel, Integer> {
 }

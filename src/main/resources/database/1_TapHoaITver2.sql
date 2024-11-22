@@ -128,16 +128,7 @@ CREATE TABLE tokens_tb (
                            expired BOOLEAN NOT NULL DEFAULT FALSE,
                            email VARCHAR(255) NOT NULL
 );
-CREATE TABLE user_coupon_tb (
-                                userID VARCHAR(100),
-                                couponID VARCHAR(100),
-                                quantity int NOT NULL,
-                                CONSTRAINT PK_User_Coupon PRIMARY KEY (userID, couponID),
-                                CONSTRAINT FK_UserCoupon FOREIGN KEY (userID)
-                                    REFERENCES user_tb(userID),
-                                CONSTRAINT FK_Coupon FOREIGN KEY (couponID)
-                                    REFERENCES coupon_tb(couponID)
-);
+
 
 
 

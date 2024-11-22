@@ -129,8 +129,11 @@ public class ProductServiceImpl implements IProductService {
             pageable = PageRequest.of(pageNumber - 1, 9);
 
         else {
-            Sort.Direction direction = sortBy.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
-            pageable = PageRequest.of(pageNumber - 1, 9, Sort.by(direction, "unitPrice"));
+            if (sortBy.equalsIgnoreCase("asc")) {
+                pageable = PageRequest.of(pageNumber - 1, 9, Sort.by(Sort.Direction.ASC, "unitPrice"));
+            } else {
+                pageable = PageRequest.of(pageNumber - 1, 9, Sort.by(Sort.Direction.DESC, "unitPrice"));
+            }
         }
 
         return productRepository.getProductForPage(

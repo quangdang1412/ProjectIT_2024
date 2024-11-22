@@ -21,14 +21,14 @@ public class PayOSPaymentService {
     @Value("${payos.checksum-key}")
     private String checksumKey;
 
-    public String createCheckout(Integer finalTotal, String orderId, String returnUrl,String cancelUrl) {
+    public String createCheckout(Integer finalTotal, String orderId, String returnUrl, String cancelUrl) {
         try {
 
-            PayOS payos = new PayOS(clientId,apiKey,checksumKey);
-            
+            PayOS payos = new PayOS(clientId, apiKey, checksumKey);
+
             Long orderCode = System.currentTimeMillis() / 1000;
 
-           
+
             String description = "Đơn hàng: " + orderId;
 
             PaymentData paymentData = PaymentData.builder()
@@ -45,5 +45,5 @@ public class PayOSPaymentService {
             return e.getMessage();
         }
     }
-    
+
 }

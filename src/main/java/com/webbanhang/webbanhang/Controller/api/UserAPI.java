@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 
-
 @RestController
 @RequestMapping("/api/user")
 @Validated
@@ -31,29 +30,28 @@ import java.util.Map;
 public class UserAPI {
 
     private final IUserService userService;
-    private final  ICouponService couponService;
-    private  final PasswordEncoder passwordEncoder;
+    private final ICouponService couponService;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/add")
-    public ResponseData<String>  addUser(@Valid @RequestBody UserRequestDTO userDTO)
-    {
-        try{
-            log.info("Request add user: {}",userDTO.getUserName());
-            String userId = userService.saveUser(userDTO,1);
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+    public ResponseData<String> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
+        try {
+            log.info("Request add user: {}", userDTO.getUserName());
+            String userId = userService.saveUser(userDTO, 1);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", userId);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Save failed");
         }
     }
+
     @PostMapping("/signup")
-    public ResponseData<String> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO){
-        try{
-            log.info("Request add user: {}",signUpRequestDTO.getUserName());
-            String s ="U" + (userService.getAllUser().size()+1);
+    public ResponseData<String> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
+        try {
+            log.info("Request add user: {}", signUpRequestDTO.getUserName());
+            String s = "U" + (userService.getAllUser().size() + 1);
             UserRequestDTO userDTO = UserRequestDTO.builder()
                     .userID(s)
                     .userName(signUpRequestDTO.getUserName())
@@ -63,36 +61,34 @@ public class UserAPI {
                     .email(signUpRequestDTO.getEmail())
                     .gender("")
                     .build();
-            String userId = userService.saveUser(userDTO,1);
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+            String userId = userService.saveUser(userDTO, 1);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", userId);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Sign up failed");
         }
     }
+
     @PutMapping("/update")
-    public ResponseData<String>  updateUser(@Valid @RequestBody UserRequestDTO userDTO)
-    {
-        try{
-            log.info("Request update user: {}",userDTO.getUserName());
-            String userId = userService.saveUser(userDTO,2);
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+    public ResponseData<String> updateUser(@Valid @RequestBody UserRequestDTO userDTO) {
+        try {
+            log.info("Request update user: {}", userDTO.getUserName());
+            String userId = userService.saveUser(userDTO, 2);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", userId);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update failed");
         }
     }
+
     @PutMapping("/updateInfo")
-    public ResponseData<String>  updateInfoUser(@Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO)
-    {
-        try{
-            log.info("Request update user: {}",updateUserRequestDTO.getUserName());
+    public ResponseData<String> updateInfoUser(@Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+        try {
+            log.info("Request update user: {}", updateUserRequestDTO.getUserName());
             UserModel userModel = userService.findUserByID(updateUserRequestDTO.getUserID());
             UserRequestDTO userDTO = UserRequestDTO.builder()
                     .userID(updateUserRequestDTO.getUserID())
@@ -104,31 +100,30 @@ public class UserAPI {
                     .gender(updateUserRequestDTO.getGender())
                     .address(updateUserRequestDTO.getAddress())
                     .build();
-            String userId = userService.saveUser(userDTO,2);
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
-            if(e instanceof CustomException)
+            String userId = userService.saveUser(userDTO, 2);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", userId);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            if (e instanceof CustomException)
                 return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update failed");
         }
     }
+
     @DeleteMapping("/delete/{userID}")
-    public ResponseData<String>  deleteUser(@PathVariable("userID")  String id)
-    {
-        try{
+    public ResponseData<String> deleteUser(@PathVariable("userID") String id) {
+        try {
             String userId = userService.deleteUser(id);
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", userId);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Delete failed");
         }
     }
+
     @PutMapping("/changePassword")
     public ResponseData<String> changePassword(@RequestBody Map<String, String> allParams, HttpSession session) {
-        try{
+        try {
             UserModel a = (UserModel) session.getAttribute("UserLogin");
             String userId = a.getUserID();
             String oldPassword = allParams.get("oldPassword");
@@ -146,18 +141,18 @@ public class UserAPI {
             }
             user.setPassword(passwordEncoder.encode(newPassword));
 
-            userId = userService.changePassword(userId,user.getPassword());
-            return new ResponseData<>(HttpStatus.CREATED.value(),"Success",userId);
-        }
-        catch (Exception e){
-            log.error("errorMessage={}",e.getMessage(),e.getCause());
+            userId = userService.changePassword(userId, user.getPassword());
+            return new ResponseData<>(HttpStatus.CREATED.value(), "Success", userId);
+        } catch (Exception e) {
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Change failed");
         }
     }
-   @GetMapping("/checkCoupon/{id}")
-   public ResponseEntity<?> checkCoupon(@PathVariable("id")  String id) {
-         return ResponseEntity.ok(couponService.findCouponByID(id));
-   }
-   
-    
+
+    @GetMapping("/checkCoupon/{id}")
+    public ResponseEntity<?> checkCoupon(@PathVariable("id") String id) {
+        return ResponseEntity.ok(couponService.findCouponByID(id));
+    }
+
+
 }

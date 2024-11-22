@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @Service
-public record TokenServiceImpl(ITokenRepository tokenRepository){
+public record TokenServiceImpl(ITokenRepository tokenRepository) {
     public void save(Token token) {
         Optional<Token> tokenOptional = tokenRepository.findByEmail(token.getEmail());
         if (tokenOptional.isEmpty()) {
@@ -23,9 +23,10 @@ public record TokenServiceImpl(ITokenRepository tokenRepository){
             tokenRepository.save(currentToken);
         }
     }
+
     public boolean removeToken(Token token) {
         tokenRepository.delete(token);
         return true;
     }
-    
+
 }

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
 @Repository
-public interface IDiscountRepository extends JpaRepository<DiscountModel,String> {
+public interface IDiscountRepository extends JpaRepository<DiscountModel, String> {
     @Transactional
     @Modifying
     @Query("UPDATE DiscountModel d SET d.active = false WHERE d.endDate < ?1")

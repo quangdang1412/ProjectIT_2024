@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface IOrderRepository extends JpaRepository<OrderModel,String> {
+public interface IOrderRepository extends JpaRepository<OrderModel, String> {
 
     @Modifying
     @Transactional

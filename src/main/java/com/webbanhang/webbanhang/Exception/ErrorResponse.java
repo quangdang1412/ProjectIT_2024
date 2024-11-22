@@ -1,5 +1,7 @@
 package com.webbanhang.webbanhang.Exception;
+
 import java.util.Date;
+
 public class ErrorResponse {
     private Date timestamp;
     private int status;

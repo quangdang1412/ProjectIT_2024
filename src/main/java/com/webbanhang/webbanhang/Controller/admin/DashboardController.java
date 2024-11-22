@@ -17,17 +17,17 @@ public class DashboardController {
     private final IOrderService orderService;
     private final IProductService productService;
     private final CheckLogin checkLogin;
+
     @GetMapping("/Dashboard")
-    public String checkActionGet(Model model, HttpSession session)
-    {
-        if(checkLogin.checkRoleAdmin(session)) {
+    public String checkActionGet(Model model, HttpSession session) {
+        if (checkLogin.checkRoleAdmin(session)) {
             return "redirect:/404";
         }
-        model.addAttribute("orderNeedToProcess",orderService.orderNeedToProcess() == null ? 0: orderService.orderNeedToProcess());
-        model.addAttribute("revenueTotal",orderService.revenueTotal() == null ? 0: orderService.revenueTotal());
-        model.addAttribute("revenuePerMonth",orderService.revenuePerMonth() == null ? 0: orderService.revenuePerMonth());
-        model.addAttribute("profitTotal",orderService.profitTotal() == null ? 0: orderService.profitTotal());
-        model.addAttribute("listProduct",productService.getProductOutOfStock());
+        model.addAttribute("orderNeedToProcess", orderService.orderNeedToProcess() == null ? 0 : orderService.orderNeedToProcess());
+        model.addAttribute("revenueTotal", orderService.revenueTotal() == null ? 0 : orderService.revenueTotal());
+        model.addAttribute("revenuePerMonth", orderService.revenuePerMonth() == null ? 0 : orderService.revenuePerMonth());
+        model.addAttribute("profitTotal", orderService.profitTotal() == null ? 0 : orderService.profitTotal());
+        model.addAttribute("listProduct", productService.getProductOutOfStock());
         return "/admin/dashboard";
     }
 }

@@ -1,4 +1,5 @@
 package com.webbanhang.webbanhang.Config;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,5 +17,5 @@ public class PayOSConfig {
     @Value("${payos.checksum-key}")
     private String checksumKey;
 
-   
+
 }

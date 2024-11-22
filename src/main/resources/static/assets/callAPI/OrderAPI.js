@@ -20,7 +20,7 @@ function sendOrderData(check) {
       },
       data: JSON.stringify(order), // Truyền dữ liệu order
       success: function (response) {
-        if (response.status === 200) {
+        if (response.status == 201) {
           $.ajax({
             url: "/api/payments/createcheckout",
             type: "POST",
@@ -31,9 +31,9 @@ function sendOrderData(check) {
               returnUrl: "http://localhost:8080/checkout",
               cancelUrl: "http://localhost:8080/checkout",
             }),
-            success: function (response) {
-              console.log("Gọi API thành công:", response);
-              window.location.href = response.redirectUrl; // Giả sử trả về một URL để điều hướng
+            success: function (response_payment) {
+              console.log("Gọi API thành công:", response_payment);
+              window.location.href = response_payment;
             },
             error: function (xhr, status, error) {
               console.error("Có lỗi xảy ra trong payment API:", error);

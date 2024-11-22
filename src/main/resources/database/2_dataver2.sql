@@ -32,7 +32,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `category_tb` WRITE;
 /*!40000 ALTER TABLE `category_tb` DISABLE KEYS */;
-INSERT INTO `category_tb` VALUES ('C002','CPU - BỘ VI XỬ LÝ'),('C003','MAINBOARD - BO MẠCH CHỦ'),('C001','MÀN HÌNH MÁY TÍNH'),('C5','Ổ CỨNG SSD & HDD'),('C4','PC GAMING'),('C39164f0b','VGA - CARD MÀN HÌNH');
+INSERT INTO `category_tb` VALUES ('C002','CPU - BỘ VI XỬ LÝ'),('C003','MAINBOARD'),('C001','MÀN HÌNH MÁY TÍNH'),('C5','Ổ CỨNG SSD & HDD'),('C4','PC GAMING'),('C39164f0b','VGA - CARD MÀN HÌNH');
 /*!40000 ALTER TABLE `category_tb` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,14 +146,9 @@ INSERT INTO `tokens_tb` VALUES (242,'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaWFuYUBleG
 /*!40000 ALTER TABLE `tokens_tb` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Dumping data for table `user_coupon_tb`
---
 
-LOCK TABLES `user_coupon_tb` WRITE;
-/*!40000 ALTER TABLE `user_coupon_tb` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_coupon_tb` ENABLE KEYS */;
-UNLOCK TABLES;
+
+
 
 --
 -- Dumping data for table `user_tb`

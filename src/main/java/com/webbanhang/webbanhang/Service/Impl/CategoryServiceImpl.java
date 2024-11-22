@@ -18,29 +18,31 @@ import java.util.List;
 public class CategoryServiceImpl implements ICategoryService {
 
     private final ICategoryRepository categoryRepository;
+
     @Override
     public List<CategoryModel> getAllCategory() {
-        return (List<CategoryModel>) categoryRepository.findAll();
+        return categoryRepository.findAll();
     }
+
     @Override
-    public CategoryModel findCategoryByID(String id)
-    {
-        return categoryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Category not found"));
+    public CategoryModel findCategoryByID(String id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
+
     @Override
     public String save(CategoryRequestDTO a) {
-        try{
+        try {
             CategoryModel categoryModel = CategoryModel.builder()
                     .categoryID(a.getCategoryID())
                     .categoryName(a.getCategoryName())
                     .build();
             categoryRepository.save(categoryModel);
             return categoryModel.getCategoryID();
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(e.getMessage());
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
 

@@ -13,14 +13,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AccountController {
     @GetMapping("/changePassword")
-    public String account(){
+    public String account() {
         return "web/account";
     }
+
     @GetMapping("/reset-password")
-    public String reset_password(@RequestParam Map<String, String> request,Model model) {
-         String email = request.get("email");
-         model.addAttribute("resetPassword","resetPassword");
-         model.addAttribute("email",email);
-         return "web/account";
+    public String reset_password(@RequestParam Map<String, String> request, Model model) {
+        String email = request.get("email");
+        model.addAttribute("resetPassword", "resetPassword");
+        model.addAttribute("email", email);
+        return "web/account";
     }
 }

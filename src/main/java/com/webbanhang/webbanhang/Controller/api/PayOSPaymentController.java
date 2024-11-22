@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 
-
 @RestController
 @RequestMapping("/api/payments")
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class PayOSPaymentController {
     private final OrderServiceImpl orderService;
 
     @PostMapping("/createcheckout")
-    public ResponseEntity<String> createCheckout(@RequestBody CheckoutRequest checkoutRequest,HttpSession session) {
+    public ResponseEntity<String> createCheckout(@RequestBody CheckoutRequest checkoutRequest, HttpSession session) {
         String checkoutUrl = payOSPaymentService.createCheckout(
                 checkoutRequest.getFinalTotal(),
                 checkoutRequest.getOrderId(),
@@ -37,8 +36,9 @@ public class PayOSPaymentController {
         session.setAttribute("id", checkoutId);
         return ResponseEntity.ok(checkoutUrl);
     }
+
     @PutMapping("/updatePaymentStatus/{orderId}")
-    public ResponseEntity<String> updatePaymentStatus(@PathVariable String orderId,HttpSession session) {
+    public ResponseEntity<String> updatePaymentStatus(@PathVariable String orderId, HttpSession session) {
         if (session.getAttribute("id") == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request");
         }

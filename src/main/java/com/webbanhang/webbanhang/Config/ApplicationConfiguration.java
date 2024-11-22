@@ -31,15 +31,17 @@ public class ApplicationConfiguration {
             return user;
         };
     }
+
     @Bean
-    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,PasswordEncoder passwordEncoder) {
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10, new SecureRandom(new byte[] {0x00, 0x01, 0x02, 0x03}));
+        return new BCryptPasswordEncoder(10, new SecureRandom(new byte[]{0x00, 0x01, 0x02, 0x03}));
     }
 }

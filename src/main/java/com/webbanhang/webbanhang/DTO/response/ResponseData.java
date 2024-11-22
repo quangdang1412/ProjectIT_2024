@@ -26,7 +26,6 @@ public class ResponseData<T> implements Serializable {
     }
 
 
-
     public String getMessage() {
         return message;
     }

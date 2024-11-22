@@ -11,14 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class SupplierServiceImpl implements ISuppilerService {
     private final ISupplierRepository supplierRepository;
+
     @Override
     public List<SupplierModel> getAllSupplier() {
-        return (List<SupplierModel>) supplierRepository.findAll();
+        return supplierRepository.findAll();
     }
 
     @Override
@@ -28,7 +30,7 @@ public class SupplierServiceImpl implements ISuppilerService {
 
     @Override
     public String saveSupplier(SupplierRequestDTO a) {
-        try{
+        try {
             SupplierModel supplierModel = SupplierModel.builder()
                     .supplierID(a.getSupplierID())
                     .supplierName(a.getSupplierName())
@@ -38,26 +40,26 @@ public class SupplierServiceImpl implements ISuppilerService {
                     .build();
             supplierRepository.save(supplierModel);
             return supplierModel.getSupplierID();
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(error);
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
 
 
     @Override
     public String deleteSupplier(String id) {
-        try{
+        try {
             SupplierModel supplierModel = findSupplierByID(id);
             supplierRepository.delete(supplierModel);
             return id;
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(error);
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
 }

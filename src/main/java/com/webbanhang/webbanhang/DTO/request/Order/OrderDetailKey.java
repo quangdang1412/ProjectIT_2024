@@ -13,7 +13,9 @@ import java.util.Objects;
 public class OrderDetailKey implements Serializable {
     private String OrderID;
     private String ProductID;
-    public OrderDetailKey() {}
+
+    public OrderDetailKey() {
+    }
 
     @Override
     public boolean equals(Object o) {

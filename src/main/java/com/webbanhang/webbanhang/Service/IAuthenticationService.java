@@ -11,9 +11,13 @@ import java.util.Map;
 
 public interface IAuthenticationService {
     AuthenticationResponse register(RegisterRequest request);
-    AuthenticationResponse login(AuthenticationRequest request,String typeLogin);
+
+    AuthenticationResponse login(AuthenticationRequest request, String typeLogin);
+
     AuthenticationResponse refreshToken(RefreshRequest request);
+
     boolean logout(String token);
-    String forgotPassword(String email,String randomString) throws MessagingException, UnsupportedEncodingException;
+
+    String forgotPassword(String email, String randomString) throws MessagingException, UnsupportedEncodingException;
 }
     

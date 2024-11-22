@@ -20,25 +20,27 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class DiscountServiceImpl implements IDiscountService {
     private final IDiscountRepository discountRepository;
+
     @Override
     public List<DiscountModel> getAllDiscount() {
-        return (List<DiscountModel>) discountRepository.findAll();
+        return discountRepository.findAll();
     }
 
     @Override
     public List<DiscountModel> getAllDiscountActive() {
         LocalDate date = LocalDate.now();
         discountRepository.validDiscount(date);
-        return (List<DiscountModel>) discountRepository.findAll().stream().filter(DiscountModel::isActive).toList();
+        return discountRepository.findAll().stream().filter(DiscountModel::isActive).toList();
     }
+
     @Override
     public DiscountModel findDiscountByID(String id) {
-        return discountRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Discount not found"));
+        return discountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Discount not found"));
     }
 
     @Override
     public String save(DiscountRequestDTO a) {
-        try{
+        try {
             DiscountModel discountModel = DiscountModel.builder()
                     .discountID(a.getDiscountID())
                     .percentage(a.getPercentage())
@@ -48,14 +50,13 @@ public class DiscountServiceImpl implements IDiscountService {
                     .build();
             discountRepository.save(discountModel);
             return a.getDiscountID();
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(e.getMessage());
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
-
 
 
 }

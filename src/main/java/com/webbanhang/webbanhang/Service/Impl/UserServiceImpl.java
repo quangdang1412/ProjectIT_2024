@@ -7,13 +7,11 @@ import com.webbanhang.webbanhang.Model.RoleModel;
 import com.webbanhang.webbanhang.Model.UserCouponModel;
 import com.webbanhang.webbanhang.Model.UserModel;
 import com.webbanhang.webbanhang.Repository.IRoleRepository;
-import com.webbanhang.webbanhang.Repository.IUserCouponRepository;
 import com.webbanhang.webbanhang.Repository.IUserRepository;
 import com.webbanhang.webbanhang.Service.IUserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +27,6 @@ public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
     private final IRoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final IUserCouponRepository userCouponRepository;
 
     @Override
     public UserDetailsService userDetailService() {
@@ -39,7 +36,7 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     @Override
     public List<UserModel> getAllUser() {
-        return (List<UserModel>) userRepository.findAll();
+        return userRepository.findAll();
     }
 
     @Override
@@ -63,38 +60,39 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public String changePassword(String id, String pass) {
-        try{
+        try {
             UserModel userModel = findUserByID(id);
             userModel.setPassword(pass);
             userRepository.save(userModel);
             return id;
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(error);
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
 
     @Override
     public String deleteUser(String id) {
-        try{
+        try {
             UserModel userModel = findUserByID(id);
             userModel.setActive(!userModel.isActive());
             userRepository.save(userModel);
             return id;
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(error);
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
+
     @Override
-    public String saveUser(UserRequestDTO request,int check) {
+    public String saveUser(UserRequestDTO request, int check) {
         RoleModel role = roleRepository.findById(request.getType()).orElseThrow(() -> new ResourceNotFoundException("Role not found"));
-        try{
-            UserModel userModel= UserModel.builder()
+        try {
+            UserModel userModel = UserModel.builder()
                     .userID(request.getUserID())
                     .userName(request.getUserName())
                     .role(role)
@@ -103,21 +101,21 @@ public class UserServiceImpl implements IUserService {
                     .address(request.getAddress())
                     .gender(String.valueOf(request.getGender()))
                     .build();
-            if(check ==1){
+            if (check == 1) {
                 userModel.setPassword(passwordEncoder.encode(request.getPassword()));
-            }
-            else{
+            } else {
                 userModel.setPassword(userRepository.getUserByEmail(request.getEmail()).getPassword());
             }
             userRepository.save(userModel);
             return userModel.getUserID();
-        }catch (Exception e){
+        } catch (Exception e) {
             String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".")+1,error.lastIndexOf("]"));
+            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
             log.info(error);
-            throw new CustomException(property+ " has been used");
+            throw new CustomException(property + " has been used");
         }
     }
+
     @Override
     public UserModel updateUser(String userId, UserModel user) {
         UserModel existingUser = userRepository.findById(userId).orElse(null);
@@ -131,17 +129,14 @@ public class UserServiceImpl implements IUserService {
         }
         return null;
     }
+
     @Override
     public UserModel createUser(UserModel user) {
         return userRepository.save(user);
     }
+
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
-    }
-
-    @Override
-    public List<UserCouponModel> findByUserCoupon_UserID(String userId) {
-        return userCouponRepository.findByUserCoupon_UserID(userId);
     }
 
 
