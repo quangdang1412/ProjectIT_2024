@@ -5,8 +5,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: taphoait
       MYSQL_DATABASE: taphoait
-      MYSQL_USER: taphoait
-      MYSQL_PASSWORD: taphoait
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
     ports:
       - '3307:3306'
     volumes:

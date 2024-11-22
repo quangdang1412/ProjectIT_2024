@@ -2,13 +2,13 @@
 
 Welcome to our **Tạp Hóa IT** project, this is the first our's project about Web Programming! This repository contains
 the source code for our web programming project, developed collaboratively
-by [Thanh Phong](https://github.com/tphong0903) and [Quang Đăng](https://github.com/quangdang1412).
+by [Thanh Phong](https://github.com/tphong0903) and [Đăng Quang](https://github.com/quangdang1412).
 
 ---
 
 ## 🚀 Project Overview
 
-This project is a built using **Spring Boot**, a robust framework for Java-based web development. The application
+This project is a built using **Spring Boot**, a framework for Java-based web development. The application
 focuses on:
 
 - **User-Friendliness:** The website features an intuitive, responsive user interface that is optimized for various
@@ -19,6 +19,9 @@ focuses on:
   and customer orders. Admins and sellers can update inventory and process orders efficiently.
 - **Payment Integration:** The website integrates popular and secure payment methods such as PayOS, enabling customers
   to pay using various online options, including QR code scanning for seamless transactions.
+- **Account Management and Order Tracking:** Customers can manage their accounts, update personal information, and view
+  order histories.
+  In addition, they can track their orders via email every time the order is updated to ensure transparency
 
 ---
 
@@ -37,6 +40,10 @@ focuses on:
   scanning for online payments.
 - **Dynamic Views with Thymeleaf & Bootstrap:** The website uses Thymeleaf for dynamic content rendering and Bootstrap
   for responsive, mobile-friendly designs.
+- **Customer Email Notifications:** Automatically sends email updates to customers for key events like order
+  confirmation, shipping status, order delivery and reset password.
+- **Image Storage with Firebase:** Product images are securely uploaded and stored using Firebase, enabling efficient
+  image management and retrieval.
 
 ---
 
@@ -47,6 +54,8 @@ focuses on:
 - **Spring Boot**
 - **Spring Security** (OAuth2, JWT)
 - **Spring Data JPA**
+- **Firebase**
+- **Java Mail**
 
 ### Frontend:
 
@@ -64,8 +73,8 @@ focuses on:
 ### Prerequisites
 
 - **Java JDK 21** or higher
-- **Maven** (or your preferred build tool)
-- **MySQL** installed and running
+- **Maven**
+- **MySQL**
 
 ### Steps to Run Locally
 
@@ -85,23 +94,23 @@ focuses on:
    If you want to enable Firebase, email services, OAuth2, or PayOS for your application, make sure to add the following
    API keys to the application.properties file:
 
-Firebase
+- **Firebase**
 
        app.firebase.file=your-file-key
        app.firebase.bucket=your-bucket
 
-Email Service
+- **Email Service**
 
        spring.mail.from=your-email-from
        spring.mail.username=your-email-username
        spring.mail.password=your-email-key
 
-OAuth2
+- **OAuth2**
 
        oauth2.client-id=your-client-id
        oauth2.client-secret=your-client-secret
 
-PayOS
+- **PayOS**
 
        payos.client-id=your-client-id
        payos.api-key=your-payos-api-key
@@ -148,9 +157,10 @@ PayOS
 
 This project was developed by:
 
-Thanh Phong: Responsible for backend logic, database integration, and admin frontend.
+- **Thanh Phong**: Responsible for backend logic, mail service, firebase service and employee frontend.
 
-Đăng Quang : Responsible for authorization, authentication, security logic, system integration, and customer frontend.
+- **Đăng Quang**: Responsible for frontend logic, security logic, payment service, crawl data and customer
+  frontend.
 
 ---
 
