@@ -11,3 +11,4 @@ spring:
               - profile
               - openid
             redirect-uri: http://localhost:8080/login/oauth2/authorization/google
+            authorization-grant-type: authorization_code
