@@ -56,7 +56,7 @@ public class OAuth2Controller {
                 RegisterRequest registerRequest = RegisterRequest.builder()
                         .email(userInfo.getEmail())
                         .name(userInfo.getUsername())
-                        .password("loda")
+                        .password("loda123")
                         .phone(null)
                         .build();
                 response = authenticationService.register(registerRequest);
