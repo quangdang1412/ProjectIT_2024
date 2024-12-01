@@ -24,11 +24,11 @@ function addToCart(productId) {
             didOpen: (toast) => {
               toast.onmouseenter = Swal.stopTimer;
               toast.onmouseleave = Swal.resumeTimer;
-            }
+            },
           });
           Toast.fire({
             icon: "success",
-            title: response
+            title: response,
           });
           // Cập nhật số lượng sản phẩm trong giỏ hàng trên giao diện
           let countElement = document.getElementById("countProductInCart");
@@ -66,16 +66,17 @@ function deleteProinCart(productId) {
           didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
-          }
+          },
         });
         Toast.fire({
           icon: "success",
-          title: response
+          title: response,
         });
         $(`tr:has(a[onclick*='${productId}'])`).remove();
-        let countElement = document.getElementById("countProductInCart");
-        let currentCount = parseInt(countElement.textContent) || 0;
-        countElement.textContent = Math.max(currentCount - 1, 0); // Trừ đi 1 sản phẩm hoặc giữ giá trị tối thiểu là 0
+        // let countElement = document.getElementById("countProductInCart");
+        // let currentCount = parseInt(countElement.textContent) || 0;
+        // countElement.textContent = Math.max(currentCount - 1, 0); // Trừ đi 1 sản phẩm hoặc giữ giá trị tối thiểu là 0
+        calculateTotal();
       } else {
         Swal.fire({
           icon: "error",
@@ -99,28 +100,46 @@ function sendProductData(check) {
 function deleteProduct(id) {
   const $link = $(`a[onclick*='${id}']`);
   const currentStatus = $link.text().trim();
-  let str
-  if (currentStatus === "Active")
-    str ="kích hoạt"
-  else
-    str ="vô hiệu hóa"
+  let str;
+  if (currentStatus === "Active") str = "kích hoạt";
+  else str = "vô hiệu hóa";
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "btn btn-success",
-      cancelButton: "btn btn-danger"
+      cancelButton: "btn btn-danger",
     },
   });
-  swalWithBootstrapButtons.fire({
-    title: `Bạn có muốn ${str} sản phẩm không?`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes",
-    cancelButtonText: "No",
-    reverseButtons: true
-  }).then((result) => {
-    if (result.isConfirmed) {
-      sendRequest("DELETE", "product", `delete/${id}`, id, "delete");
-    }
-  });
+  swalWithBootstrapButtons
+    .fire({
+      title: `Bạn có muốn ${str} sản phẩm không?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      reverseButtons: true,
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        sendRequest("DELETE", "product", `delete/${id}`, id, "delete");
+      }
+    });
+}
+function formatCurrency(amount) {
+  return amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function calculateTotal() {
+  let table = document.getElementById("myTable");
+  let totalCells = table.querySelectorAll("tbody .total p");
+  let total = 0;
 
+  totalCells.forEach((cell) => {
+    total += parseFloat(cell.innerText.replace(/[^0-9.-]+/g, ""));
+  });
+  document.getElementById("totalAmount").textContent =
+    formatCurrency(total) + " VND";
+
+  document.getElementById("quantityCart").textContent = totalCells.length;
+  document.getElementById("countProductInCart").textContent = totalCells.length;
+
+  console.log(totalCells.length);
 }
