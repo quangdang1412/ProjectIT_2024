@@ -102,13 +102,13 @@
                       <option th:value="volvo">Nothing</option>
                       <option
                         th:value="${url != null ? '?' + url + '&sortBy=asc' : '?sortBy=asc' }"
-                        th:selected="${queryString.contains('asc')}"
+                        th:selected="${queryString != null and queryString.contains('asc')}"
                       >
                         Giá thấp đến cao
                       </option>
                       <option
                         th:value="${url != null ? '?' + url + '&sortBy=desc' : '?sortBy=desc' }"
-                        th:selected="${queryString.contains('desc')}"
+                        th:selected="${queryString != null and queryString.contains('desc')}"
                       >
                         Giá cao đến thấp
                       </option>
