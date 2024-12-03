@@ -91,7 +91,7 @@
                 >
                   <label for="fruits">Sắp xếp:</label>
                   <th:block
-                    th:with="url = ${queryString != null and (queryString.contains('category') or queryString.contains('brand')) ? (queryString.contains('&sortBy=') ? queryString.substring(0, queryString.indexOf('&sortBy=')) : queryString): null}"
+                    th:with="url = ${queryString != null and (queryString.contains('category') or queryString.contains('search')  or queryString.contains('brand')) ? (queryString.contains('&sortBy=') ? queryString.substring(0, queryString.indexOf('&sortBy=')) : queryString): null}"
                   >
                     <select
                       id="fruits"
@@ -102,11 +102,13 @@
                       <option th:value="volvo">Nothing</option>
                       <option
                         th:value="${url != null ? '?' + url + '&sortBy=asc' : '?sortBy=asc' }"
+                        th:selected="${queryString.contains('asc')}"
                       >
                         Giá thấp đến cao
                       </option>
                       <option
                         th:value="${url != null ? '?' + url + '&sortBy=desc' : '?sortBy=desc' }"
+                        th:selected="${queryString.contains('desc')}"
                       >
                         Giá cao đến thấp
                       </option>
@@ -129,7 +131,10 @@
                             <a
                               th:href="@{/shop(category=${category.categoryID})}"
                             >
-                              <span class="fw-bold" th:text="${category.categoryName}"></span>
+                              <span
+                                class="fw-bold"
+                                th:text="${category.categoryName}"
+                              ></span>
                             </a>
                             <span
                               th:text="'(' + ${category.products.size()} + ')'"
@@ -148,7 +153,10 @@
                             class="d-flex justify-content-between fruite-name"
                           >
                             <a th:href="@{/shop(brand=${brand.brandID})}">
-                              <span class="fw-bold" th:text="${brand.brandName}"></span>
+                              <span
+                                class="fw-bold"
+                                th:text="${brand.brandName}"
+                              ></span>
                             </a>
                             <span
                               th:text="'(' + ${brand.products.size()} + ')'"
@@ -193,13 +201,13 @@
                           style="display: block !important"
                         >
                           <h5
-                                  th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
-                                  th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'">
-                          </h5>
+                            th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
+                            th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
+                          ></h5>
                           <h5
-                                  class="text-danger fs-5 fw-bold"
-                                  th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''">
-                          </h5>
+                            class="text-danger fs-5 fw-bold"
+                            th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
+                          ></h5>
                         </div>
                       </div>
                     </div>
@@ -343,48 +351,47 @@
                       </li>
 
                       <li
-                              class="dt-paging-button page-item"
-                              th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
+                        class="dt-paging-button page-item"
+                        th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
                       >
                         <a
-                                class="page-link last disabled"
-                                aria-controls="example"
-                                aria-label="Last"
-                                data-dt-idx="last"
-                                tabindex="-1"
-                        >...</a
+                          class="page-link last disabled"
+                          aria-controls="example"
+                          aria-label="Last"
+                          data-dt-idx="last"
+                          tabindex="-1"
+                          >...</a
                         >
                       </li>
                       <li
-                              class="dt-paging-button page-item"
-                              th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
+                        class="dt-paging-button page-item"
+                        th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
                       >
                         <a
-                                class="page-link last"
-                                aria-controls="example"
-                                th:attr="aria-disabled=${currentPage == totalPages}"
-                                aria-label="Last"
-                                data-dt-idx="last"
-                                tabindex="-1"
-                                th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + totalPages : '#'}"
-                                th:text="${totalPages}"
-                        ></a
-                        >
+                          class="page-link last"
+                          aria-controls="example"
+                          th:attr="aria-disabled=${currentPage == totalPages}"
+                          aria-label="Last"
+                          data-dt-idx="last"
+                          tabindex="-1"
+                          th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + totalPages : '#'}"
+                          th:text="${totalPages}"
+                        ></a>
                       </li>
                       <!-- Next button -->
                       <li
-                              class="dt-paging-button page-item"
-                              th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
+                        class="dt-paging-button page-item"
+                        th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
                       >
                         <a
-                                class="page-link next"
-                                aria-controls="example"
-                                th:attr="aria-disabled=${currentPage == totalPages}"
-                                aria-label="Next"
-                                data-dt-idx="next"
-                                tabindex="-1"
-                                th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + (currentPage + 1) : '#'}"
-                        >›</a
+                          class="page-link next"
+                          aria-controls="example"
+                          th:attr="aria-disabled=${currentPage == totalPages}"
+                          aria-label="Next"
+                          data-dt-idx="next"
+                          tabindex="-1"
+                          th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + (currentPage + 1) : '#'}"
+                          >›</a
                         >
                       </li>
                       <!-- Last button -->
@@ -406,7 +413,6 @@
                     </ul>
                   </div>
                 </th:block>
-                
               </div>
             </div>
           </div>
