@@ -68,6 +68,7 @@ function updateOrderData() {
   const url = "/yourOrder";
   sendRequest(method, "order", endpoint, order, url);
 }
+
 function updateYourOrderData() {
   const order = getOrderData();
   const finalTotal = order.totalPrice.replace(/[^0-9]/g, "");
@@ -90,6 +91,7 @@ function updateYourOrderData() {
     },
   });
 }
+
 function deleteOrder(id) {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {

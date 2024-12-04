@@ -1,15 +1,16 @@
 <div class="container-fluid" th:fragment="navbar">
-  <div class="container topbar bg-primary d-none d-lg-block">
-    <div class="d-flex justify-content-between">
-      <div class="top-info ps-2">
-        <small class="me-3">
-          <i class="fas fa-map-marker-alt me-2 text-secondary"></i>
-          <a href="" class="text-white">Số 1, đường Võ Văn Ngân, TP Thủ Đức</a>
-        </small>
-      </div>
+    <div class="container topbar bg-primary d-none d-lg-block">
+        <div class="d-flex justify-content-between">
+            <div class="top-info ps-2">
+                <small class="me-3">
+                    <i class="fas fa-map-marker-alt me-2 text-secondary"></i>
+                    <a href="" class="text-white">Số 1, đường Võ Văn Ngân, TP Thủ Đức</a>
+                </small>
+            </div>
+        </div>
     </div>
-  </div>
 
+<<<<<<< HEAD
   <div class="container px-0">
     <nav class="navbar navbar-light bg-white navbar-expand-xl">
       <a href="/" class="navbar-brand">
@@ -101,42 +102,115 @@
                 class="fs-5 ms-2"
                 th:text="${session.isLoggedIn==1} ? ${session.fullName} : 'Guest'"
               ></span>
+=======
+    <div class="container px-0">
+        <nav class="navbar navbar-light bg-white navbar-expand-xl">
+            <a href="/" class="navbar-brand">
+                <h1 class="text-primary display-6" style="font-family: Raleway, sans-serif;">Tạp Hoá IT</h1>
+>>>>>>> 6ef73e79405d6c964728b24b5ad432b16b41a788
             </a>
-            <div
-              class="dropdown-menu dropdown-menu-end dropdown-menu-center m-0 bg-first rounded-2"
+            <button
+                    class="navbar-toggler py-2 px-3"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse"
             >
-              <div th:if="${session.isLoggedIn==1}">
-                <a href="/inforuser" class="dropdown-item">
-                  <span>Thông tin cá nhân</span>
-                </a>
-                <a href="/changePassword" class="dropdown-item">
-                  <span>Đổi mật khẩu</span>
-                </a>
-                <a href="/yourOrder" class="dropdown-item">
-                  <span>Đơn hàng</span>
-                </a>
-                <a
-                  th:if="${session.authorities != 2}"
-                  href="/admin/Order"
-                  class="dropdown-item"
-                  >Quản lí</a
-                >
-                <a
-                  id="logoutLink"
-                  class="dropdown-item"
-                  href="#"
-                  onclick="logout()"
-                  >Đăng xuất</a
-                >
-              </div>
-              <div th:if="${session.isLoggedIn!=1}">
-                <a href="/login" class="dropdown-item">Đăng nhập</a>
-                <a href="/register" class="dropdown-item">Đăng ký</a>
-              </div>
+                <span class="fa fa-bars text-primary"></span>
+            </button>
+
+            <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
+                <div class="navbar-nav mx-auto">
+                    <a href="/static" class="nav-item nav-link fs-4 fw-bold" style="font-family: Raleway, sans-serif;">Trang
+                        chủ</a>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link fs-4 fw-bold dropdown-toggle" href="/shop"
+                           style="font-family: Raleway, sans-serif;">Sản phẩm</a>
+                        <div class="dropdown-menu bg-secondary m-0 rounded-0">
+                            <div
+                                    class="nav-item dropend"
+                                    th:each="category : ${session.categories}"
+                            >
+                                <a
+                                        class="nav-link fs-7 fw-bold"
+                                        th:href="@{/shop(category=${category.categoryID})}"
+                                        th:text="${category.categoryName}"
+                                >
+                                </a>
+
+                                <div class="dropdown-menu">
+                                    <a
+                                            class="dropdown-item fw-bold"
+                                            th:each="brand : ${category.brandSet}"
+                                            th:href="@{/shop(category=${category.categoryID}, brand=${brand.brandID})}"
+                                            th:text="${brand.brandName}"
+                                    ></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/cart" class="nav-item nav-link fs-4 fw-bold" style="font-family: Raleway, sans-serif;">Giỏ
+                        hàng</a>
+                    <a href="/checkout" class="nav-item nav-link fs-4 fw-bold" style="font-family: Raleway, sans-serif;"
+                    >Thanh toán</a
+                    >
+                </div>
+
+                <div class="d-flex m-3 me-0">
+                    <a href="/cart" class="position-relative me-4 my-auto">
+                        <i class="fa fa-shopping-bag fa-2x"></i>
+                        <span
+                                th:if="${session.countProductInCart >= 0}"
+                                id="countProductInCart"
+                                class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+                                style="top: -5px; left: 15px; height: 20px; min-width: 20px"
+                                th:text="${session.countProductInCart}"
+                        >
+            </span>
+                    </a>
+
+                    <div class="dropdown">
+                        <a class="my-auto" data-bs-toggle="dropdown">
+                            <i class="fas fa-user fa-2x"></i>
+                            <span
+                                    class="fs-5 ms-2"
+                                    th:text="${session.isLoggedIn==1} ? ${session.fullName} : 'Guest'"
+                            ></span>
+                        </a>
+                        <div
+                                class="dropdown-menu dropdown-menu-end dropdown-menu-center m-0 bg-first rounded-2"
+                        >
+                            <div th:if="${session.isLoggedIn==1}">
+                                <a href="/inforuser" class="dropdown-item">
+                                    <span>Thông tin cá nhân</span>
+                                </a>
+                                <a href="/changePassword" class="dropdown-item">
+                                    <span>Đổi mật khẩu</span>
+                                </a>
+                                <a href="/yourOrder" class="dropdown-item">
+                                    <span>Đơn hàng</span>
+                                </a>
+                                <a
+                                        th:if="${session.authorities != 2}"
+                                        href="/admin/Order"
+                                        class="dropdown-item"
+                                >Quản lí</a
+                                >
+                                <a
+                                        id="logoutLink"
+                                        class="dropdown-item"
+                                        href="#"
+                                        onclick="logout()"
+                                >Đăng xuất</a
+                                >
+                            </div>
+                            <div th:if="${session.isLoggedIn!=1}">
+                                <a href="/login" class="dropdown-item">Đăng nhập</a>
+                                <a href="/register" class="dropdown-item">Đăng ký</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-  </div>
+        </nav>
+    </div>
 </div>
