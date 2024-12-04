@@ -55,6 +55,8 @@ public class WebSecurityConfig {
     };
     private final String[] EMPLOYEE_LIST = {
             "/api/order/update",
+            "/api/product/**",
+            "/api/dashboard/**",
     };
     private final String[] ADMIN_LIST = {
             "/api/order/update",
@@ -69,7 +71,7 @@ public class WebSecurityConfig {
             "/api/user/delete/**",
             "/api/user/update"
     };
-    private final String[] role_more = {"SELLER", "ADMIN"};
+    private final String[] role_more = {"SELLER", "ADMIN" };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
