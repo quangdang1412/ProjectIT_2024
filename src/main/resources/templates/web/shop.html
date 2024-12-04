@@ -1,444 +1,446 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8"/>
     <title>Tạp Hoá IT</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="" name="keywords" />
-    <meta content="" name="description" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="keywords"/>
+    <meta content="" name="description"/>
     <link
-      rel="shortcut icon"
-      type="image/png"
-      th:href="@{/assets/img/logoit3.png}"
+            rel="shortcut icon"
+            type="image/png"
+            th:href="@{/assets/img/logoit3.png}"
     />
     <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
     />
     <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
-      rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
+            rel="stylesheet"
     />
 
     <!-- Icon Font Stylesheet -->
     <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
     />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
-      rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+            rel="stylesheet"
     />
 
     <!-- Libraries Stylesheet -->
     <link
-      th:href="@{/assets/lib/lightbox/css/lightbox.min.css}"
-      rel="stylesheet"
+            th:href="@{/assets/lib/lightbox/css/lightbox.min.css}"
+            rel="stylesheet"
     />
     <link
-      th:href="@{/assets/lib/owlcarousel/assets/owl.carousel.min.css}"
-      rel="stylesheet"
+            th:href="@{/assets/lib/owlcarousel/assets/owl.carousel.min.css}"
+            rel="stylesheet"
     />
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet"/>
 
     <!-- Template Stylesheet -->
-    <link th:href="@{/assets/css/style.css}" rel="stylesheet" />
-  </head>
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet"/>
+</head>
 
-  <body>
-    <!-- Spinner Start -->
-    <div
-      id="spinner"
-      class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center"
-    >
-      <div class="spinner-grow text-primary" role="status"></div>
-    </div>
-    <!-- Spinner End -->
+<body>
+<!-- Spinner Start -->
+<div
+        id="spinner"
+        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center"
+>
+    <div class="spinner-grow text-primary" role="status"></div>
+</div>
+<!-- Spinner End -->
 
-    <!-- Navbar start -->
-    <div th:replace="~{fragment/navbar.html :: navbar}"></div>
-    <!-- Navbar End -->
-    <!-- Fruits Shop Start-->
-    <div class="container-fluid fruite py-5 mb-5">
-      <div class="container py-5">
+<!-- Navbar start -->
+<div th:replace="~{fragment/navbar.html :: navbar}"></div>
+<!-- Navbar End -->
+<!-- Fruits Shop Start-->
+<div class="container-fluid fruite py-5 mb-5">
+    <div class="container py-5">
         <h1 class="mb-4">Sản phẩm</h1>
         <div class="row g-4">
-          <div class="col-lg-12">
-            <div class="row g-4">
-              <div class="col-xl-3">
-                <div class="input-group w-100 mx-auto d-flex">
-                  <input
-                    type="search"
-                    class="form-control p-3"
-                    placeholder="Tìm kiếm "
-                    id="searchInput"
-                    aria-describedby="search-icon-1"
-                  />
-                  <button id="searchButton" class="btn btn-primary">
-                    <i class="fa fa-search"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="col-6"></div>
-              <div class="col-xl-3">
-                <div
-                  class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4"
-                >
-                  <label for="fruits">Sắp xếp:</label>
-                  <th:block
-                    th:with="url = ${queryString != null and (queryString.contains('category') or queryString.contains('brand')) ? (queryString.contains('&sortBy=') ? queryString.substring(0, queryString.indexOf('&sortBy=')) : queryString): null}"
-                  >
-                    <select
-                      id="fruits"
-                      name="fruitlist"
-                      class="border-0 form-select-sm bg-light me-3"
-                      onchange="location = this.value"
-                    >
-                      <option th:value="volvo">Nothing</option>
-                      <option
-                        th:value="${url != null ? '?' + url + '&sortBy=asc' : '?sortBy=asc' }"
-                      >
-                        Giá thấp đến cao
-                      </option>
-                      <option
-                        th:value="${url != null ? '?' + url + '&sortBy=desc' : '?sortBy=desc' }"
-                      >
-                        Giá cao đến thấp
-                      </option>
-                    </select>
-                  </th:block>
-                </div>
-              </div>
-            </div>
-            <div class="row g-4">
-              <div class="col-lg-3">
+            <div class="col-lg-12">
                 <div class="row g-4">
-                  <div class="col-lg-12">
-                    <div class="mb-3">
-                      <h4>Danh mục</h4>
-                      <ul class="list-unstyled fruite-categorie">
-                        <li th:each="category : ${categories}">
-                          <div
-                            class="d-flex justify-content-between fruite-name"
-                          >
-                            <a
-                              th:href="@{/shop(category=${category.categoryID})}"
+                    <div class="col-xl-3">
+                        <div class="input-group w-100 mx-auto d-flex">
+                            <input
+                                    type="search"
+                                    class="form-control p-3"
+                                    placeholder="Tìm kiếm "
+                                    id="searchInput"
+                                    aria-describedby="search-icon-1"
+                            />
+                            <button id="searchButton" class="btn btn-primary">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-6"></div>
+                    <div class="col-xl-3">
+                        <div
+                                class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4"
+                        >
+                            <label for="fruits">Sắp xếp:</label>
+                            <th:block
+                                    th:with="url = ${queryString != null and (queryString.contains('category') or queryString.contains('search') or queryString.contains('brand')) ? (queryString.contains('&sortBy=') ? queryString.substring(0, queryString.indexOf('&sortBy=')) : queryString): null}"
                             >
-                              <span class="fw-bold" th:text="${category.categoryName}"></span>
-                            </a>
-                            <span
-                              th:text="'(' + ${category.products.size()} + ')'"
-                            ></span>
-                          </div>
-                        </li>
-                      </ul>
+                                <select
+                                        id="fruits"
+                                        name="fruitlist"
+                                        class="border-0 form-select-sm bg-light me-3"
+                                        onchange="location = this.value"
+                                >
+                                    <option th:value="volvo">Nothing</option>
+                                    <option
+                                            th:value="${url != null ? '?' + url + '&sortBy=asc' : '?sortBy=asc' }"
+                                            th:selected="${queryString != null and queryString.contains('asc')}"
+                                    >
+                                        Giá thấp đến cao
+                                    </option>
+                                    <option
+                                            th:value="${url != null ? '?' + url + '&sortBy=desc' : '?sortBy=desc' }"
+                                            th:selected="${queryString != null and queryString.contains('desc')}"
+                                    >
+                                        Giá cao đến thấp
+                                    </option>
+                                </select>
+                            </th:block>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-lg-12">
-                    <div class="mb-3">
-                      <h4>Thương hiệu</h4>
-                      <ul class="list-unstyled fruite-categorie">
-                        <li th:each="brand : ${brands}">
-                          <div
-                            class="d-flex justify-content-between fruite-name"
-                          >
-                            <a th:href="@{/shop(brand=${brand.brandID})}">
-                              <span class="fw-bold" th:text="${brand.brandName}"></span>
-                            </a>
-                            <span
-                              th:text="'(' + ${brand.products.size()} + ')'"
-                            ></span>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="col-lg-12">
-                    <h4 class="mb-3">Sản phẩm khuyến mãi</h4>
-                    <div
-                      class="d-flex align-items-center justify-content-start"
-                      th:each="product: ${productDiscount}"
-                    >
-                      <div
-                        class="rounded me-4"
-                        style="width: 100px; height: 100px"
-                      >
-                        <a th:href="@{/detail/{id}(id=${product.productID})}">
-                          <img
-                            th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
-                            th:alt="${product.Image?.ImageCode}"
-                            class="img-fluid rounded"
-                            style="
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-3">
+                        <div class="row g-4">
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <h4>Danh mục</h4>
+                                    <ul class="list-unstyled fruite-categorie">
+                                        <li th:each="category : ${categories}">
+                                            <div
+                                                    class="d-flex justify-content-between fruite-name"
+                                            >
+                                                <a
+                                                        th:href="@{/shop(category=${category.categoryID})}"
+                                                >
+                                                    <span class="fw-bold" th:text="${category.categoryName}"></span>
+                                                </a>
+                                                <span
+                                                        th:text="'(' + ${category.products.size()} + ')'"
+                                                ></span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <h4>Thương hiệu</h4>
+                                    <ul class="list-unstyled fruite-categorie">
+                                        <li th:each="brand : ${brands}">
+                                            <div
+                                                    class="d-flex justify-content-between fruite-name"
+                                            >
+                                                <a th:href="@{/shop(brand=${brand.brandID})}">
+                                                    <span class="fw-bold" th:text="${brand.brandName}"></span>
+                                                </a>
+                                                <span
+                                                        th:text="'(' + ${brand.products.size()} + ')'"
+                                                ></span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <h4 class="mb-3">Sản phẩm khuyến mãi</h4>
+                                <div
+                                        class="d-flex align-items-center justify-content-start"
+                                        th:each="product: ${productDiscount}"
+                                >
+                                    <div
+                                            class="rounded me-4"
+                                            style="width: 100px; height: 100px"
+                                    >
+                                        <a th:href="@{/detail/{id}(id=${product.productID})}">
+                                            <img
+                                                    th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
+                                                    th:alt="${product.Image?.ImageCode}"
+                                                    class="img-fluid rounded"
+                                                    style="
                               width: 90px;
                               height: 90px;
                               max-width: fit-content;
                             "
-                          />
-                        </a>
-                      </div>
-                      <div>
-                        <a th:href="@{/detail/{id}(id=${product.productID})}">
-                          <h6 class="mb-2" th:text="${product.ProductName}">
-                            Big Banana
-                          </h6>
-                        </a>
+                                            />
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a th:href="@{/detail/{id}(id=${product.productID})}">
+                                            <h6 class="mb-2" th:text="${product.ProductName}">
+                                                Big Banana
+                                            </h6>
+                                        </a>
 
-                        <div
-                          class="d-flex mb-2"
-                          style="display: block !important"
-                        >
-                          <h5
-                                  th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
-                                  th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'">
-                          </h5>
-                          <h5
-                                  class="text-danger fs-5 fw-bold"
-                                  th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''">
-                          </h5>
+                                        <div
+                                                class="d-flex mb-2"
+                                                style="display: block !important"
+                                        >
+                                            <h5
+                                                    th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
+                                                    th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'">
+                                            </h5>
+                                            <h5
+                                                    class="text-danger fs-5 fw-bold"
+                                                    th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''">
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-9">
-                <div class="row g-4 justify-content-start" id="productList">
-                  <!-- Thymeleaf foreach loop -->
-                  <div
-                    th:each="product: ${products}"
-                    class="col-md-6 col-lg-6 col-xl-4 product-item"
-                  >
-                    <div class="rounded position-relative fruite-item">
-                      <div class="fruite-img">
-                        <a th:href="@{/detail/{id}(id=${product.productID})}">
-                          <img
-                            th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
-                            th:alt="${product.Image?.ImageCode}"
-                            class="img-fluid w-100 rounded-top"
-                            style="height: 240px"
-                          />
-                        </a>
-                      </div>
-                      <div
-                        class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                        style="top: 10px; left: 10px"
-                        th:text="${product.Category?.categoryName}"
-                      >
-                        Fruits
-                      </div>
-                      <div
-                        class="p-4 border border-secondary border-top-0 rounded-bottom"
-                      >
-                        <a th:href="@{/detail/{id}(id=${product.productID})}">
-                          <h4
-                            th:text="${product.ProductName}"
-                            style="
+                    <div class="col-lg-9">
+                        <div class="row g-4 justify-content-start" id="productList">
+                            <!-- Thymeleaf foreach loop -->
+                            <div
+                                    th:each="product: ${products}"
+                                    class="col-md-6 col-lg-6 col-xl-4 product-item"
+                            >
+                                <div class="rounded position-relative fruite-item">
+                                    <div class="fruite-img">
+                                        <a th:href="@{/detail/{id}(id=${product.productID})}">
+                                            <img
+                                                    th:src="${#strings.contains(product.Image?.ImageCode, 'https') ? product.Image.ImageCode : '/ImageProduct/' + product.Image.ImageCode}"
+                                                    th:alt="${product.Image?.ImageCode}"
+                                                    class="img-fluid w-100 rounded-top"
+                                                    style="height: 240px"
+                                            />
+                                        </a>
+                                    </div>
+                                    <div
+                                            class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                            style="top: 10px; left: 10px"
+                                            th:text="${product.Category?.categoryName}"
+                                    >
+                                        Fruits
+                                    </div>
+                                    <div
+                                            class="p-4 border border-secondary border-top-0 rounded-bottom"
+                                    >
+                                        <a th:href="@{/detail/{id}(id=${product.productID})}">
+                                            <h4
+                                                    th:text="${product.ProductName}"
+                                                    style="
                               display: -webkit-box;
                               -webkit-line-clamp: 4;
                               -webkit-box-orient: vertical;
                               overflow: hidden;
                               min-height: 115px;
                             "
-                          >
-                            Product Name
-                          </h4>
-                        </a>
-                        <br />
-                        <div class="d-flex justify-content-start flex-lg-wrap">
-                          <p
-                            th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
-                            th:style="${product.Discount} != null ? 'height: 46px':'height: 46px'"
-                            th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
-                          >
-                            Price
-                          </p>
-                        </div>
-                        <p
-                          class="text-danger fs-5 fw-bold d-flex justify-content-start"
-                          th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
-                        >
-                          Price
-                        </p>
-                        <p
-                          th:if="${product.Discount} == null"
-                          style="
+                                            >
+                                                Product Name
+                                            </h4>
+                                        </a>
+                                        <br/>
+                                        <div class="d-flex justify-content-start flex-lg-wrap">
+                                            <p
+                                                    th:class="${product.Discount} != null ? 'text-dark fs-5 fw-bold mb-0 text-decoration-line-through pe-lg-3':'text-dark fs-5 fw-bold mb-0 pe-lg-3'"
+                                                    th:style="${product.Discount} != null ? 'height: 46px':'height: 46px'"
+                                                    th:text="${#numbers.formatDecimal(product.UnitPrice,1,'COMMA',0,'POINT')} + ' VND'"
+                                            >
+                                                Price
+                                            </p>
+                                        </div>
+                                        <p
+                                                class="text-danger fs-5 fw-bold d-flex justify-content-start"
+                                                th:text="${product.Discount} != null ? ${#numbers.formatDecimal(product.UnitPrice * (100 - product.Discount.Percentage) / 100,1,'COMMA',0,'POINT')} + ' VND' : ''"
+                                        >
+                                            Price
+                                        </p>
+                                        <p
+                                                th:if="${product.Discount} == null"
+                                                style="
                             visibility: hidden;
                             margin-bottom: 0px;
                             height: 30px;
                           "
-                        >
-                          &nbsp
-                        </p>
-                        <br />
-                        <div class="d-flex justify-content-end">
-                          <a
-                            th:attr="onclick=|addToCart('${product.productID}')|"
-                            class="btn border border-secondary rounded-pill px-3 text-primary"
-                          >
-                            <i class="fa fa-shopping-bag me-2 text-primary"></i>
-                            Giỏ hàng
-                          </a>
+                                        >
+                                            &nbsp
+                                        </p>
+                                        <br/>
+                                        <div class="d-flex justify-content-end">
+                                            <a
+                                                    th:attr="onclick=|addToCart('${product.productID}')|"
+                                                    class="btn border border-secondary rounded-pill px-3 text-primary"
+                                            >
+                                                <i class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                Giỏ hàng
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
+                        <br/>
+                        <th:block th:with="fullUrl='?' + ${queryString}">
+                            <div
+                                    class="dt-paging paging_full_numbers d-flex justify-content-center"
+                            >
+                                <ul class="pagination">
+                                    <!-- First button -->
+                                    <li
+                                            class="dt-paging-button page-item"
+                                            th:classappend="${currentPage == 1} ? 'disabled' : ''"
+                                    >
+                                        <a
+                                                class="page-link first"
+                                                aria-controls="example"
+                                                th:attr="aria-disabled=${currentPage == 1}"
+                                                aria-label="First"
+                                                data-dt-idx="first"
+                                                tabindex="-1"
+                                                th:href="${currentPage > 1 ? fullUrl + '&pageNo=1' : '#'}"
+                                        >«</a
+                                        >
+                                    </li>
+
+                                    <!-- Previous button -->
+                                    <li
+                                            class="dt-paging-button page-item"
+                                            th:classappend="${currentPage == 1} ? 'disabled' : ''"
+                                    >
+                                        <a
+                                                class="page-link previous"
+                                                aria-controls="example"
+                                                th:attr="aria-disabled=${currentPage == 1}"
+                                                aria-label="Previous"
+                                                data-dt-idx="previous"
+                                                tabindex="-1"
+                                                th:href="${currentPage > 1 ? fullUrl + '&pageNo=' + (currentPage - 1) : '#'}"
+                                        >‹</a
+                                        >
+                                    </li>
+
+                                    <!-- Page numbers -->
+                                    <li
+                                            class="dt-paging-button page-item"
+                                            th:each="i : ${#numbers.sequence(1, totalPages)}"
+                                            th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1}"
+                                            th:classappend="${currentPage == i ? 'active' : ''}"
+                                    >
+                                        <a
+                                                class="page-link"
+                                                th:href="${fullUrl + '&pageNo=' + i}"
+                                                th:text="${i}"
+                                        ></a>
+                                    </li>
+
+                                    <li
+                                            class="dt-paging-button page-item"
+                                            th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
+                                    >
+                                        <a
+                                                class="page-link last disabled"
+                                                aria-controls="example"
+                                                aria-label="Last"
+                                                data-dt-idx="last"
+                                                tabindex="-1"
+                                        >...</a
+                                        >
+                                    </li>
+                                    <li
+                                            class="dt-paging-button page-item"
+                                            th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
+                                    >
+                                        <a
+                                                class="page-link last"
+                                                aria-controls="example"
+                                                th:attr="aria-disabled=${currentPage == totalPages}"
+                                                aria-label="Last"
+                                                data-dt-idx="last"
+                                                tabindex="-1"
+                                                th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + totalPages : '#'}"
+                                                th:text="${totalPages}"
+                                        ></a
+                                        >
+                                    </li>
+                                    <!-- Next button -->
+                                    <li
+                                            class="dt-paging-button page-item"
+                                            th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
+                                    >
+                                        <a
+                                                class="page-link next"
+                                                aria-controls="example"
+                                                th:attr="aria-disabled=${currentPage == totalPages}"
+                                                aria-label="Next"
+                                                data-dt-idx="next"
+                                                tabindex="-1"
+                                                th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + (currentPage + 1) : '#'}"
+                                        >›</a
+                                        >
+                                    </li>
+                                    <!-- Last button -->
+                                    <li
+                                            class="dt-paging-button page-item"
+                                            th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
+                                    >
+                                        <a
+                                                class="page-link last"
+                                                aria-controls="example"
+                                                th:attr="aria-disabled=${currentPage == totalPages}"
+                                                aria-label="Last"
+                                                data-dt-idx="last"
+                                                tabindex="-1"
+                                                th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + totalPages : '#'}"
+                                        >»</a
+                                        >
+                                    </li>
+                                </ul>
+                            </div>
+                        </th:block>
+
                     </div>
-                  </div>
                 </div>
-                <br />
-                <th:block th:with="fullUrl='?' + ${queryString}">
-                  <div
-                    class="dt-paging paging_full_numbers d-flex justify-content-center"
-                  >
-                    <ul class="pagination">
-                      <!-- First button -->
-                      <li
-                        class="dt-paging-button page-item"
-                        th:classappend="${currentPage == 1} ? 'disabled' : ''"
-                      >
-                        <a
-                          class="page-link first"
-                          aria-controls="example"
-                          th:attr="aria-disabled=${currentPage == 1}"
-                          aria-label="First"
-                          data-dt-idx="first"
-                          tabindex="-1"
-                          th:href="${currentPage > 1 ? fullUrl + '&pageNo=1' : '#'}"
-                          >«</a
-                        >
-                      </li>
-
-                      <!-- Previous button -->
-                      <li
-                        class="dt-paging-button page-item"
-                        th:classappend="${currentPage == 1} ? 'disabled' : ''"
-                      >
-                        <a
-                          class="page-link previous"
-                          aria-controls="example"
-                          th:attr="aria-disabled=${currentPage == 1}"
-                          aria-label="Previous"
-                          data-dt-idx="previous"
-                          tabindex="-1"
-                          th:href="${currentPage > 1 ? fullUrl + '&pageNo=' + (currentPage - 1) : '#'}"
-                          >‹</a
-                        >
-                      </li>
-
-                      <!-- Page numbers -->
-                      <li
-                        class="dt-paging-button page-item"
-                        th:each="i : ${#numbers.sequence(1, totalPages)}"
-                        th:if="${i == currentPage - 1} or ${i == currentPage} or ${i == currentPage + 1}"
-                        th:classappend="${currentPage == i ? 'active' : ''}"
-                      >
-                        <a
-                          class="page-link"
-                          th:href="${fullUrl + '&pageNo=' + i}"
-                          th:text="${i}"
-                        ></a>
-                      </li>
-
-                      <li
-                              class="dt-paging-button page-item"
-                              th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
-                      >
-                        <a
-                                class="page-link last disabled"
-                                aria-controls="example"
-                                aria-label="Last"
-                                data-dt-idx="last"
-                                tabindex="-1"
-                        >...</a
-                        >
-                      </li>
-                      <li
-                              class="dt-paging-button page-item"
-                              th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
-                      >
-                        <a
-                                class="page-link last"
-                                aria-controls="example"
-                                th:attr="aria-disabled=${currentPage == totalPages}"
-                                aria-label="Last"
-                                data-dt-idx="last"
-                                tabindex="-1"
-                                th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + totalPages : '#'}"
-                                th:text="${totalPages}"
-                        ></a
-                        >
-                      </li>
-                      <!-- Next button -->
-                      <li
-                              class="dt-paging-button page-item"
-                              th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
-                      >
-                        <a
-                                class="page-link next"
-                                aria-controls="example"
-                                th:attr="aria-disabled=${currentPage == totalPages}"
-                                aria-label="Next"
-                                data-dt-idx="next"
-                                tabindex="-1"
-                                th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + (currentPage + 1) : '#'}"
-                        >›</a
-                        >
-                      </li>
-                      <!-- Last button -->
-                      <li
-                        class="dt-paging-button page-item"
-                        th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
-                      >
-                        <a
-                          class="page-link last"
-                          aria-controls="example"
-                          th:attr="aria-disabled=${currentPage == totalPages}"
-                          aria-label="Last"
-                          data-dt-idx="last"
-                          tabindex="-1"
-                          th:href="${currentPage < totalPages ? fullUrl + '&pageNo=' + totalPages : '#'}"
-                          >»</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                </th:block>
-                
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-    <!-- Fruits Shop End-->
+</div>
+<!-- Fruits Shop End-->
 
-    <!-- Footer Start -->
-    <div th:replace="~{fragment/footer.html}"></div>
-    <!-- Footer End -->
-    <!-- Back to Top -->
-    <a
-      href="#"
-      class="btn btn-primary border-3 border-primary rounded-circle back-to-top"
-      ><i class="fa fa-arrow-up"></i
-    ></a>
+<!-- Footer Start -->
+<div th:replace="~{fragment/footer.html}"></div>
+<!-- Footer End -->
+<!-- Back to Top -->
+<a
+        href="#"
+        class="btn btn-primary border-3 border-primary rounded-circle back-to-top"
+><i class="fa fa-arrow-up"></i
+></a>
 
-    <!-- JavaScript Libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script th:src="@{/assets/lib/easing/easing.min.js}"></script>
-    <script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
-    <script th:src="@{/assets/lib/lightbox/js/lightbox.min.js}"></script>
-    <script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script th:src="@{/assets/js/searchproduct.js}"></script>
-    <script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
+<!-- JavaScript Libraries -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets/lib/easing/easing.min.js}"></script>
+<script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
+<script th:src="@{/assets/lib/lightbox/js/lightbox.min.js}"></script>
+<script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script th:src="@{/assets/js/searchproduct.js}"></script>
+<script th:src="@{/assets/callAPI/refreshtoken.js}"></script>
 
-    <!-- Template Javascript -->
-    <script th:src="@{/assets/callAPI/sendAPI.js}"></script>
-    <script th:src="@{/assets/js/main.js}"></script>
-    <script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
-  </body>
+<!-- Template Javascript -->
+<script th:src="@{/assets/callAPI/sendAPI.js}"></script>
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/callAPI/ProductAPI.js}"></script>
+</body>
 </html>
