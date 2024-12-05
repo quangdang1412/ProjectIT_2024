@@ -2,6 +2,7 @@ package com.webbanhang.webbanhang.Service.Impl;
 
 import com.webbanhang.webbanhang.DTO.request.User.UserRequestDTO;
 import com.webbanhang.webbanhang.Exception.CustomException;
+import com.webbanhang.webbanhang.Exception.EmailAlreadyExistsException;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.RoleModel;
 import com.webbanhang.webbanhang.Model.UserCouponModel;
@@ -138,6 +139,8 @@ public class UserServiceImpl implements IUserService {
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
-
-
+    public boolean existsByPhone(String phoneString) {
+        return userRepository.findByPhone(phoneString).isPresent();
+    }
+        
 }
