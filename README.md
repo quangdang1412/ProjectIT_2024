@@ -29,8 +29,8 @@ focuses on:
 
 - **RESTful APIs:** Backend services for smooth client-server interaction.
 - **Database Integration:** CRUD operations with [MySQL] using Spring Data JPA.
-- **User Authentication (OAuth2 & JWT):** Users can register and log in securely, including Google OAuth2 integration
-  for easy login.
+- **User Authentication (OAuth2,JWT,OTP):** Users can register and log in securely, including Google OAuth2 integration
+  for easy login, reset password with OTP sent by email.
 - **Product Search & Filtering:** Advanced search and filter functionality allow customers to find products by
   categories, brands, and specifications.
 - **Product and Order Management:** Admins can manage the product catalog, including adding, updating, deleting
