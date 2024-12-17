@@ -25,5 +25,6 @@ public interface IUserRepository extends JpaRepository<UserModel, String> {
     Optional<UserModel> findByEmail(String email);
 
     Optional<UserModel> findByUserName(String email);
+    Optional<UserModel> findByPhone(String phone);
 
 }
