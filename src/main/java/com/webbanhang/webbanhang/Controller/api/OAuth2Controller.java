@@ -56,7 +56,7 @@ public class OAuth2Controller {
                 RegisterRequest registerRequest = RegisterRequest.builder()
                         .email(userInfo.getEmail())
                         .name(userInfo.getUsername())
-                        .password("loda123")
+                        .password("loda123123asjdhakhsdajshfbhgbasjhfba")
                         .phone(null)
                         .build();
                 response = authenticationService.register(registerRequest);
@@ -67,7 +67,7 @@ public class OAuth2Controller {
             checkLogin.checkLogin(session, response);
             return "redirect:/";
         } catch (Exception e) {
-            return "redirect:/login";
+            return "redirect:login";
         }
 
     }

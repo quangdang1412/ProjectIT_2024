@@ -33,9 +33,9 @@ public class YourOrderController {
             orderService.getOrderByStatus("Chờ thanh toán");
             List<OrderModel> listOrder = userService.findUserByID(a.getUserID()).getUserOrder();
             model.addAttribute("listOrder", listOrder);
-            return "/web/your-order";
+            return "web/your-order";
         }
-        return "redirect:/login";
+        return "redirect:login";
     }
 
     @GetMapping("/yourOrder/updateorder")
@@ -47,7 +47,7 @@ public class YourOrderController {
         String id = allParams.get("orderID");
         OrderModel orderModel = orderService.getOrderByID(id);
         if (a == null || !orderModel.getUserOrder().getUserID().equals(a.getUserID()))
-            return "redirect:/login";
+            return "redirect:login";
         if (action == null) {
             action = "list";
         }
@@ -57,7 +57,7 @@ public class YourOrderController {
                 model.addAttribute("cancel", cancel);
                 return updateOrderForm(model, id);
             default:
-                return "redirect:/yourOrder";
+                return "redirect:yourOrder";
 
         }
     }
@@ -93,6 +93,6 @@ public class YourOrderController {
         model.addAttribute("DeliveryTime", a.getDeliveryTime());
         model.addAttribute("Status", a.getStatus());
         model.addAttribute("Order", a);
-        return "/web/your-orderdetail";
+        return "web/your-orderdetail";
     }
 }

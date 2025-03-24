@@ -25,6 +25,8 @@ public class WebSecurityConfig {
     private final AuthenticationFilter authenticationFilter;
     private final AuthenticationProvider authenticationProvider;
     private final String[] WHITE_LITS = {"/",
+            "/api/order/placeOrder",
+            "/web/**",
             "/static/**",
             "/template/**",
             "/signinoauth2",
@@ -71,7 +73,7 @@ public class WebSecurityConfig {
             "/api/user/delete/**",
             "/api/user/update"
     };
-    private final String[] role_more = {"SELLER", "ADMIN" };
+    private final String[] role_more = {"SELLER", "ADMIN"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

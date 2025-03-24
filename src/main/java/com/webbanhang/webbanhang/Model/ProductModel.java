@@ -52,4 +52,7 @@ public class ProductModel {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productOrder", cascade = CascadeType.ALL)
     private List<OrderDetailModel> productOrderDetail;
+
+//    @Version
+//    private Integer version;
 }

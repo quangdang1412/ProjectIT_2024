@@ -12,9 +12,11 @@ import com.webbanhang.webbanhang.Repository.IProductRepository;
 import com.webbanhang.webbanhang.Service.ICartService;
 import com.webbanhang.webbanhang.Service.IOrderService;
 import com.webbanhang.webbanhang.Service.IUserService;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.Duration;
@@ -25,6 +27,8 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @RequiredArgsConstructor
@@ -36,19 +40,22 @@ public class OrderServiceImpl implements IOrderService {
     private final ICartService cartService;
     private final IProductRepository productRepository;
     private final MailService mailService;
+    private final Lock lock = new ReentrantLock();
 
     @Override
     public List<OrderModel> getAllOrder() {
         return orderRepository.findAll();
     }
 
+
     @Override
     public String save(OrderRequestDTO a, String id) {
+
         try {
             UserModel userModel = userService.findUserByID(id);
             double totalPrice = 0;
             OrderModel order = OrderModel.builder()
-                    .orderID(a.getOrderID())
+                    .orderID("O" + UUID.randomUUID().toString().substring(0, 8))
                     .userOrder(userModel)
                     .name(a.getName())
                     .address(a.getAddress())
@@ -77,34 +84,60 @@ public class OrderServiceImpl implements IOrderService {
             }
             order.setPaymentModel(payment);
             List<OrderDetailModel> orderDetailModels = new ArrayList<>();
-            if (!userModel.getUserCart().isEmpty()) {
-                for (CartModel cart : userModel.getUserCart()) {
-                    ProductModel productModel = productRepository.findById(cart.getProductCart().getProductID()).get();
-                    if (productModel.getQuantity() < cart.getQuantity())
-                        throw new CustomException("Sản phẩm " + productModel.getProductName() + " không đủ số lượng");
-                    if (cart.getProductCart().getDiscount() != null) {
-                        totalPrice += cart.getProductCart().getUnitPrice() * (100 - cart.getProductCart().getDiscount().getPercentage()) / 100 * cart.getQuantity();
-                    } else {
-                        totalPrice += cart.getProductCart().getUnitPrice() * cart.getQuantity();
+//            if (!userModel.getUserCart().isEmpty()) {
+//                for (CartModel cart : userModel.getUserCart()) {
+//                    ProductModel productModel = productRepository.findById(cart.getProductCart().getProductID())
+//                            .orElseThrow(() -> new CustomException("Sản phẩm không tồn tại"));
+//                    if (productModel.getQuantity() < cart.getQuantity()) {
+//                        throw new CustomException("Sản phẩm " + productModel.getProductName() + " không đủ số lượng");
+//                    }
+//                    if (cart.getProductCart().getDiscount() != null) {
+//                        totalPrice += cart.getProductCart().getUnitPrice() * (100 - cart.getProductCart().getDiscount().getPercentage()) / 100 * cart.getQuantity();
+//                    } else {
+//                        totalPrice += cart.getProductCart().getUnitPrice() * cart.getQuantity();
+//                    }
+//                    productModel.setQuantity(productModel.getQuantity() - cart.getQuantity());
+//                    productRepository.save(productModel);
+//                    orderDetailModels.add(new OrderDetailModel(order, cart.getProductCart(), cart.getQuantity()));
+//                }
+//            } else {
+//                throw new CustomException("Vui lòng thêm sản phẩm vào giỏ hàng");
+//            }
+            lock.lock();
+            try {
+                if (!userModel.getUserCart().isEmpty()) {
+                    for (CartModel cart : userModel.getUserCart()) {
+                        ProductModel productModel = productRepository.findById(cart.getProductCart().getProductID())
+                                .orElseThrow(() -> new CustomException("Sản phẩm không tồn tại"));
+                        if (productModel.getQuantity() < cart.getQuantity()) {
+                            throw new CustomException("Sản phẩm " + productModel.getProductName() + " không đủ số lượng");
+                        }
+                        if (cart.getProductCart().getDiscount() != null) {
+                            totalPrice += cart.getProductCart().getUnitPrice() * (100 - cart.getProductCart().getDiscount().getPercentage()) / 100 * cart.getQuantity();
+                        } else {
+                            totalPrice += cart.getProductCart().getUnitPrice() * cart.getQuantity();
+                        }
+                        productModel.setQuantity(productModel.getQuantity() - cart.getQuantity());
+                        productRepository.save(productModel);
+                        orderDetailModels.add(new OrderDetailModel(order, cart.getProductCart(), cart.getQuantity()));
                     }
-                    productModel.setQuantity(productModel.getQuantity() - cart.getQuantity());
-                    productRepository.save(productModel);
-                    orderDetailModels.add(new OrderDetailModel(order, cart.getProductCart(), cart.getQuantity()));
+                } else {
+                    throw new CustomException("Vui lòng thêm sản phẩm vào giỏ hàng");
                 }
-            } else {
-                throw new CustomException("Vui lòng thêm sản phẩm vào giỏ hàng");
+            } finally {
+                lock.unlock();
             }
             order.setOrderDetails(orderDetailModels);
             order.setTotalPrice(totalPrice);
             orderRepository.save(order);
             return order.getOrderID();
         } catch (Exception e) {
-            if (e instanceof CustomException)
-                throw new CustomException(e.getMessage());
-            String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
-            log.info(error);
-            throw new CustomException(property + " has been used");
+            if (e instanceof CustomException) {
+                throw new CustomException(e.getMessage() != null ? e.getMessage() : "Có lỗi xảy ra");
+            } else {
+                log.error("Lỗi không xác định: ", e);
+                throw new CustomException("Đã có lỗi xảy ra");
+            }
         }
     }
 

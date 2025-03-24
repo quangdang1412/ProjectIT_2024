@@ -28,15 +28,19 @@ public class OrderAPI {
     private final IOrderService orderService;
     private final ICartService cartService;
     private final CheckLogin login;
+    private Integer number = 0;
+    private Integer success = 0;
 
     @PostMapping("/placeOrder")
     public ResponseData<String> addOrder(@Valid @RequestBody OrderRequestDTO orderRequestDTO, HttpSession session) {
         try {
-            log.info("Request add order: {}", orderRequestDTO.getOrderID());
-            UserModel userModel = (UserModel) session.getAttribute("UserLogin");
-            String orderID = orderService.save(orderRequestDTO, userModel.getUserID());
-            cartService.deleteByUserCartUserID(userModel.getUserID());
+            log.info("{} Request add order", number++);
+//            UserModel userModel = (UserModel) session.getAttribute("UserLogin");
+//            String orderID = orderService.save(orderRequestDTO, userModel.getUserID());
+            String orderID = orderService.save(orderRequestDTO, "U003");
+//            cartService.deleteByUserCartUserID(userModel.getUserID());
             login.refreshUser(session);
+            log.info("Request {} Success", success++);
             return new ResponseData<>(HttpStatus.CREATED.value(), "Success", orderID);
         } catch (Exception e) {
             log.error("errorMessage={}", e.getMessage(), e.getCause());
