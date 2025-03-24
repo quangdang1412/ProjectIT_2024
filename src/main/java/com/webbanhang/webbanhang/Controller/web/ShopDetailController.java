@@ -34,6 +34,6 @@ public class ShopDetailController {
         }
         model.addAttribute("product", product);
         model.addAttribute("productDiscount", productDiscount);
-        return "/web/shop-detail";
+        return "web/shop-detail";
     }
 }

@@ -1,3 +1,6 @@
+CREATE USER 'taphoait'@'%' IDENTIFIED BY 'taphoait';
+GRANT ALL PRIVILEGES ON *.* TO 'taphoait'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
 
 USE taphoait;
 

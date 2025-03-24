@@ -29,44 +29,47 @@ public class HomeController {
         loadData.loadProduct(model);
         loadData.loadOrderDetail(model);
         loadData.loadCategory(model, session);
-        return "/web/index";
+        return "web/index";
     }
 
     @GetMapping("/contact")
     public String contact(Model model, HttpSession session) {
-        return "/web/contact";
+        return "web/contact";
     }
 
     @GetMapping("/testimonial")
     public String testimonial() {
-        return "/web/testimonial";
+        return "web/testimonial";
     }
 
     @GetMapping("/shop-detail")
     public String shopDetail(Model model, HttpSession session) {
         login.refreshUser(session);
-        return "/web/shop-detail";
+        return "web/shop-detail";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "/web/login";
+        return "web/login";
     }
 
 
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("SignUp", "right-panel-active");
-        return "/web/login";
+        return "web/login";
     }
 
     @GetMapping("/inforuser")
     public String inforuser(Model model, HttpSession session) {
-        login.refreshUser(session);
-        UserModel a = (UserModel) session.getAttribute("UserLogin");
-        UserModel b = userService.findUserByID(a.getUserID());
-        model.addAttribute("User", b);
-        return "/web/inforUser";
+        if (session.getAttribute("UserLogin") != null) {
+            login.refreshUser(session);
+            UserModel a = (UserModel) session.getAttribute("UserLogin");
+            UserModel b = userService.findUserByID(a.getUserID());
+            model.addAttribute("User", b);
+            return "web/inforUser";
+        }
+        return "redirect:login";
     }
 
     @GetMapping("/list")
@@ -77,6 +80,6 @@ public class HomeController {
 
     @GetMapping("/test")
     public String test() {
-        return "/web/test";
+        return "web/test";
     }
 }

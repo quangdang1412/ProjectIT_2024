@@ -49,9 +49,9 @@ public class CartController {
         if (session.getAttribute("UserLogin") != null) {
             login.refreshUser(session);
             loadProduct(model, session);
-            return "/web/cart";
+            return "web/cart";
         }
-        return "redirect:/login";
+        return "redirect:login";
     }
 
 }

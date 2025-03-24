@@ -66,8 +66,8 @@ public class CheckOutController {
             loadProduct(model, session);
             model.addAttribute("status", status);
             model.addAttribute("cancel", cancel);
-            return "/web/checkout";
+            return "web/checkout";
         }
-        return "redirect:/login";
+        return "redirect:login";
     }
 }

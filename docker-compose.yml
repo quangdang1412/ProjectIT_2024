@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mysqldb:
     image: mysql:8.0.25
@@ -5,10 +7,36 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: taphoait
       MYSQL_DATABASE: taphoait
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 1234
     ports:
-      - '3307:3306'
+      - '3304:3306'
+    expose:
+      - '3306'
     volumes:
       - ./src/main/resources/database:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shopapp-network
 
+  taphoait:
+    container_name: TapHoaIT-API
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    ports:
+      - '8100:8080'
+    networks:
+      - shopapp-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/taphoait
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: taphoait
+
+networks:
+  shopapp-network:

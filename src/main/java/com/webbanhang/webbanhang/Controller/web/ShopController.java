@@ -80,7 +80,7 @@ public class ShopController {
         model.addAttribute("currentURL", servletRequest.getRequestURL());
         model.addAttribute("queryString", queryString);
         //checkLogin.checkLogin(session,model,userService);
-        return "/web/shop";
+        return "web/shop";
     }
 
 
@@ -104,7 +104,7 @@ public class ShopController {
                 redirectAttributes.addFlashAttribute("errorMessage", "Không thêm được sản phẩm vào giỏ hàng");
             }
         }
-        return "redirect:/shop";
+        return "redirect:shop";
     }
 
 
