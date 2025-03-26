@@ -1,42 +1,71 @@
 version: '3.8'
 
 services:
-  mysqldb:
-    image: mysql:8.0.25
+  redis-container:
+    image: redis:latest
+    container_name: redis-container
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: taphoait
-      MYSQL_DATABASE: taphoait
     ports:
-      - '3304:3306'
-    expose:
-      - '3306'
+      - "6379:6379"
     volumes:
-      - ./src/main/resources/database:/docker-entrypoint-initdb.d/
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - redis_data:/data
     networks:
       - shopapp-network
-
-  taphoait:
-    container_name: TapHoaIT-API
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    depends_on:
-      mysqldb:
-        condition: service_healthy
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    restart: always
     ports:
-      - '8100:8080'
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - shopapp-network
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/taphoait
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: taphoait
+#  mysqldb:
+#    image: mysql:8.0.25
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: taphoait
+#      MYSQL_DATABASE: taphoait
+#    ports:
+#      - '3304:3306'
+#    expose:
+#      - '3306'
+#    volumes:
+#      - ./src/main/resources/database:/docker-entrypoint-initdb.d/
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    networks:
+#      - shopapp-network
+#
+#  taphoait:
+#    container_name: TapHoaIT-API
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    depends_on:
+#      mysqldb:
+#        condition: service_healthy
+#    ports:
+#      - '8100:8080'
+#    networks:
+#      - shopapp-network
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/taphoait
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: taphoait
+#      SPRING_REDIS_HOST: redis-container
+#      SPRING_REDIS_PORT: 6379
 
+volumes:
+  redis_data:
+  rabbitmq_data:
 networks:
   shopapp-network:

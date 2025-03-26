@@ -1,6 +1,7 @@
 package com.webbanhang.webbanhang.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.webbanhang.webbanhang.Model.PK.OrderDetailID;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +17,7 @@ import lombok.*;
 public class OrderDetailModel {
     @Id
     @ManyToOne()
-    @JsonBackReference
+    @JsonIgnore
     @JoinColumn(name = "orderID")
     private OrderModel order;
     @Id

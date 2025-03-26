@@ -1,5 +1,6 @@
 package com.webbanhang.webbanhang.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "product_tb")
+@EntityListeners(ProductListener.class)
 public class ProductModel {
     @Id
     @Column
@@ -47,10 +49,12 @@ public class ProductModel {
     private SupplierModel supplier;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productCart", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<CartModel> productCart;
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productOrder", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<OrderDetailModel> productOrderDetail;
 
 //    @Version

@@ -1,6 +1,9 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
 import com.google.api.client.util.ArrayMap;
+import com.webbanhang.webbanhang.Constraint.JobQueue;
+import com.webbanhang.webbanhang.DTO.request.EmailRequest;
+import com.webbanhang.webbanhang.DTO.request.Order.OrderEmailDTO;
 import com.webbanhang.webbanhang.DTO.request.Order.OrderRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.DashboardResponse;
 import com.webbanhang.webbanhang.Exception.CustomException;
@@ -15,6 +18,7 @@ import com.webbanhang.webbanhang.Service.IUserService;
 import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +41,8 @@ public class OrderServiceImpl implements IOrderService {
 
     private final IUserService userService;
     private final IOrderRepository orderRepository;
-    private final ICartService cartService;
     private final IProductRepository productRepository;
-    private final MailService mailService;
+    private final RabbitTemplate rabbitTemplate;
     private final Lock lock = new ReentrantLock();
 
     @Override
@@ -153,14 +156,16 @@ public class OrderServiceImpl implements IOrderService {
             }
             order.setAddress(allParams.get("address"));
             orderRepository.save(order);
-            if (checkChangeStatus == 1)
-                mailService.sendUpdateOrderMail(order, checkChangeStatus);
+            OrderEmailDTO orderEmailDTO = new OrderEmailDTO(order.getOrderID(), order.getPhone(), order.getOrderDetails(), order.getAddress(), order.getStatus(), order.getUserOrder().getEmail());
+            rabbitTemplate.convertAndSend(JobQueue.QUEUE_SEND_EMAIL, new EmailRequest(orderEmailDTO, checkChangeStatus));
             return order.getOrderID();
         } catch (Exception e) {
-            String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
-            log.info(error);
-            throw new CustomException(property + " has been used");
+            if (e instanceof CustomException) {
+                throw new CustomException(e.getMessage() != null ? e.getMessage() : "Có lỗi xảy ra");
+            } else {
+                log.error("Lỗi không xác định: ", e);
+                throw new CustomException("Đã có lỗi xảy ra");
+            }
         }
 
     }
@@ -177,10 +182,12 @@ public class OrderServiceImpl implements IOrderService {
             orderRepository.deleteOrder(a);
             return a;
         } catch (Exception e) {
-            String error = e.getMessage();
-            String property = error.substring(error.lastIndexOf(".") + 1, error.lastIndexOf("]"));
-            log.info(e.getMessage());
-            throw new CustomException(property + " has been used");
+            if (e instanceof CustomException) {
+                throw new CustomException(e.getMessage() != null ? e.getMessage() : "Có lỗi xảy ra");
+            } else {
+                log.error("Lỗi không xác định: ", e);
+                throw new CustomException("Đã có lỗi xảy ra");
+            }
         }
     }
 

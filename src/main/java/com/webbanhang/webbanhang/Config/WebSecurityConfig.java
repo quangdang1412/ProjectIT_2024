@@ -52,26 +52,27 @@ public class WebSecurityConfig {
             "/admin/**",
             "/test",
             "/api/payments/**",
+            "/api/product/**",
             "/search",
             "api/user/checkCoupon/**"
     };
     private final String[] EMPLOYEE_LIST = {
-            "/api/order/update",
-            "/api/product/**",
-            "/api/dashboard/**",
+//            "/api/order/update",
+//            "/api/product/**",
+//            "/api/dashboard/**",
     };
     private final String[] ADMIN_LIST = {
-            "/api/order/update",
-            "/api/order/delete/**",
-            "/api/other/**",
-            "/api/product/add",
-            "/api/product/update",
-            "/api/dashboard/**",
-            "/api/product/delete/**",
-            "/api/supplier/**",
-            "/api/user/add",
-            "/api/user/delete/**",
-            "/api/user/update"
+//            "/api/order/update",
+//            "/api/order/delete/**",
+//            "/api/other/**",
+//            "/api/product/add",
+//            "/api/product/update",
+//            "/api/dashboard/**",
+//            "/api/product/delete/**",
+//            "/api/supplier/**",
+//            "/api/user/add",
+//            "/api/user/delete/**",
+//            "/api/user/update"
     };
     private final String[] role_more = {"SELLER", "ADMIN"};
 

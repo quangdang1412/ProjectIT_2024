@@ -1,9 +1,14 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
+import com.webbanhang.webbanhang.Constraint.JobQueue;
+import com.webbanhang.webbanhang.DTO.request.EmailRequest;
+import com.webbanhang.webbanhang.DTO.request.ResetPasswordRequest;
 import com.webbanhang.webbanhang.Exception.ResourceNotFoundException;
 import com.webbanhang.webbanhang.Model.*;
+import com.webbanhang.webbanhang.Service.ITokenRedisService;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +47,9 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final ITokenRedisService tokenRedisService;
+    private final RabbitTemplate rabbitTemplate;
+
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
@@ -83,7 +91,9 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     public AuthenticationResponse refreshToken(RefreshRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();
         final String email = jwtService.extractUsername(refreshToken);
-        Token token = tokenService.tokenRepository().findByEmail(email).get();
+        Token token = tokenRedisService.getToken(email);
+        if (token == null)
+            tokenService.tokenRepository().findByEmail(email).get();
 
         if (token == null || token.isRevoked() || token.isExpired()) {
             throw new TokenException("Invalid or expired refresh token");
@@ -94,6 +104,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         token.setExpired(false);
         token.setRevoked(false);
         tokenService.save(token);
+        tokenRedisService.addTokenRedis(user.getEmail(), token);
         return AuthenticationResponse.builder()
                 .userDto(UserMapper.mapToUserDto(user))
                 .token(newAccessToken)
@@ -122,6 +133,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .revoked(false)
                 .build();
         tokenService.save(token);
+        tokenRedisService.addTokenRedis(user.getEmail(), token);
         UserRequestDTO userDto = UserMapper.mapToUserDto(user);
         return AuthenticationResponse.builder()
                 .userDto(userDto)
@@ -138,7 +150,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             return false;
         }
         tokenEntity.setRevoked(true);
-        tokenService.removeToken(tokenEntity);
+        tokenRedisService.deleteTokenRedis(email);
         return tokenService.removeToken(tokenEntity);
     }
 
@@ -147,7 +159,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         try {
             if (userService.existsByEmail(email)) {
                 String confirmLink = "http://localhost:8080/reset-password?email=" + email + "&resetPasswordKey=" + randomString;
-                mailService.sendResetPasswordMail(confirmLink, email);
+                rabbitTemplate.convertAndSend(JobQueue.QUEUE_SEND_EMAIL_RESET_PASS, new ResetPasswordRequest(confirmLink, email));
+//                mailService.sendResetPasswordMail(confirmLink, email);
                 return "Success";
             } else
                 return "Failed";

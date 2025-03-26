@@ -1,5 +1,6 @@
 package com.webbanhang.webbanhang.DTO.request.Order;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderRequestDTO {
     @NotBlank(message = "orderID must be not blank")
     @NotNull

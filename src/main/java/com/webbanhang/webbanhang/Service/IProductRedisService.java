@@ -10,8 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public interface IProductService {
-    List<ProductModel> getAllProduct();
+public interface IProductRedisService {
+    List<ProductModel> getAllProduct(String key) throws JsonProcessingException;
+
+    void saveAllProduct(List<ProductModel> productModelList, String key) throws JsonProcessingException;
 
     ProductModel getProductByID(String id);
 
@@ -27,8 +29,13 @@ public interface IProductService {
 
     Page<ProductModel> getProductForPage(Integer a, String categoryID, String brandID, String sortBy, String searchQuery);
 
-    PageResponse<?> getAllProductWithSortBy(int pageNo, int pageSize, String sortBy);
+    PageResponse<List<ProductModel>> getAllProductWithSortBy(int pageNo, int pageSize, String sortBy);
+
+    void saveGetAllProductWithSortBy(int pageNo, int pageSize, String sortBy, PageResponse<List<ProductModel>> a);
 
     Page<ProductDTO> searchProducts(int pageNo, int pageSize, String searchQuery, String categoryId);
 
+    void clear();
+
+    void clearProduct();
 }

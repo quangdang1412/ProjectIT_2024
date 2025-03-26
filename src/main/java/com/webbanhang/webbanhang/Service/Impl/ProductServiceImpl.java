@@ -1,5 +1,7 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webbanhang.webbanhang.DTO.request.Product.ProductRequestDTO;
 import com.webbanhang.webbanhang.DTO.response.PageResponse;
 import com.webbanhang.webbanhang.DTO.response.ProductDTO;
@@ -15,12 +17,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,16 +40,29 @@ public class ProductServiceImpl implements IProductService {
     private final IDiscountService discountService;
     private final ISuppilerService supplierService;
     private final IImageService imageService;
+    private final IProductRedisService productRedisService;
 
     @Override
     public List<ProductModel> getAllProduct() {
-        for (ProductModel productModel : productRepository.findAll()) {
-            if (productModel.getDiscount() != null && productModel.getDiscount().getEndDate().toLocalDate().isBefore(LocalDate.now())) {
-                productModel.setDiscount(null);
-                productRepository.save(productModel);
+        String key = "getAllProduct";
+        try {
+            // Kiểm tra cache
+            List<ProductModel> productModelList = productRedisService.getAllProduct(key);
+            if (productModelList != null) {
+                log.info("Lấy danh sách sản phẩm từ cache Redis.");
+                return productModelList;
             }
+
+            // Nếu cache không có, lấy từ DB
+            productModelList = productRepository.findAll();
+            productRedisService.saveAllProduct(productModelList, key);
+            log.info("Dữ liệu lấy từ database và đã lưu vào cache.");
+            return productModelList;
+        } catch (Exception e) {
+            log.error("Lỗi khi lấy danh sách sản phẩm: ", e);
+            return Collections.emptyList(); // Trả về danh sách rỗng thay vì `null`
         }
-        return productRepository.findAll();
+
     }
 
     @Override
@@ -145,7 +163,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public PageResponse<?> getAllProductWithSortBy(int pageNo, int pageSize, String sortBy) {
+    public PageResponse<List<ProductModel>> getAllProductWithSortBy(int pageNo, int pageSize, String sortBy) {
         if (pageNo > 0)
             pageNo--;
         String substring = sortBy.substring(1);
@@ -163,7 +181,11 @@ public class ProductServiceImpl implements IProductService {
             }
         }
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sorts));
+
         Page<ProductModel> productPage = productRepository.findAll(pageable);
+        PageResponse<List<ProductModel>> a = productRedisService.getAllProductWithSortBy(pageNo + 1, pageSize, sortBy);
+        if (a != null)
+            return a;
         List<ProductModel> list = productPage.stream().map(product -> ProductModel.builder()
                         .productID(product.getProductID())
                         .brand(product.getBrand())
@@ -174,12 +196,14 @@ public class ProductServiceImpl implements IProductService {
                         .unitPrice(product.getUnitPrice())
                         .build())
                 .toList();
-        return PageResponse.builder()
+        a = PageResponse.<List<ProductModel>>builder()
                 .pageNo(++pageNo)
                 .pageSize(pageSize)
                 .totalPage(productPage.getTotalPages())
                 .items(list)
                 .build();
+        productRedisService.saveGetAllProductWithSortBy(pageNo, pageSize, sortBy, a);
+        return a;
     }
 
     public Page<ProductDTO> searchProducts(int pageNo, int pageSize, String searchQuery, String categoryId) {

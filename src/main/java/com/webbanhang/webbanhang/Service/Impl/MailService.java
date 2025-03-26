@@ -1,5 +1,6 @@
 package com.webbanhang.webbanhang.Service.Impl;
 
+import com.webbanhang.webbanhang.DTO.request.Order.OrderEmailDTO;
 import com.webbanhang.webbanhang.Model.OrderModel;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -26,7 +27,7 @@ public class MailService {
     @Value("${spring.mail.from}")
     private String emailFrom;
 
-    public void sendUpdateOrderMail(OrderModel orderModel, int checkChangeStatus) throws MessagingException, UnsupportedEncodingException {
+    public void sendUpdateOrderMail(OrderEmailDTO orderModel, int checkChangeStatus) throws MessagingException, UnsupportedEncodingException {
         log.info("Sending Confirm Link.....");
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -48,7 +49,7 @@ public class MailService {
         }
         context.setVariables(properties);
         helper.setFrom(emailFrom, "TapHoaIT");
-        helper.setTo(orderModel.getUserOrder().getEmail());
+        helper.setTo(orderModel.getUserEmail());
         helper.setSubject("Thông tin đơn hàng TapHoaIT");
         try {
             String html = templateEngine.process("ConfirmMail", context);

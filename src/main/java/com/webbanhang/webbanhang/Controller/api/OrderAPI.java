@@ -34,11 +34,10 @@ public class OrderAPI {
     @PostMapping("/placeOrder")
     public ResponseData<String> addOrder(@Valid @RequestBody OrderRequestDTO orderRequestDTO, HttpSession session) {
         try {
-            log.info("{} Request add order", number++);
-//            UserModel userModel = (UserModel) session.getAttribute("UserLogin");
-//            String orderID = orderService.save(orderRequestDTO, userModel.getUserID());
-            String orderID = orderService.save(orderRequestDTO, "U003");
-//            cartService.deleteByUserCartUserID(userModel.getUserID());
+            UserModel userModel = (UserModel) session.getAttribute("UserLogin");
+            String orderID = orderService.save(orderRequestDTO, userModel.getUserID());
+//            String orderID = orderService.save(orderRequestDTO, "U003");
+            cartService.deleteByUserCartUserID(userModel.getUserID());
             login.refreshUser(session);
             log.info("Request {} Success", success++);
             return new ResponseData<>(HttpStatus.CREATED.value(), "Success", orderID);

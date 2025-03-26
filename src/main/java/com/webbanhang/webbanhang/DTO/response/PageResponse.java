@@ -1,12 +1,15 @@
 package com.webbanhang.webbanhang.DTO.response;
 
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
 import java.io.Serializable;
 
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PageResponse<T> implements Serializable {
     private int pageNo;
     private int pageSize;
