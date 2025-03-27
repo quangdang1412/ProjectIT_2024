@@ -1,4 +1,4 @@
-package com.webbanhang.webbanhang;
+package com.webbanhang.webbanhang.Consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webbanhang.webbanhang.Constraint.JobQueue;

@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "product_tb")
-@EntityListeners(ProductListener.class)
+//@EntityListeners(ProductListener.class)
 public class ProductModel {
     @Id
     @Column

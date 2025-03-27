@@ -12,6 +12,7 @@ import com.webbanhang.webbanhang.Model.*;
 import com.webbanhang.webbanhang.Repository.ICouponRepository;
 import com.webbanhang.webbanhang.Repository.IOrderRepository;
 import com.webbanhang.webbanhang.Repository.IProductRepository;
+import com.webbanhang.webbanhang.Repository.IUserRepository;
 import com.webbanhang.webbanhang.Service.ICartService;
 import com.webbanhang.webbanhang.Service.IOrderService;
 import com.webbanhang.webbanhang.Service.IUserService;
@@ -40,9 +41,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public class OrderServiceImpl implements IOrderService {
 
     private final IUserService userService;
+    private final IUserRepository userRepository;
     private final IOrderRepository orderRepository;
     private final IProductRepository productRepository;
     private final RabbitTemplate rabbitTemplate;
+    private final ICartService cartService;
+
     private final Lock lock = new ReentrantLock();
 
     @Override
@@ -52,14 +56,14 @@ public class OrderServiceImpl implements IOrderService {
 
 
     @Override
+    @Transactional
     public String save(OrderRequestDTO a, String id) {
-
         try {
-            UserModel userModel = userService.findUserByID(id);
+            UserModel userModel = userRepository.getReferenceById(id);
             double totalPrice = 0;
             OrderModel order = OrderModel.builder()
-                    .orderID("O" + UUID.randomUUID().toString().substring(0, 8))
                     .userOrder(userModel)
+                    .orderID(a.getOrderID())
                     .name(a.getName())
                     .address(a.getAddress())
                     .phone(a.getPhone())
@@ -87,51 +91,27 @@ public class OrderServiceImpl implements IOrderService {
             }
             order.setPaymentModel(payment);
             List<OrderDetailModel> orderDetailModels = new ArrayList<>();
-//            if (!userModel.getUserCart().isEmpty()) {
-//                for (CartModel cart : userModel.getUserCart()) {
-//                    ProductModel productModel = productRepository.findById(cart.getProductCart().getProductID())
-//                            .orElseThrow(() -> new CustomException("Sản phẩm không tồn tại"));
-//                    if (productModel.getQuantity() < cart.getQuantity()) {
-//                        throw new CustomException("Sản phẩm " + productModel.getProductName() + " không đủ số lượng");
-//                    }
-//                    if (cart.getProductCart().getDiscount() != null) {
-//                        totalPrice += cart.getProductCart().getUnitPrice() * (100 - cart.getProductCart().getDiscount().getPercentage()) / 100 * cart.getQuantity();
-//                    } else {
-//                        totalPrice += cart.getProductCart().getUnitPrice() * cart.getQuantity();
-//                    }
-//                    productModel.setQuantity(productModel.getQuantity() - cart.getQuantity());
-//                    productRepository.save(productModel);
-//                    orderDetailModels.add(new OrderDetailModel(order, cart.getProductCart(), cart.getQuantity()));
-//                }
-//            } else {
-//                throw new CustomException("Vui lòng thêm sản phẩm vào giỏ hàng");
-//            }
-            lock.lock();
-            try {
-                if (!userModel.getUserCart().isEmpty()) {
-                    for (CartModel cart : userModel.getUserCart()) {
-                        ProductModel productModel = productRepository.findById(cart.getProductCart().getProductID())
-                                .orElseThrow(() -> new CustomException("Sản phẩm không tồn tại"));
-                        if (productModel.getQuantity() < cart.getQuantity()) {
-                            throw new CustomException("Sản phẩm " + productModel.getProductName() + " không đủ số lượng");
-                        }
-                        if (cart.getProductCart().getDiscount() != null) {
-                            totalPrice += cart.getProductCart().getUnitPrice() * (100 - cart.getProductCart().getDiscount().getPercentage()) / 100 * cart.getQuantity();
-                        } else {
-                            totalPrice += cart.getProductCart().getUnitPrice() * cart.getQuantity();
-                        }
-                        productModel.setQuantity(productModel.getQuantity() - cart.getQuantity());
-                        productRepository.save(productModel);
-                        orderDetailModels.add(new OrderDetailModel(order, cart.getProductCart(), cart.getQuantity()));
+            List<CartModel> cartModelList = userModel.getUserCart();
+            if (!cartModelList.isEmpty()) {
+                for (CartModel cart : cartModelList) {
+                    ProductModel productModel = productRepository.findById(cart.getProductCart().getProductID()).get();
+                    if (productModel.getQuantity() < cart.getQuantity())
+                        throw new CustomException("Sản phẩm " + productModel.getProductName() + " không đủ số lượng");
+                    if (productModel.getDiscount() != null) {
+                        totalPrice += productModel.getUnitPrice() * (100 - productModel.getDiscount().getPercentage()) / 100 * cart.getQuantity();
+                    } else {
+                        totalPrice += productModel.getUnitPrice() * cart.getQuantity();
                     }
-                } else {
-                    throw new CustomException("Vui lòng thêm sản phẩm vào giỏ hàng");
+                    productModel.setQuantity(productModel.getQuantity() - cart.getQuantity());
+                    productModel = productRepository.save(productModel);
+                    orderDetailModels.add(new OrderDetailModel(order, productModel, cart.getQuantity()));
                 }
-            } finally {
-                lock.unlock();
+            } else {
+                throw new CustomException("Vui lòng thêm sản phẩm vào giỏ hàng");
             }
             order.setOrderDetails(orderDetailModels);
             order.setTotalPrice(totalPrice);
+            order.setOrderDate(Date.valueOf(LocalDate.now()));
             orderRepository.save(order);
             return order.getOrderID();
         } catch (Exception e) {

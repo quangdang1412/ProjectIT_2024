@@ -15,7 +15,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @Entity(name = "UserModel")
 @Getter
 @Setter
@@ -52,12 +51,12 @@ public class UserModel implements UserDetails {
     private RoleModel role;
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userCart", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userCart", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CartModel> userCart;
 
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userOrder", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userOrder", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderModel> userOrder;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sellerOrder", cascade = CascadeType.ALL)

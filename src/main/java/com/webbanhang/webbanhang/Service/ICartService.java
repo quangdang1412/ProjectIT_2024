@@ -7,6 +7,8 @@ import com.webbanhang.webbanhang.Model.UserModel;
 import java.util.List;
 
 public interface ICartService {
+    List<CartModel> getAllCartOfUser(String id);
+
     List<CartModel> getAllCart();
 
     List<ProductModel> getProductInCart(String id);

@@ -54,6 +54,8 @@ public class WebSecurityConfig {
             "/api/payments/**",
             "/api/product/**",
             "/search",
+            "/ws/**",
+            "/api/**",
             "api/user/checkCoupon/**"
     };
     private final String[] EMPLOYEE_LIST = {
@@ -95,11 +97,9 @@ public class WebSecurityConfig {
                         .authenticationEntryPoint((request, response, authException) ->
                                 response.sendError(403, "Access Denied")
                         )
-                );
-        http.exceptionHandling(exceptionHandling -> exceptionHandling
-                .accessDeniedPage("/404")
-        );
-        http.csrf(AbstractHttpConfigurer::disable);
+                ).exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedPage("/404")
+                ).csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 

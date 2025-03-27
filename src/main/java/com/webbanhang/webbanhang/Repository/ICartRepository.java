@@ -14,6 +14,9 @@ public interface ICartRepository extends JpaRepository<CartModel, UserCartID> {
     @Query("select c.productCart from CartModel c where c.userCart.userID = :id")
     List<ProductModel> getProductInCart(String id);
 
+    @Query("select c from CartModel c where c.userCart.userID = :id")
+    List<CartModel> getAllCartOfUser(String id);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM CartModel c where c.userCart.userID = :id")

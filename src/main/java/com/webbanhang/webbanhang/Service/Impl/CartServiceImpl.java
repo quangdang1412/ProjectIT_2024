@@ -25,6 +25,11 @@ public class CartServiceImpl implements ICartService {
     }
 
     @Override
+    public List<CartModel> getAllCartOfUser(String id) {
+        return cartRepository.getAllCartOfUser(id);
+    }
+
+    @Override
     public List<ProductModel> getProductInCart(String id) {
         return cartRepository.getProductInCart(id);
     }
