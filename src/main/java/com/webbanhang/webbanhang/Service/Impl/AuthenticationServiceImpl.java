@@ -51,10 +51,6 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         if (request.getPassword().length() < 6) {
             throw new EmailAlreadyExistsException("Mật khẩu phải dài hơn hoặc bằng 6 kí tự");
         }
-        if (userService.existsByPhone(request.getPhone())) {
-            throw new EmailAlreadyExistsException("SĐT đã đăng kí tài khoản: " + request.getPhone());
-        }
-        
         UserModel newUser = new UserModel();
         String userId = "U" + UUID.randomUUID().toString().substring(0, 8);
         newUser.setUserName(request.getName());
